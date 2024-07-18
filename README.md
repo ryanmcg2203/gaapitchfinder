@@ -5,11 +5,12 @@ Contains the underlying dataset for the GAA Pitch Finder website.
 This dataset provides detailed information about various GAA Pitches, including their respective clubs, names, locations (latitude and longitude), provinces, countries, divisions, and counties. It also includes specific data such as the name of the pitch (where available), directions (via a Google Maps URL), and the club's Twitter handle (where available).
 
 ## Dataset Structure
-The dataset currently consists of 1973 rows and 11 columns, detailed as follows:
+The dataset currently consists of 1973 rows and 12 columns, detailed as follows:
 
 - **File**: The region identifier.
 - **Club**: The name of the GAA club.
 - **Pitch**: The name of the GAA club's pitch (some entries may be missing).
+- **Code**: The GAA sports that the clubs partake in e.g. Football, Hurling, Camoige, Mixed.
 - **Latitude**: The latitude coordinate of the club's location.
 - **Longitude**: The longitude coordinate of the club's location.
 - **Province**: The province where the club is located.
