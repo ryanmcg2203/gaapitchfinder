@@ -6,15 +6,14 @@ A comprehensive dataset and analysis tool for GAA pitches across Ireland, includ
 
 ```
 gaapitchfinder/
-├── gaapitchfinder_data.csv    # Main dataset containing club information
 ├── additional_data/          # Supplementary data files
 │   └── club_images/         # Club crest images
 ├── output/                   # Generated content
 │   ├── visualizations/      # Maps and charts
 │   └── reports/            # Analysis reports
 ├── scripts/                 # Python analysis scripts
+├── gaapitchfinder_data.csv    # Main dataset containing club information
 ├── requirements.txt         # Project dependencies
-└── venv/                   # Python virtual environment
 ```
 
 ## Features
