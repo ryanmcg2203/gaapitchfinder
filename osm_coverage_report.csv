@@ -1,0 +1,355 @@
+Club,County,Province,Latitude,Longitude,Status
+Antrim GAA,Antrim,Ulster,54.573306,-5.983986,matched_gaa
+"All Saints GAA, Ballymena",Antrim,Ulster,54.86743,-6.227189,matched_generic
+"Cardinal O'Donnell's, Belfast",Antrim,Ulster,54.590545,-5.972702,matched_gaa
+Carey Faughs GAA ,Antrim,Ulster,55.1986,-6.1938,matched_generic
+Clooney Gaels,Antrim,Ulster,54.82385,-6.387777,matched_generic
+"Con Magee's GAA, Glenravel",Antrim,Ulster,54.984596,-6.186593,matched_gaa
+"Cuchullainn's GAA, Dunloy",Antrim,Ulster,55.007717,-6.41204,matched_gaa
+"Éire Óg, Derriaghy",Antrim,Ulster,54.56853,-5.98518,matched_generic
+"Erin's Own, Cargin",Antrim,Ulster,54.749007,-6.458106,matched_generic
+"Glen Rovers, Armoy ",Antrim,Ulster,55.1370902,-6.2955139,matched_generic
+Gort na Móna,Antrim,Ulster,54.5906,-5.995,matched_gaa
+"John Mitchel's GAA, Belfast",Antrim,Ulster,54.562768,-6.033005,matched_generic
+"Kickham's GAA, Ardoyne",Antrim,Ulster,54.6858,-5.9973,no_match
+"Kickham's GAC, Creggan",Antrim,Ulster,54.719573,-6.3600587,matched_gaa
+CLG Laochra Loch Lao,Antrim,Ulster,54.591348,-5.9685765,matched_generic
+"Lámh Dhearg GAA, Hannahstown",Antrim,Ulster,54.588335,-6.038245,matched_gaa
+Latharna Óg GAA,Antrim,Ulster,54.87706753,-5.85860296,matched_generic
+Loch Mór Dál gCais GAA,Antrim,Ulster,54.621,-6.2141,matched_generic
+Loughgiel Shamrocks,Antrim,Ulster,55.061282,-6.310512,matched_gaa
+"McQuillan's GAA, Ballycastle",Antrim,Ulster,55.204051,-6.273102,matched_generic
+"Michael Davitt's GAC, Belfast",Antrim,Ulster,54.57552,-5.97088,matched_generic
+"O'Donovan Rossa's GAC, Belfast",Antrim,Ulster,54.57464,-6.006294,matched_gaa
+"Oisín's GAA, Glenariffe",Antrim,Ulster,55.05484494,-6.05173517,matched_gaa
+"Patrick Pearse's, Belfast",Antrim,Ulster,54.616736,-5.947392,matched_generic
+"Patrick Sarfield's GAA, Belfast",Antrim,Ulster,54.574646,-6.006268,matched_gaa
+Rathlin Island,Antrim,Ulster,55.292381,-6.262749,no_match
+"Robert Emmet's, Cushendun",Antrim,Ulster,55.130366,-6.04369,matched_gaa
+"Roger Casement's GAC, Portglenone",Antrim,Ulster,54.88252,-6.482781,matched_gaa
+"Ruairí Óg's GAA, Cushendall",Antrim,Ulster,55.077538,-6.058273,matched_gaa
+"Shane O'Neill's GAA, Glenarm",Antrim,Ulster,54.928236,-5.951509,matched_generic
+"St. Agnes' GAA, Andersontown",Antrim,Ulster,54.568222,-5.985396,matched_generic
+"St. Brigid's GAC, Belfast",Antrim,Ulster,54.571242,-5.975754,matched_generic
+"St. Brigid's GAA, Cloughmills",Antrim,Ulster,55.011488,-6.328958,no_match
+"St. Comgall's GAA, Antrim",Antrim,Ulster,54.721602,-6.219077,matched_generic
+"St. Enda's GAA, Glengormley",Antrim,Ulster,54.662454,-5.968857,matched_gaa
+"St. Ergnat's GAA, Moneyglass",Antrim,Ulster,54.779743,-6.423082,matched_gaa
+"St. Gall's GAA, Belfast",Antrim,Ulster,54.584527,-5.96968,matched_gaa
+"St. James GAA, Aldergrove",Antrim,Ulster,54.6164029,-6.22496103,matched_gaa
+"St. John's GAA, Belfast",Antrim,Ulster,54.592333,-5.977393,matched_gaa
+"St. Joseph's GAA, Glenavy",Antrim,Ulster,54.579567,-6.223824,matched_gaa
+"St. Malachy's GAC, Belfast",Antrim,Ulster,54.57567,-5.91052,matched_generic
+"St. Mary's GAA, Aghagallon",Antrim,Ulster,54.500464,-6.272927,matched_generic
+"St. Mary's GAA, Ahoghill",Antrim,Ulster,54.823856,-6.387851,matched_generic
+"St. Mary's GAC, Rasharkin",Antrim,Ulster,54.941544,-6.485376,matched_gaa
+"St. Patrick's GAA, Lisburn",Antrim,Ulster,54.528101,-6.049427,matched_generic
+"St. Paul's GAC, Belfast",Antrim,Ulster,54.574727,-6.006261,matched_gaa
+"St. Teresa's GAA, Belfast",Antrim,Ulster,54.57902,-6.007327,matched_gaa
+"Tír na nÓg, Randalstown",Antrim,Ulster,54.749254,-6.286166,matched_generic
+Armagh GAA,Armagh,Ulster,54.343541,-6.662385,matched_gaa
+Armagh Harps,Armagh,Ulster,54.358832,-6.661491,matched_gaa
+Ballymacnab Round Towers,Armagh,Ulster,54.289793,-6.632396,matched_gaa
+"Clann Éireann GAA, Lurgan",Armagh,Ulster,54.475013,-6.330333,matched_generic
+"Clan na Gael GAA, Lurgan",Armagh,Ulster,54.462356,-6.349253,matched_generic
+Craobh Rua GAA,Armagh,Ulster,54.191814,-6.393125,matched_generic
+"Crossmaglen Rangers, GAA",Armagh,Ulster,54.074906,-6.609043,matched_gaa
+"Cúchulainn's GAA, Armagh",Armagh,Ulster,54.349452,-6.65998,matched_gaa
+"Cúchulainn's GAA, Mullaghbane",Armagh,Ulster,54.109772,-6.487697,matched_gaa
+Culloville Blues GAC,Armagh,Ulster,54.058777,-6.639885,matched_generic
+"Davitt's GAA, Ballyhegan",Armagh,Ulster,54.407259,-6.574018,no_match
+"Éire Féin GAA, Lissummon",Armagh,Ulster,54.252195,-6.418559,no_match
+"Éire Óg GAA, Craigavon",Armagh,Ulster,54.454205,-6.36235,matched_gaa
+"Emmet's GAA, Dorsey",Armagh,Ulster,54.142498,-6.551489,matched_gaa
+"Eoghan Rua GAA, Middletown",Armagh,Ulster,54.295445,-6.847434,matched_gaa
+"Lámh Dhearg GAA, Keady",Armagh,Ulster,54.256288,-6.702197,matched_gaa
+"Laurence O'Toole's GAA, Belleek",Armagh,Ulster,54.172867,-6.488864,matched_gaa
+Madden Rapparees GAA,Armagh,Ulster,54.317243,-6.713616,no_match
+"Michael Dwyer's GAA, Keady",Armagh,Ulster,54.256291,-6.702172,matched_gaa
+"Na Fianna GAA, Middletown",Armagh,Ulster,54.296608,-6.847081,matched_gaa
+"O'Connell's GAA, Tullysaran",Armagh,Ulster,54.390982,-6.742078,matched_gaa
+"O'Donovan Rossa's GAA, Mullaghbrack",Armagh,Ulster,54.302774,-6.536274,matched_gaa
+"O'Neill's GAA, An Port Mór",Armagh,Ulster,54.414817,-6.702904,matched_generic
+"O'Rahilly's GAA, Collegeland",Armagh,Ulster,54.44122,-6.679128,matched_gaa
+"Peadar Ó Doirnín GAA, Forkhill",Armagh,Ulster,54.084477,-6.45661,matched_gaa
+"Pearse √ìg Park, Ballycrummy",Armagh,Ulster,54.352151,-6.677901,matched_generic
+"Pearse's GAA, Annaghmore",Armagh,Ulster,54.465761,-6.563157,matched_generic
+"Phelim Brady's GAA, Darkley",Armagh,Ulster,54.224187,-6.682098,matched_generic
+"Redmond O'Hanlon's GAA, Poyntzpass",Armagh,Ulster,54.287984,-6.376069,matched_gaa
+"Robert Emmett's GAA, Clonmore",Armagh,Ulster,54.478915,-6.641734,matched_generic
+"Sarsfield's GAA, High Moss",Armagh,Ulster,54.503226,-6.459335,no_match
+"Sean McDermott's GAA, Maghery",Armagh,Ulster,54.513592,-6.575599,matched_gaa
+"Seán South's GAA, Clady",Armagh,Ulster,54.251565,-6.565384,matched_gaa
+"Seán Treacy GAA, Lurgan",Armagh,Ulster,54.477315,-6.330721,matched_generic
+"Shane O'Neill's GAA, Camloch",Armagh,Ulster,54.180022,-6.405246,matched_gaa
+Silverbridge Harps,Armagh,Ulster,54.096321,-6.538566,matched_gaa
+"St. Colmcille's GAA, Grange",Armagh,Ulster,54.392046,-6.663018,no_match
+"St. Killian's GAA, Whitecross",Armagh,Ulster,54.221327,-6.483997,matched_generic
+"St. Malachy's GAA, Portadown",Armagh,Ulster,54.432459,-6.474408,no_match
+"St. Mary's GAA, Granemore",Armagh,Ulster,54.251585,-6.653614,matched_gaa
+"St. Michael's GAA, Newtownhamilton",Armagh,Ulster,54.187836,-6.573192,matched_generic
+"St. Mochua's GAA, Derrynoose",Armagh,Ulster,54.232106,-6.774799,matched_gaa
+"St. Moninne's GAA, Killeavy",Armagh,Ulster,54.142921,-6.361886,matched_gaa
+"St. Patrick's GAA, Carrickcruppen",Armagh,Ulster,54.182572,-6.39738,matched_gaa
+"St. Patrick's GAA, Dromintee",Armagh,Ulster,54.098003,-6.398717,matched_generic
+"St. Paul's GAA, Lurgan",Armagh,Ulster,54.452014,-6.348393,matched_gaa
+"St. Peter's GAA, Lurgan",Armagh,Ulster,54.467672,-6.328553,matched_gaa
+"Thomas Davis' GAA, Corrinshego",Armagh,Ulster,54.176514,-6.363094,matched_gaa
+"Tír na nÓìg GAA, Portadown",Armagh,Ulster,54.436676,-6.455092,matched_gaa
+"Wolfe Tone GAA, Derrymacash",Armagh,Ulster,54.477252,-6.396009,matched_gaa
+Cavan GAA,Cavan,Ulster,53.981623,-7.360618,matched_gaa
+Bailieborough Shamrocks,Cavan,Ulster,53.925765,-6.969827,matched_gaa
+Ballinagh GAA,Cavan,Ulster,53.930673,-7.412008,matched_gaa
+Ballyhaise GAA,Cavan,Ulster,54.046253,-7.314709,matched_gaa
+Ballymachugh GAA,Cavan,Ulster,53.835841,-7.353148,matched_gaa
+Belturbet Rory O'Moores,Cavan,Ulster,54.099878,-7.438112,matched_gaa
+Butlersbridge GAA,Cavan,Ulster,54.047954,-7.375035,matched_gaa
+Castlerahan GAA,Cavan,Ulster,53.861232,-7.209929,matched_gaa
+Cavan Gaels,Cavan,Ulster,53.988038,-7.363122,matched_gaa
+Cootehill Celtic,Cavan,Ulster,54.072479,-7.079643,matched_gaa
+Corlough GAA,Cavan,Ulster,54.118056,-7.747799,matched_gaa
+Cornafean GAA,Cavan,Ulster,53.9504,-7.49461,matched_gaa
+Crosserlough GAA,Cavan,Ulster,53.861975,-7.316331,matched_gaa
+Cuchulainn's GAA,Cavan,Ulster,53.808693,-6.938897,matched_gaa
+Denn GAA,Cavan,Ulster,53.920235,-7.264607,matched_gaa
+Drumalee GAA,Cavan,Ulster,53.997988,-7.352844,matched_gaa
+Drumgoon Éire Óg GAA,Cavan,Ulster,54.04294,-7.018316,matched_gaa
+Drumlane GAA,Cavan,Ulster,54.068624,-7.478328,matched_gaa
+Drung Dalcassians GAA,Cavan,Ulster,54.068864,-7.225342,matched_gaa
+Gowna GAA,Cavan,Ulster,53.86601,-7.550067,matched_gaa
+Kildallan GAA,Cavan,Ulster,54.119597,-7.584639,matched_gaa
+Kill Shamrocks,Cavan,Ulster,54.054796,-7.135233,matched_gaa
+Killeshandra Leaguers GAA,Cavan,Ulster,54.011024,-7.526885,matched_gaa
+Killinkere GAA,Cavan,Ulster,53.885481,-7.050346,matched_gaa
+Killygarry GAA,Cavan,Ulster,53.964688,-7.318857,matched_gaa
+Kingscourt Stars GAA,Cavan,Ulster,53.907118,-6.801545,matched_gaa
+Knockbride GAA,Cavan,Ulster,53.977897,-7.057976,matched_gaa
+Lacken Celtic GAA,Cavan,Ulster,53.920851,-7.426256,matched_gaa
+Laragh United GAA,Cavan,Ulster,53.983051,-7.237147,matched_gaa
+"Erin's Own GAA, Lavey",Cavan,Ulster,53.901499,-7.17445,matched_gaa
+Maghera MacFinn's GAA,Cavan,Ulster,53.800467,-7.039934,matched_gaa
+Mountnugent GAA,Cavan,Ulster,53.805934,-7.219515,matched_gaa
+Mullahoran Dreadnoughts,Cavan,Ulster,53.835173,-7.439166,matched_gaa
+Munterconnacht GAA,Cavan,Ulster,53.793504,-7.066725,matched_gaa
+Ramor United GAA,Cavan,Ulster,53.830296,-7.070488,matched_gaa
+Redhills GAA,Cavan,Ulster,54.099834,-7.32191,matched_gaa
+Shannon Gaels,Cavan,Ulster,54.289898,-7.866955,matched_gaa
+Shercock GAA,Cavan,Ulster,53.980313,-6.88016,matched_gaa
+St Joseph's Hurling,Cavan,Ulster,53.835179,-7.439169,matched_gaa
+"St. Aidans GAA, Templeport",Cavan,Ulster,54.121966,-7.674415,matched_gaa
+"St. Mary's GAA, Swanlinbar",Cavan,Ulster,54.192078,-7.704567,matched_gaa
+"St. Patricks, Arva",Cavan,Ulster,53.92166,-7.57887,matched_gaa
+Woodford Gaels,Cavan,Ulster,53.835696,-7.35338,matched_gaa
+Derry GAA,Derry,Ulster,54.993153,-7.335791,matched_gaa
+Derry GAA Centre of Excellence,Derry,Ulster,54.9241781,-6.9530881,matched_generic
+Ballinderry Shamrocks,Derry,Ulster,54.659645,-6.558921,matched_generic
+Brian Óg's GAA,Derry,Ulster,55.033214,-7.31057,matched_gaa
+Doire Cholmcille GAA,Derry,Ulster,55.00893,-7.337932,no_match
+Eoghan Rua GAA,Derry,Ulster,55.164562,-6.695764,matched_gaa
+"Erin's Own GAA, Lavey",Derry,Ulster,54.830513,-6.605331,matched_gaa
+"Henry Joy McCracken's GAA, Moneymore",Derry,Ulster,54.690527,-6.659844,matched_gaa
+"John Mitchel's GAA, Claudy",Derry,Ulster,54.908988,-7.14671,matched_gaa
+"John Mitchel's GAA, Glenullin",Derry,Ulster,54.954253,-6.735021,matched_gaa
+Kevin Lynch's GAA,Derry,Ulster,54.922705,-6.904493,no_match
+Limavady Wolfhounds GAA,Derry,Ulster,55.050481,-6.936571,matched_generic
+"Michael Davitt's GAA, Swatragh",Derry,Ulster,54.916706,-6.66344,matched_gaa
+Na Magha GAA,Derry,Ulster,55.034242,-7.299886,matched_gaa
+"O'Connor's GAA, Glack",Derry,Ulster,55.023509,-7.030822,matched_gaa
+"O'Donovan Rossa's GAA, Magherafelt",Derry,Ulster,54.758564,-6.598506,matched_generic
+"Ógra Cholmcille GAA, Drummullan",Derry,Ulster,54.643899,-6.665948,matched_gaa
+"Patrick Pearse's GAA, Kilrea",Derry,Ulster,54.929674,-6.580779,matched_gaa
+"Pearse's GAA, Waterside",Derry,Ulster,54.984291,-7.302588,no_match
+"Robert Emmet's GAA, Slaughtneil",Derry,Ulster,54.883566,-6.700523,matched_gaa
+"Sarsfield's GAA, Ballerin",Derry,Ulster,55.012062,-6.734256,matched_generic
+"Seán Dolan's GAA, Creggan",Derry,Ulster,54.994131,-7.352781,matched_generic
+"Seán O'Leary's GAA, Newbridge",Derry,Ulster,54.761608,-6.506944,matched_gaa
+"St. Aidan's GAA, Magilligan",Derry,Ulster,55.151434,-6.913931,matched_gaa
+"St. Canice's GAA, Dungiven",Derry,Ulster,54.926148,-6.918967,matched_gaa
+"St. Colm's GAA, Ballinascreen",Derry,Ulster,54.782805,-6.805583,matched_generic
+"St. Joseph's GAA, Craigbane",Derry,Ulster,54.867883,-7.14664,matched_generic
+"St. Malachy's GAA, Castledawson",Derry,Ulster,54.767215,-6.536969,matched_gaa
+"St. Mary's GAA, Ardmore",Derry,Ulster,54.959921,-7.257367,matched_generic
+"St. Mary's GAA, Banagher",Derry,Ulster,54.892357,-7.01412,matched_gaa
+"St. Mary's GAA, Faughanvale",Derry,Ulster,55.035499,-7.103388,matched_gaa
+"St. Mary's GAA, Slaughtmanus",Derry,Ulster,54.987569,-7.182146,matched_gaa
+"St. Matthew's GAA, Drumsurn",Derry,Ulster,54.988629,-6.865364,matched_generic
+"St. Michael's GAA, Lissan",Derry,Ulster,54.690727,-6.756946,matched_gaa
+"St. Oliver Plunkett's GAA, Greenlough",Derry,Ulster,54.867798,-6.513454,matched_gaa
+"St. Patrick's GAA, The Loup",Derry,Ulster,54.702043,-6.589179,matched_gaa
+"St. Trea's GAA, Ballymaguigan",Derry,Ulster,54.742591,-6.523167,matched_gaa
+"Watty Graham's GAA, Glen",Derry,Ulster,54.840171,-6.688647,matched_generic
+"William O'Brien's GAA, Foreglen",Derry,Ulster,54.927172,-7.023387,matched_generic
+"Wolfe Tones GAA, Bellaghy",Derry,Ulster,54.807106,-6.514772,matched_generic
+Donegal GAA,Donegal,Ulster,54.801525,-7.782047,matched_gaa
+Donegal GAA,Donegal,Ulster,54.945512,-7.754561,matched_gaa
+Donegal GAA,Donegal,Ulster,54.497969,-8.193448,matched_gaa
+Aodh Ruadh GAA,Donegal,Ulster,54.498144,-8.191869,matched_gaa
+Ardara GAA,Donegal,Ulster,54.769722,-8.416487,matched_gaa
+Arranmore GAA,Donegal,Ulster,54.98566,-8.492488,matched_generic
+Buncrana GAA,Donegal,Ulster,55.130095,-7.455806,matched_gaa
+Burt GAA,Donegal,Ulster,55.031659,-7.460402,matched_gaa
+Carndonagh GAA,Donegal,Ulster,55.25936,-7.245766,matched_gaa
+Cloughaneely GAA,Donegal,Ulster,55.140639,-8.098203,matched_gaa
+Downings GAA,Donegal,Ulster,55.193302,-7.831668,matched_gaa
+Dungloe GAA,Donegal,Ulster,54.951057,-8.352223,matched_generic
+Fanad Gaels GAA,Donegal,Ulster,55.198566,-7.64377,no_match
+Four Masters GAA,Donegal,Ulster,54.655422,-8.122581,matched_gaa
+Gaoth Dobhair GAA,Donegal,Ulster,55.082695,-8.310726,matched_gaa
+Glenfin GAA,Donegal,Ulster,54.824338,-7.923301,matched_generic
+Glenswilly GAA,Donegal,Ulster,54.941201,-7.839139,matched_gaa
+Kilcar GAA,Donegal,Ulster,54.626195,-8.602701,matched_gaa
+Killybegs GAA,Donegal,Ulster,54.638166,-8.485331,matched_generic
+Letterkenny Gaels GAA,Donegal,Ulster,54.950591,-7.693299,matched_gaa
+Milford GAA,Donegal,Ulster,55.083392,-7.703174,matched_gaa
+Moville GAA,Donegal,Ulster,55.193931,-7.02327,matched_gaa
+Na Rossa,Donegal,Ulster,54.86595,-8.375999,matched_generic
+"Naomh Brd GAA, Ballintra/Laghey",Donegal,Ulster,54.599663,-8.101298,matched_generic
+"Naomh Colmcille GAA, Newtowncunningham",Donegal,Ulster,54.999721,-7.519841,matched_generic
+"Naomh Columba GAA, Glencolumbkille",Donegal,Ulster,54.710617,-8.732384,matched_gaa
+"Naomh Conall GAA, Glenties",Donegal,Ulster,54.794201,-8.296564,matched_generic
+"Naomh Muire GAA, Lower Rosses",Donegal,Ulster,55.030302,-8.37084,matched_gaa
+"Naomh Pádraig GAA, Lifford",Donegal,Ulster,54.838201,-7.47892,matched_generic
+"Naomh Pádraig GAA, Malin",Donegal,Ulster,55.297694,-7.262075,matched_gaa
+"Naomh Pádraig GAA, Muff",Donegal,Ulster,55.094599,-7.231127,matched_gaa
+"Naomh Ultan GAA, Dunkineely",Donegal,Ulster,54.633589,-8.348614,matched_gaa
+Pettigo GAA,Donegal,Ulster,54.545812,-7.838141,matched_generic
+Réalt na Mara GAA,Donegal,Ulster,54.474555,-8.283204,matched_gaa
+Red Hugh's GAA,Donegal,Ulster,54.779234,-7.69589,matched_gaa
+Robert Emmet's GAA,Donegal,Ulster,54.801225,-7.573345,matched_gaa
+Seán Mac Cunmaill's GAA,Donegal,Ulster,54.801349,-7.777731,matched_gaa
+Setanta GAA,Donegal,Ulster,54.786475,-7.7023,matched_gaa
+"St. Eunan's GAA, Letterkenny",Donegal,Ulster,54.945481,-7.752443,matched_gaa
+"St. Mary's GAA, Convoy",Donegal,Ulster,54.859081,-7.679632,matched_gaa
+"St. Michael's GAA, Creeslough/Dunfanaghy",Donegal,Ulster,55.182515,-7.988381,matched_gaa
+"St. Naul's GAA, Mountcharles",Donegal,Ulster,54.644605,-8.201164,matched_gaa
+Termon GAA,Donegal,Ulster,55.044074,-7.815342,matched_generic
+Urris GAA,Donegal,Ulster,55.263109,-7.427555,matched_generic
+Down GAA,Down,Ulster,54.163068,-6.337124,matched_gaa
+Down GAA,Down,Ulster,54.477827,-5.510035,matched_generic
+Aghaderg-Ballyvarley GAA,Down,Ulster,54.34497,-6.326956,matched_gaa
+"An Ríocht GAA, Greencastle",Down,Ulster,54.049279,-6.035741,matched_gaa
+Annaclone GAA,Down,Ulster,54.294965,-6.179847,matched_gaa
+Ardglass GAA,Down,Ulster,54.268025,-5.5938,matched_gaa
+Atticall GAA,Down,Ulster,54.10535,-6.062063,matched_gaa
+Aughlisnafin GAA,Down,Ulster,54.262246,-5.91886,matched_gaa
+Ballela GAA,Down,Ulster,54.354679,-6.148469,matched_gaa
+Ballyholland Harps,Down,Ulster,54.166128,-6.311919,matched_gaa
+Ballykinlar GAA,Down,Ulster,54.257445,-5.790076,matched_gaa
+Ballymartin GAA Club,Down,Ulster,54.073515,-5.961816,matched_gaa
+"Beann Dhearg GAA, Kilclief",Down,Ulster,54.341737,-5.544638,matched_gaa
+Bredagh GAA,Down,Ulster,54.57344,-5.91051,matched_generic
+Bright GAA,Down,Ulster,54.294031,-5.715156,matched_gaa
+Bryansford GAA,Down,Ulster,54.217911,-5.891957,matched_gaa
+Carryduff GAA,Down,Ulster,54.530779,-5.886732,matched_gaa
+Clann na Banna GAA,Down,Ulster,54.349371,-6.282023,matched_generic
+Clonduff GAA,Down,Ulster,54.200228,-6.135352,matched_gaa
+Dromara GAA,Down,Ulster,54.368806,-5.985304,matched_generic
+Dundrum GAA,Down,Ulster,54.262534,-5.838307,matched_gaa
+East Belfast GAA,Down,Ulster,54.5684095,-5.87337474,matched_generic
+Fontenoy's GAA. Liatroim,Down,Ulster,54.285659,-5.994104,matched_gaa
+"John Martin's GAA, Glenn",Down,Ulster,54.2411,-6.3355,matched_generic
+"John Mitchel's GAA, Ballygalget",Down,Ulster,54.413253,-5.499707,matched_gaa
+"John Mitchel's GAA, Newry",Down,Ulster,54.153034,-6.324304,matched_gaa
+Longstone GAA,Down,Ulster,54.110249,-5.933245,matched_gaa
+Loughinisland,Down,Ulster,54.350932,-5.81299,matched_gaa
+Mayobridge GAA,Down,Ulster,54.18296,-6.224988,matched_gaa
+Newry Shamrocks,Down,Ulster,54.163093,-6.334689,matched_gaa
+"Owen Roe's GAA, Kilcoo",Down,Ulster,54.235819,-6.023384,matched_gaa
+"Russell Gaelic Union, Downpatrick",Down,Ulster,54.317274,-5.701665,matched_gaa
+Saval GAA,Down,Ulster,54.214114,-6.284156,matched_gaa
+"St. Bronagh's GAA, Rostrevor",Down,Ulster,54.105386,-6.203355,matched_gaa
+"St. Colman's GAA, Drumaness",Down,Ulster,54.364927,-5.848621,matched_gaa
+"St. John Bosco GAA, Newry",Down,Ulster,54.180977,-6.347595,matched_gaa
+"St. John's GAA, Drumnaquoile",Down,Ulster,54.297345,-5.907541,matched_gaa
+"St. Joseph's GAA, Ballycran",Down,Ulster,54.477829,-5.507836,matched_generic
+St. Malachy's GAA. Castlewellan,Down,Ulster,54.255572,-5.941395,matched_gaa
+"St. Mary's GAA, Burren",Down,Ulster,54.137491,-6.262803,matched_gaa
+"St. Mary's GAA, Glasdrumman",Down,Ulster,54.124699,-5.907279,matched_gaa
+"St. Michael's GAA, Magheralin",Down,Ulster,54.465105,-6.276598,matched_gaa
+"St. Mochhai's GAA, Darragh Cross",Down,Ulster,54.448684,-5.757501,matched_gaa
+"St. Patrick's GAA, Drumgath",Down,Ulster,54.22961,-6.214452,matched_gaa
+"St. Patrick's GAA, Portaferry",Down,Ulster,54.373912,-5.532181,matched_gaa
+"St. Patrick's GAA, Saul",Down,Ulster,54.348653,-5.653568,matched_gaa
+"St. Paul's GAA, Holywood",Down,Ulster,54.637267,-5.841064,matched_generic
+"St. Peter's GAA, Warrenpoint",Down,Ulster,54.103374,-6.228527,matched_gaa
+Teconnaught GAA,Down,Ulster,54.359383,-5.771101,matched_gaa
+Tullylish GAA,Down,Ulster,54.381373,-6.311648,matched_gaa
+"Wolfe Tone GAA, Killyleagh",Down,Ulster,54.403911,-5.652938,matched_generic
+Fermanagh GAA,Fermanagh,Ulster,54.351139,-7.634813,matched_gaa
+"Art McMurrough's GAA, Belnaleck",Fermanagh,Ulster,54.290111,-7.672727,matched_gaa
+"St. Aidan's GAA, Derrylin",Fermanagh,Ulster,54.1916067,-7.5684442,matched_generic
+"Brian Boru GAA, Kinawley",Fermanagh,Ulster,54.217359,-7.676336,matched_gaa
+Derrygonnelly Harps,Fermanagh,Ulster,54.421938,-7.827696,matched_gaa
+"Emmett's GAA, Lisnaskea",Fermanagh,Ulster,54.249707,-7.452027,matched_gaa
+Enniskillen Gaels,Fermanagh,Ulster,54.351022,-7.634843,matched_gaa
+"Erne Gaels, Belleek",Fermanagh,Ulster,54.48504,-8.088652,matched_gaa
+"First Fermanagh's GAA, Newtownbutler",Fermanagh,Ulster,54.187566,-7.364801,matched_gaa
+"Heber McMahon's GAA, Brookeborough",Fermanagh,Ulster,54.312959,-7.39369,matched_gaa
+"O'Connell's GAA, Derrylin",Fermanagh,Ulster,54.204195,-7.575962,matched_gaa
+"O'Dwyer's GAA, Coa",Fermanagh,Ulster,54.40243,-7.537014,matched_gaa
+"O'Rahilly's GAA, Belcoo",Fermanagh,Ulster,54.298865,-7.883084,matched_gaa
+Roslea Shamrocks,Fermanagh,Ulster,54.240537,-7.169908,matched_gaa
+"St. Joseph's GAA, Ederney",Fermanagh,Ulster,54.531447,-7.655133,matched_gaa
+"St. Macartan's GAA, Aghadrumsee",Fermanagh,Ulster,54.23729,-7.233976,matched_gaa
+"St. Mary's GAA, Devenish",Fermanagh,Ulster,54.41029,-8.091314,matched_gaa
+"St. Mary's GAA, Maguiresbridge",Fermanagh,Ulster,54.291314,-7.477572,matched_gaa
+"St. Molaise's GAA, Irvinestown",Fermanagh,Ulster,54.474998,-7.62985,matched_gaa
+"St. Patrick's GAA, Donagh",Fermanagh,Ulster,54.215802,-7.38902,matched_gaa
+"St. Patricks GAA, Lisbellaw",Fermanagh,Ulster,54.344695,-7.558182,no_match
+Teemore Shamrocks,Fermanagh,Ulster,54.144486,-7.567095,matched_gaa
+Tempo Maguires,Fermanagh,Ulster,54.381779,-7.460613,matched_gaa
+Tyrone GAA,Tyrone,Ulster,54.613948,-7.299232,matched_gaa
+Tyrone GAA Garvaghey Centre,Tyrone,Ulster,54.4912088,-7.131232,matched_gaa
+Beragh Red Knights,Tyrone,Ulster,54.549666,-7.152417,matched_gaa
+Cappagh Gaels,Tyrone,Ulster,54.601477,-7.254738,matched_gaa
+"Clann na nGael GAA, Donagheady",Tyrone,Ulster,54.826154,-7.226472,matched_gaa
+Derrytresk Fir an Chnoic GAA,Tyrone,Ulster,54.518026,-6.64025,no_match
+"Éire Óg GAA, Carrickmore",Tyrone,Ulster,54.59419,-7.046522,matched_gaa
+"Éire Óg GAA, Clogher",Tyrone,Ulster,54.412092,-7.165559,matched_generic
+"Emmett's GAA, Eskra",Tyrone,Ulster,54.484967,-7.202589,matched_gaa
+"Eoghan Rua GAA, Dungannon",Tyrone,Ulster,54.508666,-6.787254,matched_gaa
+Errigal Ciaran GAA,Tyrone,Ulster,54.524743,-7.06973,matched_generic
+"Fr. Rock's GAA, Cookstown",Tyrone,Ulster,54.642676,-6.75079,matched_gaa
+Derrylaughan Kevin Barry's GAC,Tyrone,Ulster,54.53633,-6.61058,matched_gaa
+"Na Fianna GAA, Coalisland",Tyrone,Ulster,54.543273,-6.690517,matched_gaa
+"Naomh Colmcille GAA, Coalisland/Clonoe",Tyrone,Ulster,54.53822,-6.649469,no_match
+"O'Donovan Rossa's GAA, Ardboe",Tyrone,Ulster,54.614172,-6.551919,matched_generic
+"O'Neill's GAA, Aghaloo",Tyrone,Ulster,54.407448,-6.978524,matched_gaa
+"O'Rahilly's GAA, Clonoe",Tyrone,Ulster,54.533554,-6.677183,matched_generic
+"Owen Roe's GAA, Brackaville",Tyrone,Ulster,54.550859,-6.715102,matched_generic
+"Owen Roe's GAA, Leckpatrick",Tyrone,Ulster,54.842718,-7.357853,matched_generic
+"Pearse Óg GAA, Dregish",Tyrone,Ulster,54.667527,-7.460411,matched_gaa
+"Pearse's GAA, Fintona",Tyrone,Ulster,54.49211,-7.327816,matched_gaa
+"Pearse's GAA, Galbally",Tyrone,Ulster,54.543001,-6.904847,matched_generic
+"Plunkett's GAA, Pomeroy",Tyrone,Ulster,54.593823,-6.936975,matched_generic
+"Robert Emmet's GAA, Brockagh",Tyrone,Ulster,54.561066,-6.599255,matched_generic
+"Sarsfield's GAA, Drumragh",Tyrone,Ulster,54.570499,-7.360705,matched_gaa
+"Sigerson's GAA, Strabane",Tyrone,Ulster,54.816627,-7.457993,matched_gaa
+"St. Colmcille's GAA, Carrickmore",Tyrone,Ulster,54.592369,-7.067623,matched_gaa
+"St. Columba's GAA, Urney",Tyrone,Ulster,54.794333,-7.53218,matched_generic
+"St. Davog's, Aghyaran",Tyrone,Ulster,54.677623,-7.704023,matched_gaa
+"St. Dympna's GAA, Dromore",Tyrone,Ulster,54.51581,-7.45148,matched_gaa
+"St. Enda's GAA, Omagh",Tyrone,Ulster,54.613985,-7.296944,matched_gaa
+"St. Eugene's GAA, Castlederg",Tyrone,Ulster,54.707328,-7.599265,matched_gaa
+"St. Eugene's GAA, Newtownstewart",Tyrone,Ulster,54.718492,-7.371679,matched_generic
+"St. Joseph's GAA, Glenelly",Tyrone,Ulster,54.766177,-7.250513,matched_generic
+"St. Macartan's GAA, Augher",Tyrone,Ulster,54.436332,-7.120059,matched_gaa
+"St. Macartan's GAA, Trillick",Tyrone,Ulster,54.452746,-7.491399,matched_gaa
+"St. Malachy's GAA, Edendork",Tyrone,Ulster,54.522556,-6.759909,matched_generic
+"St. Malachy's GAA, Moortown",Tyrone,Ulster,54.637103,-6.516028,matched_generic
+"St. Mary's GAA, Killeeshil",Tyrone,Ulster,54.49185,-6.943026,matched_gaa
+"St. Mary's GAA, Killyclogher",Tyrone,Ulster,54.60123,-7.25474,matched_gaa
+"St. Mary's GAA, Killyman",Tyrone,Ulster,54.507296,-6.673472,matched_generic
+"St. Patrick's GAA, Donaghmore",Tyrone,Ulster,54.534032,-6.812071,matched_gaa
+"St. Patrick's GAA, Eglish",Tyrone,Ulster,54.45196,-6.798555,matched_generic
+"St. Patrick's GAA, Gortin",Tyrone,Ulster,54.718342,-7.228704,matched_gaa
+"St. Patrick's GAA, Greencastle",Tyrone,Ulster,54.698255,-7.067184,matched_generic
+"St. Patrick's GAA, Tattyreagh",Tyrone,Ulster,54.534817,-7.281799,matched_gaa
+"St. Patrick's GAA, Rock",Tyrone,Ulster,54.599205,-6.831476,matched_gaa
+"St. Teresa's GAA, Loughmacrory",Tyrone,Ulster,54.627368,-7.105762,matched_gaa
+Stewartstown Harps,Tyrone,Ulster,54.566203,-6.689505,no_match
+Strabane Shamrocks,Tyrone,Ulster,54.818395,-7.457211,matched_gaa
+"Thomas Clarke's GAA, Dungannon",Tyrone,Ulster,54.508647,-6.787287,matched_gaa
+"Tír na nÓg GAA, The Moy",Tyrone,Ulster,54.443301,-6.697002,matched_gaa
+"Wolfe Tone's GAA, Drumquin",Tyrone,Ulster,54.612331,-7.491606,matched_gaa
+"Wolfe Tone's GAA, Kildress",Tyrone,Ulster,54.64009,-6.924508,matched_generic
