@@ -186,13 +186,13 @@ def build_overpass_query(lat, lon, radius=SEARCH_RADIUS_M):
     return f"""
 [out:json][timeout:25];
 (
-  way["sport"="gaelic_football"](around:{radius},{lat},{lon});
-  way["sport"="hurling"](around:{radius},{lat},{lon});
-  way["sport"="gaelic_games"](around:{radius},{lat},{lon});
+  way["sport"~"gaelic_football"](around:{radius},{lat},{lon});
+  way["sport"~"hurling"](around:{radius},{lat},{lon});
+  way["sport"~"gaelic_games"](around:{radius},{lat},{lon});
   way["leisure"="pitch"](around:{radius},{lat},{lon});
-  relation["sport"="gaelic_football"](around:{radius},{lat},{lon});
-  relation["sport"="hurling"](around:{radius},{lat},{lon});
-  relation["sport"="gaelic_games"](around:{radius},{lat},{lon});
+  relation["sport"~"gaelic_football"](around:{radius},{lat},{lon});
+  relation["sport"~"hurling"](around:{radius},{lat},{lon});
+  relation["sport"~"gaelic_games"](around:{radius},{lat},{lon});
   relation["leisure"="pitch"](around:{radius},{lat},{lon});
 );
 out body;
@@ -263,7 +263,7 @@ def pick_best_element(elements, centroid_lat, centroid_lon):
         """Lower is better. GAA-specific tags get priority, then distance."""
         tags = way.get("tags", {})
         sport = tags.get("sport", "")
-        is_gaa = sport in gaa_tags
+        is_gaa = any(tag in sport for tag in gaa_tags)
         # Compute centroid of way nodes
         coords = [node_lookup[nid] for nid in way["nodes"] if nid in node_lookup]
         if not coords:
