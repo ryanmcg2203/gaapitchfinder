@@ -33,9 +33,9 @@ GAA_TAGS = {"gaelic_football", "hurling", "gaelic_games"}
 def build_query(lat, lon):
     return f"""[out:json][timeout:25];
 (
-  way["sport"="gaelic_football"](around:{SEARCH_RADIUS_M},{lat},{lon});
-  way["sport"="hurling"](around:{SEARCH_RADIUS_M},{lat},{lon});
-  way["sport"="gaelic_games"](around:{SEARCH_RADIUS_M},{lat},{lon});
+  way["sport"~"gaelic_football"](around:{SEARCH_RADIUS_M},{lat},{lon});
+  way["sport"~"hurling"](around:{SEARCH_RADIUS_M},{lat},{lon});
+  way["sport"~"gaelic_games"](around:{SEARCH_RADIUS_M},{lat},{lon});
   way["leisure"="pitch"](around:{SEARCH_RADIUS_M},{lat},{lon});
 );
 out body;
@@ -73,7 +73,7 @@ def has_match(elements):
         return False, False
     for way in ways:
         sport = way.get("tags", {}).get("sport", "")
-        if sport in GAA_TAGS:
+        if any(tag in sport for tag in GAA_TAGS):
             return True, True
     return True, False  # matched but only via generic leisure=pitch
 
