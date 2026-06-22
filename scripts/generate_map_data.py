@@ -1,6 +1,6 @@
 """
-Convert gaapitchfinder_data.csv to map/data.json for the Leaflet map.
-Run from repo root: python scripts/generate_map_data.py
+Convert gaapitchfinder_data.csv to site/data.json for the Leaflet map.
+Run from repo root: python3 scripts/generate_map_data.py
 """
 import csv
 import json
@@ -51,8 +51,8 @@ with open('gaapitchfinder_data.csv') as f:
             'd': row['Directions'].strip(),
         })
 
-os.makedirs('map', exist_ok=True)
-out_path = 'map/data.json'
+os.makedirs('site', exist_ok=True)
+out_path = 'site/data.json'
 with open(out_path, 'w') as f:
     json.dump(clubs, f, separators=(',', ':'))
 

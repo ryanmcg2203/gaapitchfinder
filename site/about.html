@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About – GAA Pitch Finder</title>
+<link rel="icon" type="image/png" href="img/logo-icon.png">
+<meta property="og:title" content="About – GAA Pitch Finder">
+<meta property="og:description" content="GAA Pitch Finder is a free map of nearly 2,000 GAA pitches worldwide, built and maintained by Ryan McGuinness since 2017.">
+<meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<meta property="og:url" content="https://gaapitchfinder.com/about.html">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://gaapitchfinder.com/about.html">
+<meta name="description" content="GAA Pitch Finder is a free map of nearly 2,000 GAA pitches worldwide, built and maintained by Ryan McGuinness since 2017.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="blog/">Blog</a></li>
+    <li><a href="directions.html">Directions</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="dataset.html">Dataset</a></li>
+  </ul>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="nav-donate" target="_blank" rel="noopener noreferrer">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="/">GAA Pitch Finder</a>
+  <a href="blog/">Blog</a>
+  <a href="directions.html">Directions</a>
+  <a href="dataset.html">Dataset</a>
+  <a href="about.html">About</a>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
+</div>
+
+<div class="page-content">
+  <h1>About</h1>
+
+  <p>GAA Pitch Finder is a free interactive map of GAA club pitches worldwide. It was started in 2017 as a personal project and has grown to cover nearly 2,000 pitches across Ireland and the global Irish diaspora.</p>
+
+  <h2>The project</h2>
+  <p>The map began with a simple question: where are all the GAA pitches in Ireland? What started as a weekend project turned into something much bigger. Club locations have been collected and verified over several years, with coordinates cross-referenced against satellite imagery and club websites.</p>
+  <p>The data now covers every county in Ireland and clubs in Great Britain, North America, Europe, Australasia, Asia, the Middle East, and South America. Each entry includes GPS coordinates, elevation, annual rainfall, and a Google Maps directions link.</p>
+
+  <h2>Who built it</h2>
+  <p>GAA Pitch Finder is built and maintained by Ryan McGuinness. The dataset is published openly on <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> and has been used in academic research, government programmes, and commercial GIS systems.</p>
+
+  <h2>Contact</h2>
+  <p>To suggest a missing pitch, report an error, or ask about the data, get in touch at <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>.</p>
+</div>
+
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+document.getElementById('drawer-close').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.remove('open');
+});
+</script>
+</body>
+</html>

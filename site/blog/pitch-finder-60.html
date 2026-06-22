@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch Finder 6.0 – GAA Pitch Finder</title>
+<link rel="icon" type="image/png" href="../img/logo-icon.png">
+<meta property="og:title" content="Pitch Finder 6.0 – GAA Pitch Finder">
+<meta property="og:description" content="The underlying dataset is now published openly on GitHub. Presented at the Q1 Dublin Data Meetup.">
+<meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<meta property="og:url" content="https://gaapitchfinder.com/blog/pitch-finder-60.html">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://gaapitchfinder.com/blog/pitch-finder-60.html">
+<meta name="description" content="The underlying dataset is now published openly on GitHub. Presented at the Q1 Dublin Data Meetup.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="../img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="/blog/" class="active">Blog</a></li>
+    <li><a href="/directions.html">Directions</a></li>
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/dataset.html">Dataset</a></li>
+  </ul>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="nav-donate" target="_blank" rel="noopener noreferrer">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="/">GAA Pitch Finder</a>
+  <a href="/blog/">Blog</a>
+  <a href="/directions.html">Directions</a>
+  <a href="/dataset.html">Dataset</a>
+  <a href="/about.html">About</a>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
+</div>
+<div class="page-content">
+  <div class="post-header">
+    <h1>Pitch Finder 6.0</h1>
+    <div class="post-date">25 February 2024 &middot; 1 min read</div>
+  </div>
+  <div class="post-body">
+    <p>February 2024 updates:</p>
+    <ul>
+      <li>Published the underlying dataset to <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>. This is a major change for GAA Pitch Finder — I was afraid of sharing the data before but think it makes sense to share it with the masses!</li>
+      <li>Presented this work at the Q1 Dublin Data Meetup.</li>
+      <li>The original version of the map from 6 years ago was posted to Reddit, leading to a lot of debate, adding a few new pitches and some great publicity.</li>
+    </ul>
+  </div>
+  <nav class="post-nav">
+    <div>
+      <span class="post-nav-label">Newer</span>
+      <a href="elevation-analysis.html">The Heights of Gaelic Games</a>
+    </div>
+    <div class="post-nav-next">
+      <span class="post-nav-label">Older</span>
+      <a href="most-remote-pitches.html">Most Remote GAA Pitches in Ireland</a>
+    </div>
+  </nav>
+  <a class="back-link" href="./">&larr; Back to Blog</a>
+</div>
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;&middot;&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+document.getElementById('drawer-close').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.remove('open');
+});
+</script>
+</body>
+</html>
