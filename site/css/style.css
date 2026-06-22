@@ -169,6 +169,16 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .nav-drawer a:hover { color: #fff; }
 .nav-drawer.open { display: block; }
 
+.drawer-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 28px;
+  display: flex;
+  color: #777;
+}
+.drawer-close:hover { color: #fff; }
+
 @media (max-width: 640px) {
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
@@ -250,6 +260,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .post-list a:hover { color: #555; }
 
 .post-meta { font-size: 13px; color: #999; }
+.post-excerpt { font-size: 14px; color: #777; line-height: 1.6; margin-top: 6px; }
 
 /* ── Blog post ─────────────────────────────────────────────────────── */
 .post-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
@@ -266,6 +277,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .post-body { font-size: 16px; line-height: 1.75; color: #333; }
 .post-body p { margin-bottom: 20px; }
 .post-body h2 { font-size: 20px; font-weight: 600; margin: 36px 0 12px; color: #111; }
+.post-body h3 { font-size: 15px; font-weight: 600; margin: 24px 0 6px; color: #333; }
 .post-body ul { margin: 0 0 20px 20px; }
 .post-body li { margin-bottom: 6px; }
 .post-body a { color: #111; }
@@ -300,3 +312,17 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .dir-pitch { color: #999; font-size: 13px; margin-left: 6px; }
 
 #dir-loading { color: #999; font-size: 16px; padding: 40px 0; }
+
+/* ── Blog post navigation ────────────────────────────────────────── */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+.post-nav a { font-size: 14px; color: #555; text-decoration: none; }
+.post-nav a:hover { color: #111; }
+.post-nav-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #bbb; margin-bottom: 3px; }
+.post-nav-next { text-align: right; }

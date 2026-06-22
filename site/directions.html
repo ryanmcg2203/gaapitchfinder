@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Directions – GAA Pitch Finder</title>
-<meta name="description" content="Find directions to every GAA pitch in Ireland and worldwide. Browse by province and county.">
+<link rel="icon" type="image/png" href="img/logo-icon.png">
+<meta property="og:title" content="Directions – GAA Pitch Finder">
+<meta property="og:description" content="Find Google Maps directions to every GAA pitch in Ireland and worldwide. Browse by province and county.">
+<meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<meta property="og:url" content="https://gaapitchfinder.com/directions.html">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://gaapitchfinder.com/directions.html">
+<meta name="description" content="Find Google Maps directions to every GAA pitch in Ireland and worldwide. Browse by province and county.">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,23 +22,27 @@
     GAA Pitch Finder
   </a>
   <ul class="nav-links">
-    <li><a href="/">GAA Pitch Finder</a></li>
     <li><a href="blog/">Blog</a></li>
     <li><a href="directions.html" class="active">Directions</a></li>
+    <li><a href="about.html">About</a></li>
     <li><a href="dataset.html">Dataset</a></li>
   </ul>
-  <a href="#" class="nav-donate">Donate</a>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="nav-donate" target="_blank" rel="noopener noreferrer">Donate</a>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 <div class="nav-drawer" id="nav-drawer">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <a href="/">GAA Pitch Finder</a>
   <a href="blog/">Blog</a>
   <a href="directions.html">Directions</a>
   <a href="dataset.html">Dataset</a>
 
-  <a href="#">Donate</a>
+  <a href="about.html">About</a>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
 </div>
 
 <div class="page-content">
@@ -49,6 +60,9 @@
 <script>
 document.getElementById('hamburger').addEventListener('click', () => {
   document.getElementById('nav-drawer').classList.toggle('open');
+});
+document.getElementById('drawer-close').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.remove('open');
 });
 
 // Province order for Ireland
@@ -83,6 +97,14 @@ fetch('data.json')
       byProvince[prov][c.k].push(c);
     });
 
+    // ── Overseas: group by region then country ────────────────────────────
+    const byRegion = {};
+    overseas.forEach(c => {
+      if (!byRegion[c.r]) byRegion[c.r] = {};
+      if (!byRegion[c.r][c.k]) byRegion[c.r][c.k] = [];
+      byRegion[c.r][c.k].push(c);
+    });
+
     // TOC
     const tocHtml = ['<h2>Ireland</h2><ul>'];
     PROVINCE_ORDER.forEach(p => {
@@ -92,6 +114,16 @@ fetch('data.json')
       });
     });
     tocHtml.push('</ul>');
+
+    REGION_ORDER.forEach(region => {
+      if (!byRegion[region]) return;
+      tocHtml.push(`<h2>${region}</h2><ul>`);
+      Object.keys(byRegion[region]).sort().forEach(country => {
+        tocHtml.push(`<li><a href="#${slug(country)}">${country}</a></li>`);
+      });
+      tocHtml.push('</ul>');
+    });
+
     toc.innerHTML = tocHtml.join('');
 
     // Body
@@ -110,14 +142,6 @@ fetch('data.json')
         html += '</ul></div>';
       });
       html += '</div>';
-    });
-
-    // ── Overseas: group by region then country ────────────────────────────
-    const byRegion = {};
-    overseas.forEach(c => {
-      if (!byRegion[c.r]) byRegion[c.r] = {};
-      if (!byRegion[c.r][c.k]) byRegion[c.r][c.k] = [];
-      byRegion[c.r][c.k].push(c);
     });
 
     REGION_ORDER.forEach(region => {
