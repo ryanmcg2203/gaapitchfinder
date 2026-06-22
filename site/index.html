@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>GAA Pitch Finder</title>
+<meta name="description" content="Find every GAA pitch in Ireland and worldwide. Search by county, club or pitch name and get directions.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<link rel="stylesheet" href="vendor/MarkerCluster.css">
+<link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
+<style>
+body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* ── Map filter bar ── */
+#topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #242424;
+  border-bottom: 1px solid #383838;
+  flex-shrink: 0;
+}
+
+#filters-label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  padding-right: 12px;
+  border-right: 1px solid #484848;
+  flex-shrink: 0;
+}
+
+#selects { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
+
+select {
+  flex: 1 1 140px;
+  background: #333;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  min-width: 0;
+}
+select:focus { outline: none; border-color: #888; }
+select:disabled { opacity: 0.4; cursor: default; }
+
+.bar-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #484848;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+.bar-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.bar-btn.dots-active { border-color: #ffffcc; color: #ffffcc; }
+
+#theme-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+#theme-btn:hover { background: rgba(255,255,255,0.1); }
+
+#count-badge { flex-shrink: 0; font-size: 12px; color: #777; white-space: nowrap; }
+
+/* ── Map ── */
+#map { flex: 1; position: relative; }
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ccc;
+  font-size: 14px;
+  z-index: 999;
+  background: rgba(26,26,26,0.88);
+  padding: 12px 20px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* ── Tooltip ── */
+.leaflet-tooltip {
+  background: rgba(20,20,20,0.93);
+  border: 1px solid #383838;
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+.leaflet-tooltip::before { display: none; }
+.tt-club { font-size: 13px; font-weight: 600; color: #f0f0f0; line-height: 1.35; }
+.tt-pitch { font-size: 12px; color: #999; margin-top: 1px; }
+.tt-loc { font-size: 11px; color: #666; margin-top: 2px; }
+.tt-hint { font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 0.2px; }
+
+/* ── Popup ── */
+.leaflet-popup-content-wrapper {
+  background: #1c1c1c;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.7);
+  color: #e0e0e0;
+}
+.leaflet-popup-tip-container { margin-top: -1px; }
+.leaflet-popup-tip { background: #1c1c1c; box-shadow: none; }
+.leaflet-popup-content { margin: 14px 16px; min-width: 180px; }
+.leaflet-popup-close-button { color: #555 !important; font-size: 20px !important; line-height: 24px !important; width: 24px !important; height: 24px !important; top: 6px !important; right: 8px !important; }
+.leaflet-popup-close-button:hover { color: #bbb !important; background: none !important; }
+.pop-club { font-size: 15px; font-weight: 600; color: #fff; line-height: 1.3; }
+.pop-pitch { font-size: 13px; color: #999; margin-top: 2px; }
+.pop-loc { font-size: 12px; color: #666; margin-top: 4px; }
+.pop-sep { border: none; border-top: 1px solid #2e2e2e; margin: 10px 0 8px; }
+.pop-dir { display: inline-flex; align-items: center; gap: 5px; color: #5b9cf6; font-size: 13px; font-weight: 500; text-decoration: none; }
+.pop-dir:hover { color: #82b4f8; }
+
+/* ── Light theme ── */
+body.light #topbar { background: #f5f5f5; border-bottom-color: #e0e0e0; }
+body.light #filters-label { color: #333; border-right-color: #ddd; }
+body.light select { background: #fff; color: #333; border-color: #ccc; }
+body.light .bar-btn { border-color: #ddd; color: #666; }
+body.light .bar-btn:hover { background: rgba(0,0,0,0.05); color: #333; }
+body.light .bar-btn.dots-active { border-color: #999900; color: #999900; }
+body.light #count-badge { color: #aaa; }
+body.light #theme-btn:hover { background: rgba(0,0,0,0.06); }
+body.light #loading { background: rgba(245,245,245,0.92); color: #555; }
+body.light .leaflet-tooltip { background: rgba(255,255,255,0.96); border-color: #ddd; }
+body.light .tt-club { color: #111; }
+body.light .tt-pitch { color: #555; }
+body.light .tt-loc { color: #999; }
+body.light .tt-hint { color: #bbb; }
+body.light .leaflet-popup-content-wrapper { background: #fff; border-color: #ddd; }
+body.light .leaflet-popup-tip { background: #fff; }
+body.light .pop-club { color: #111; }
+body.light .pop-pitch { color: #555; }
+body.light .pop-loc { color: #999; }
+body.light .pop-sep { border-top-color: #eee; }
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  body { overflow: hidden; }
+  #filters-label { display: none; }
+  #topbar { padding: 8px 10px; gap: 6px; }
+  select { font-size: 12px; padding: 6px 8px; flex-basis: calc(50% - 4px); }
+  #theme-btn { font-size: 18px; }
+  #count-badge { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="/" class="active">GAA Pitch Finder</a></li>
+    <li><a href="blog/">Blog</a></li>
+    <li><a href="directions.html">Directions</a></li>
+    <li><a href="dataset.html">Dataset</a></li>
+  </ul>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/">GAA Pitch Finder</a>
+  <a href="blog/">Blog</a>
+  <a href="directions.html">Directions</a>
+  <a href="dataset.html">Dataset</a>
+
+  <a href="#">Donate</a>
+</div>
+
+<div id="topbar">
+  <div id="filters-label">FILTERS</div>
+  <div id="selects">
+    <select id="sel-region" aria-label="Filter by region"><option value="">Region (All)</option></select>
+    <select id="sel-county" aria-label="Filter by county or country"><option value="">Location (All)</option></select>
+    <select id="sel-club"   aria-label="Filter by club"><option value="">Club (All)</option></select>
+    <select id="sel-pitch"  aria-label="Filter by pitch"><option value="">Pitch (All)</option></select>
+  </div>
+  <span id="count-badge" aria-live="polite"></span>
+  <button class="bar-btn" id="reset-btn" aria-label="Reset filters">Reset</button>
+  <button class="bar-btn" id="cluster-btn" aria-label="Switch to dots view">Dots</button>
+  <button id="theme-btn" aria-label="Toggle day/night mode" title="Toggle day/night">🌙</button>
+</div>
+
+<div id="map">
+  <div id="loading">Loading pitches…</div>
+  <button id="info-btn" aria-label="About this map" title="About">ℹ</button>
+  <div id="info-panel">
+    <p>Use the dropdowns to filter by region, county, club or pitch. Click any marker to see details and get Google Maps Directions.</p>
+    <p>The underlying data is freely available on <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+    <p>Enquiries or issues? <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a></p>
+    <a href="#" class="donate-link">Donate</a>
+  </div>
+</div>
+
+<script src="vendor/leaflet.js"></script>
+<script src="vendor/leaflet.markercluster.js"></script>
+<script>
+// ── Mobile nav ────────────────────────────────────────────────────────────────
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+
+// ── Info panel ────────────────────────────────────────────────────────────────
+document.getElementById('info-btn').addEventListener('click', () => {
+  document.getElementById('info-panel').classList.toggle('open');
+});
+document.addEventListener('click', e => {
+  const panel = document.getElementById('info-panel');
+  const btn   = document.getElementById('info-btn');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+    panel.classList.remove('open');
+  }
+});
+
+// ── Tile layers ───────────────────────────────────────────────────────────────
+const darkTiles = L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>', subdomains: 'abcd', maxZoom: 19 }
+);
+const lightTiles = L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+  { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>', subdomains: 'abcd', maxZoom: 19 }
+);
+
+const map = L.map('map', { center: [53.5, -8], zoom: 7, layers: [darkTiles], preferCanvas: true });
+
+let isDark = true;
+
+document.getElementById('theme-btn').addEventListener('click', () => {
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+  map.removeLayer(isDark ? lightTiles : darkTiles);
+  map.addLayer(isDark ? darkTiles : lightTiles);
+  document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+});
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+const selRegion = document.getElementById('sel-region');
+const selCounty = document.getElementById('sel-county');
+const selClub   = document.getElementById('sel-club');
+const selPitch  = document.getElementById('sel-pitch');
+const countBadge = document.getElementById('count-badge');
+
+let allClubs = [];
+let clustered = true;
+
+function makeClusterLayer() {
+  return L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 40, showCoverageOnHover: false, spiderfyOnMaxZoom: true });
+}
+
+let markerLayer = makeClusterLayer();
+map.addLayer(markerLayer);
+
+function setOptions(el, values, placeholder) {
+  const prev = el.value;
+  el.innerHTML = `<option value="">${placeholder}</option>`;
+  values.forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; el.appendChild(o); });
+  if (values.includes(prev)) el.value = prev;
+}
+
+function getFiltered(region, county, club, pitch) {
+  return allClubs.filter(c =>
+    (!region || c.r === region) && (!county || c.k === county) &&
+    (!club || c.c === club) && (!pitch || c.p === pitch)
+  );
+}
+
+function cascadeFilters() {
+  const region = selRegion.value, county = selCounty.value, club = selClub.value;
+  const counties = [...new Set(allClubs.filter(c => !region || c.r === region).map(c => c.k))].sort();
+  setOptions(selCounty, counties, 'Location (All)');
+  const clubs = [...new Set(allClubs.filter(c => (!region || c.r === region) && (!county || c.k === county)).map(c => c.c))].sort();
+  setOptions(selClub, clubs, 'Club (All)');
+  const pitches = [...new Set(getFiltered(region, county, club, '').map(c => c.p).filter(Boolean))].sort();
+  setOptions(selPitch, pitches, 'Pitch (All)');
+  selPitch.disabled = pitches.length < 2;
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function renderMarkers() {
+  markerLayer.clearLayers();
+  const visible = getFiltered(selRegion.value, selCounty.value, selClub.value, selPitch.value);
+  countBadge.textContent = `${visible.length.toLocaleString()} pitch${visible.length !== 1 ? 'es' : ''}`;
+
+  visible.forEach(c => {
+    const eC = escHtml(c.c), eP = escHtml(c.p), eL = escHtml(c.k);
+    const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
+    const tooltip = `<div class="tt-club">${eC}</div>${eP ? `<div class="tt-pitch">${eP}</div>` : ''}<div class="tt-loc">${eL}</div><div class="tt-hint">Click for directions</div>`;
+    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep"><a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a>`;
+    L.circleMarker([c.la, c.lo], { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 })
+      .bindTooltip(tooltip, { sticky: true, opacity: 1 })
+      .bindPopup(popup, { maxWidth: 280 })
+      .addTo(markerLayer);
+  });
+
+  if (visible.length > 0 && visible.length < allClubs.length) {
+    map.fitBounds(visible.map(c => [c.la, c.lo]), { padding: [40, 40], maxZoom: 14 });
+  }
+}
+
+// ── Cluster / dots toggle ─────────────────────────────────────────────────────
+const clusterBtn = document.getElementById('cluster-btn');
+clusterBtn.addEventListener('click', () => {
+  clustered = !clustered;
+  map.removeLayer(markerLayer);
+  markerLayer = clustered ? makeClusterLayer() : L.layerGroup();
+  map.addLayer(markerLayer);
+  clusterBtn.textContent = clustered ? 'Dots' : 'Cluster';
+  clusterBtn.setAttribute('aria-label', clustered ? 'Switch to dots view' : 'Switch to cluster view');
+  clusterBtn.classList.toggle('dots-active', !clustered);
+  renderMarkers();
+});
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+document.getElementById('reset-btn').addEventListener('click', () => {
+  selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = '';
+  cascadeFilters(); renderMarkers(); map.setView([53.5, -8], 7);
+});
+
+// ── Event wiring ──────────────────────────────────────────────────────────────
+selRegion.addEventListener('change', () => { selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); renderMarkers(); });
+selCounty.addEventListener('change', () => { selClub.value = ''; selPitch.value = ''; cascadeFilters(); renderMarkers(); });
+selClub.addEventListener('change',   () => { selPitch.value = ''; cascadeFilters(); renderMarkers(); });
+selPitch.addEventListener('change', renderMarkers);
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+fetch('data.json')
+  .then(r => r.json())
+  .then(data => {
+    allClubs = data;
+    setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
+    selRegion.value = 'Ireland';
+    cascadeFilters(); renderMarkers();
+    document.getElementById('loading').remove();
+  })
+  .catch(() => {
+    const el = document.getElementById('loading');
+    el.textContent = 'Failed to load pitch data';
+    el.style.color = '#f87171';
+  });
+</script>
+</body>
+</html>

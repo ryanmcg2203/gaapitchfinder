@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directions – GAA Pitch Finder</title>
+<meta name="description" content="Find directions to every GAA pitch in Ireland and worldwide. Browse by province and county.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">GAA Pitch Finder</a></li>
+    <li><a href="blog/">Blog</a></li>
+    <li><a href="directions.html" class="active">Directions</a></li>
+    <li><a href="dataset.html">Dataset</a></li>
+  </ul>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/">GAA Pitch Finder</a>
+  <a href="blog/">Blog</a>
+  <a href="directions.html">Directions</a>
+  <a href="dataset.html">Dataset</a>
+
+  <a href="#">Donate</a>
+</div>
+
+<div class="page-content">
+  <h1>Directions</h1>
+  <p>Browse by province and county. Click a club name to open Google Maps directions to that pitch.</p>
+  <div id="dir-loading">Loading pitches…</div>
+  <div id="dir-toc" class="dir-toc"></div>
+  <div id="dir-body"></div>
+</div>
+
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+
+// Province order for Ireland
+const PROVINCE_ORDER = ['Connacht', 'Leinster', 'Munster', 'Ulster'];
+
+// For non-Ireland regions, group by region then country
+const REGION_ORDER = ['Great Britain', 'North America', 'Rest of Europe', 'Australasia', 'Asia', 'Middle East', 'South America'];
+
+fetch('data.json')
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('dir-loading').remove();
+
+    // Separate Ireland (has Province column via 'k' = county) from overseas
+    const ireland = data.filter(c => c.r === 'Ireland');
+    const overseas = data.filter(c => c.r !== 'Ireland');
+
+    const toc = document.getElementById('dir-toc');
+    const body = document.getElementById('dir-body');
+
+    // ── Ireland: group by province then county ────────────────────────────
+    // Build province → county → clubs
+    const byProvince = {};
+    ireland.forEach(c => {
+      // We need province — for Ireland clubs use the province from data
+      // Province not in data.json (stripped to save space), derive from county
+      // Actually we stored 'k' = county for Ireland. We need province grouping.
+      // Use a county→province lookup.
+      const prov = COUNTY_PROVINCE[c.k] || 'Other';
+      if (!byProvince[prov]) byProvince[prov] = {};
+      if (!byProvince[prov][c.k]) byProvince[prov][c.k] = [];
+      byProvince[prov][c.k].push(c);
+    });
+
+    // TOC
+    const tocHtml = ['<h2>Ireland</h2><ul>'];
+    PROVINCE_ORDER.forEach(p => {
+      if (!byProvince[p]) return;
+      Object.keys(byProvince[p]).sort().forEach(county => {
+        tocHtml.push(`<li><a href="#${slug(county)}">${county}</a></li>`);
+      });
+    });
+    tocHtml.push('</ul>');
+    toc.innerHTML = tocHtml.join('');
+
+    // Body
+    let html = '';
+    PROVINCE_ORDER.forEach(prov => {
+      if (!byProvince[prov]) return;
+      html += `<div class="dir-province"><h2>${prov}</h2>`;
+      Object.keys(byProvince[prov]).sort().forEach(county => {
+        const clubs = byProvince[prov][county].sort((a, b) => a.c.localeCompare(b.c));
+        html += `<div class="dir-county" id="${slug(county)}"><h3>${county}</h3><ul>`;
+        clubs.forEach(c => {
+          const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
+          const pitch = c.p ? `<span class="dir-pitch">${esc(c.p)}</span>` : '';
+          html += `<li><a href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><span class="dir-club">${esc(c.c)}</span>${pitch}</a></li>`;
+        });
+        html += '</ul></div>';
+      });
+      html += '</div>';
+    });
+
+    // ── Overseas: group by region then country ────────────────────────────
+    const byRegion = {};
+    overseas.forEach(c => {
+      if (!byRegion[c.r]) byRegion[c.r] = {};
+      if (!byRegion[c.r][c.k]) byRegion[c.r][c.k] = [];
+      byRegion[c.r][c.k].push(c);
+    });
+
+    REGION_ORDER.forEach(region => {
+      if (!byRegion[region]) return;
+      html += `<div class="dir-province"><h2>${region}</h2>`;
+      Object.keys(byRegion[region]).sort().forEach(country => {
+        const clubs = byRegion[region][country].sort((a, b) => a.c.localeCompare(b.c));
+        html += `<div class="dir-county" id="${slug(country)}"><h3>${country}</h3><ul>`;
+        clubs.forEach(c => {
+          const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
+          const pitch = c.p ? `<span class="dir-pitch">${esc(c.p)}</span>` : '';
+          html += `<li><a href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><span class="dir-club">${esc(c.c)}</span>${pitch}</a></li>`;
+        });
+        html += '</ul></div>';
+      });
+      html += '</div>';
+    });
+
+    body.innerHTML = html;
+  })
+  .catch(() => {
+    document.getElementById('dir-loading').textContent = 'Failed to load pitch data.';
+  });
+
+function slug(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+function esc(str) { return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+// County → Province lookup for Ireland
+const COUNTY_PROVINCE = {
+  'Galway':'Connacht','Leitrim':'Connacht','Mayo':'Connacht','Roscommon':'Connacht','Sligo':'Connacht',
+  'Carlow':'Leinster','Dublin':'Leinster','Kildare':'Leinster','Kilkenny':'Leinster','Laois':'Leinster',
+  'Longford':'Leinster','Louth':'Leinster','Meath':'Leinster','Offaly':'Leinster','Westmeath':'Leinster',
+  'Wexford':'Leinster','Wicklow':'Leinster',
+  'Clare':'Munster','Cork':'Munster','Kerry':'Munster','Limerick':'Munster','Tipperary':'Munster','Waterford':'Munster',
+  'Antrim':'Ulster','Armagh':'Ulster','Cavan':'Ulster','Derry':'Ulster','Donegal':'Ulster','Down':'Ulster',
+  'Fermanagh':'Ulster','Monaghan':'Ulster','Tyrone':'Ulster',
+  'London':'Great Britain','New York':'North America'
+};
+</script>
+</body>
+</html>

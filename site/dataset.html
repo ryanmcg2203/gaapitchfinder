@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dataset – GAA Pitch Finder</title>
+<meta name="description" content="The GAA Pitch Finder dataset — nearly 2,000 GAA pitches worldwide, freely available on GitHub.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">GAA Pitch Finder</a></li>
+    <li><a href="blog/">Blog</a></li>
+    <li><a href="directions.html">Directions</a></li>
+    <li><a href="dataset.html" class="active">Dataset</a></li>
+  </ul>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/">GAA Pitch Finder</a>
+  <a href="blog/">Blog</a>
+  <a href="directions.html">Directions</a>
+  <a href="dataset.html">Dataset</a>
+
+  <a href="#">Donate</a>
+</div>
+
+<div class="page-content">
+  <h1>Dataset</h1>
+  <p>The underlying dataset behind GAA Pitch Finder is freely available on GitHub. It contains nearly 2,000 GAA pitches worldwide, including coordinates, elevation, rainfall data, and more.</p>
+  <p><a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">View the dataset on GitHub →</a></p>
+
+  <h2>What's included</h2>
+  <ul>
+    <li>Club name and pitch name</li>
+    <li>Latitude and longitude (WGS84)</li>
+    <li>Province, county, country and region</li>
+    <li>Elevation (metres above sea level)</li>
+    <li>Annual rainfall and rain days</li>
+    <li>Google Maps directions link</li>
+  </ul>
+
+  <h2>Coverage</h2>
+  <ul>
+    <li>Ireland — all 32 counties</li>
+    <li>Great Britain</li>
+    <li>North America (USA and Canada)</li>
+    <li>Rest of Europe</li>
+    <li>Australasia</li>
+    <li>Asia</li>
+    <li>Middle East</li>
+    <li>South America</li>
+  </ul>
+
+  <h2>Usage</h2>
+  <p>The data is published openly for research, education, and community use. If you use it in your work, a mention would be appreciated. For enquiries contact <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>.</p>
+</div>
+
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+</script>
+</body>
+</html>

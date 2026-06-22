@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch Finder 3.0 – GAA Pitch Finder</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="../img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">GAA Pitch Finder</a></li>
+    <li><a href="/blog/" class="active">Blog</a></li>
+    <li><a href="/directions.html">Directions</a></li>
+    <li><a href="/dataset.html">Dataset</a></li>
+  </ul>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/">GAA Pitch Finder</a>
+  <a href="/blog/">Blog</a>
+  <a href="/directions.html">Directions</a>
+  <a href="/dataset.html">Dataset</a>
+</div>
+<div class="page-content">
+  <div class="post-header">
+    <h1>Pitch Finder 3.0</h1>
+    <div class="post-date">28 December 2020</div>
+  </div>
+  <div class="post-body">
+    <p>2020 end of year site updates:</p>
+    <ul>
+      <li>The main map has been migrated to Tableau Public instead of Google Maps.</li>
+      <li>The map is adaptive based on laptop vs mobile.</li>
+      <li>Filtering capabilities for Clubs, Pitches, and Counties.</li>
+      <li>No Pitch filtering on Mobile due to screen size constraints.</li>
+      <li>Removed Twitter links due to difficulties in URL Actions going to both Google Maps and Twitter on Mobile in a single Tooltip.</li>
+      <li>May add Light mode based on feedback, if intuitive on mobile.</li>
+    </ul>
+    <p>Other Pitch Finder work throughout 2020:</p>
+    <ul>
+      <li>Tableau viz of the Worst GAA Pitch to get Injured at.</li>
+      <li>Tableau viz of the most Isolated GAA Pitch.</li>
+      <li>GAA Pitch Finder data used to aid with Government COVID response.</li>
+    </ul>
+    <p>Still thinking about making an app but doing nothing about it — maybe in 2021.</p>
+  </div>
+  <a class="back-link" href="./">&larr; Back to Blog</a>
+</div>
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;&middot;&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+</script>
+</body>
+</html>

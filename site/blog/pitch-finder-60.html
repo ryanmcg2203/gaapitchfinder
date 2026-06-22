@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch Finder 6.0 – GAA Pitch Finder</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="../img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">GAA Pitch Finder</a></li>
+    <li><a href="/blog/" class="active">Blog</a></li>
+    <li><a href="/directions.html">Directions</a></li>
+    <li><a href="/dataset.html">Dataset</a></li>
+  </ul>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/">GAA Pitch Finder</a>
+  <a href="/blog/">Blog</a>
+  <a href="/directions.html">Directions</a>
+  <a href="/dataset.html">Dataset</a>
+</div>
+<div class="page-content">
+  <div class="post-header">
+    <h1>Pitch Finder 6.0</h1>
+    <div class="post-date">25 February 2024</div>
+  </div>
+  <div class="post-body">
+    <p>February 2024 updates:</p>
+    <ul>
+      <li>Published the underlying dataset to <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>. This is a major change for GAA Pitch Finder — I was afraid of sharing the data before but think it makes sense to share it with the masses!</li>
+      <li>Presented this work at the Q1 Dublin Data Meetup.</li>
+      <li>The original version of the map from 6 years ago was posted to Reddit, leading to a lot of debate, adding a few new pitches and some great publicity.</li>
+    </ul>
+  </div>
+  <a class="back-link" href="./">&larr; Back to Blog</a>
+</div>
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;&middot;&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+</script>
+</body>
+</html>
