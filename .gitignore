@@ -16,5 +16,6 @@ Thumbs.db
 map/data.json
 site/data.json
 site/clubs/
+site/counties/
 data/derived/pitch_geometry.csv
 data/derived/.pitch_geometry_checkpoint.json
