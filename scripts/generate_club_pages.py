@@ -35,6 +35,11 @@ def esc(value):
     return html.escape(value or "")
 
 
+def ga_snippet():
+    return """<script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
+<script src="/js/ga.js"></script>"""
+
+
 def page_title(page):
     first_row = page["rows"][0]
     pitch = first_row["Pitch"].strip()
@@ -142,6 +147,7 @@ def render_club_page(page):
 <meta property="og:type" content="website">
 <link rel="canonical" href="{esc(canonical_url)}">
 <meta name="description" content="{esc(description)}">
+{ga_snippet()}
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -239,6 +245,7 @@ def render_index_page(pages):
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/clubs/">
 <meta name="description" content="Browse club and pitch pages for GAA clubs in Ireland and worldwide.">
+{ga_snippet()}
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
