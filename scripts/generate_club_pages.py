@@ -122,6 +122,41 @@ document.getElementById('drawer-close').addEventListener('click', () => {
 """.strip()
 
 
+def directory_search_html(input_id, placeholder, label="Search"):
+    return f"""
+<div class="directory-search">
+  <label for="{esc_attr(input_id)}">{esc(label)}</label>
+  <input id="{esc_attr(input_id)}" type="search" placeholder="{esc_attr(placeholder)}" autocomplete="off">
+</div>
+""".strip()
+
+
+def directory_search_script(input_id, item_selector, empty_id):
+    return f"""
+<script>
+(function() {{
+  const input = document.getElementById('{input_id}');
+  const empty = document.getElementById('{empty_id}');
+  if (!input) return;
+  const items = Array.from(document.querySelectorAll('{item_selector}'));
+  function applyFilter() {{
+    const query = input.value.trim().toLowerCase();
+    let visible = 0;
+    items.forEach((item) => {{
+      const text = (item.dataset.search || item.textContent || '').toLowerCase();
+      const match = !query || text.includes(query);
+      item.hidden = !match;
+      if (match) visible += 1;
+    }});
+    if (empty) empty.hidden = visible !== 0;
+  }}
+  input.addEventListener('input', applyFilter);
+  applyFilter();
+}})();
+</script>
+""".strip()
+
+
 def row_coordinates(row):
     try:
         return float(row["Latitude"].strip()), float(row["Longitude"].strip())
@@ -637,8 +672,9 @@ def render_index_page(pages):
     for initial in sorted(groups):
         links = []
         for page in sorted(groups[initial], key=lambda item: (item["club"].lower(), item["location_label"].lower())):
+            search_text = f"{page['club']} {page['location_label']} {row_region(page['rows'][0])}"
             links.append(
-                f"<li><a href=\"/{page['rel_url']}\">{esc(page['club'])}</a>"
+                f"<li data-search=\"{esc_attr(search_text)}\"><a href=\"/{page['rel_url']}\">{esc(page['club'])}</a>"
                 f"<span class=\"club-directory-meta\">{esc(page['location_label'])}</span></li>"
             )
         sections.append(
@@ -705,8 +741,10 @@ def render_index_page(pages):
 <div class="page-content">
   <h1>Club Directory</h1>
   <p>Browse static club and pitch pages for GAA clubs in Ireland and worldwide. Each page includes the recorded pitch details, coordinates, and directions links from the GAA Pitch Finder dataset.</p>
+  {directory_search_html("club-directory-search", "Search clubs, counties, or countries")}
   <div class="club-directory-toc">{toc}</div>
   {"".join(sections)}
+  <p class="directory-empty" id="club-directory-empty" hidden>No matching clubs found.</p>
 </div>
 
 <footer class="site-footer">
@@ -721,6 +759,7 @@ document.getElementById('drawer-close').addEventListener('click', () => {{
   document.getElementById('nav-drawer').classList.remove('open');
 }});
 </script>
+{directory_search_script("club-directory-search", ".club-directory-group li", "club-directory-empty")}
 </body>
 </html>
 """
@@ -758,8 +797,9 @@ def render_counties_index(counties):
             continue
         links = []
         for county, pages in province_groups[province]:
+            search_text = f"{county} {province}"
             links.append(
-                f"<li><a href=\"/{county_url(county)}\">{esc(county)}</a>"
+                f"<li data-search=\"{esc_attr(search_text)}\"><a href=\"/{county_url(county)}\">{esc(county)}</a>"
                 f"<span>{len(pages)} pitches</span></li>"
             )
         sections.append(
@@ -799,10 +839,12 @@ def render_counties_index(counties):
   <p class="clubs-breadcrumb"><a href="/clubs/">Clubs</a> / Counties</p>
   <h1>GAA Pitches By County</h1>
   <p>Browse county pages for GAA clubs and pitches across Ireland, grouped by province. Each county page links through to recorded pitch coordinates and directions.</p>
+  {directory_search_html("county-index-search", "Search counties or provinces")}
   <div class="club-directory-toc">{toc}</div>
   <section class="county-directory">
     {"".join(sections)}
   </section>
+  <p class="directory-empty" id="county-index-empty" hidden>No matching counties found.</p>
 </div>
 
 <footer class="site-footer">
@@ -810,6 +852,7 @@ def render_counties_index(counties):
 </footer>
 
 {drawer_script()}
+{directory_search_script("county-index-search", ".county-province-group li", "county-index-empty")}
 </body>
 </html>
 """
@@ -825,8 +868,9 @@ def render_county_page(county, pages):
     structured_data = county_page_schema(county, pages, description)
     rows = []
     for page in pages:
+        search_text = f"{page['club']} {page_pitch_label(page)} {county} {province}"
         rows.append(
-            f"<li><a href=\"/{page['rel_url']}\">{esc(page['club'])}</a>"
+            f"<li data-search=\"{esc_attr(search_text)}\"><a href=\"/{page['rel_url']}\">{esc(page['club'])}</a>"
             f"<span>{esc(page_pitch_label(page))}</span></li>"
         )
 
@@ -857,9 +901,11 @@ def render_county_page(county, pages):
   <h1>GAA Pitches In {esc(county)}</h1>
   <p class="clubs-subtitle">{esc(province)} · Ireland</p>
   <p>{esc(description)}</p>
+  {directory_search_html("county-page-search", f"Search clubs or pitches in {county}")}
   <section class="county-directory">
     <ul>{"".join(rows)}</ul>
   </section>
+  <p class="directory-empty" id="county-page-empty" hidden>No matching pitches found.</p>
   <a href="/counties/" class="back-link">Browse all counties</a>
 </div>
 
@@ -868,6 +914,7 @@ def render_county_page(county, pages):
 </footer>
 
 {drawer_script()}
+{directory_search_script("county-page-search", ".county-directory li", "county-page-empty")}
 </body>
 </html>
 """
