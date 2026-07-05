@@ -47,6 +47,31 @@ def ga_snippet():
 <script src="/js/ga.js"></script>"""
 
 
+def absolute_url(path):
+    return f"{SITE_BASE_URL}/{path.lstrip('/')}"
+
+
+def json_ld_script(data):
+    json_text = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+    json_text = json_text.replace("</", "<\\/")
+    return f'<script type="application/ld+json">{json_text}</script>'
+
+
+def breadcrumb_schema(items):
+    return {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": index,
+                "name": name,
+                "item": url,
+            }
+            for index, (name, url) in enumerate(items, start=1)
+        ],
+    }
+
+
 def nav_html(prefix="../"):
     return f"""
 <nav class="site-nav">
@@ -159,6 +184,211 @@ def county_url(county):
 
 def ireland_county(row):
     return row["County"].strip() if row["File"].strip() == "Ireland" else ""
+
+
+def place_address(row):
+    address = {}
+    if row["Country"].strip():
+        address["addressCountry"] = row["Country"].strip()
+    if row["Province"].strip() and row["File"].strip() == "Ireland":
+        address["addressRegion"] = row["Province"].strip()
+    locality = row["County"].strip() or row["Division"].strip()
+    if locality:
+        address["addressLocality"] = locality
+    return address
+
+
+def row_place_schema(row, page_url, index=0):
+    coords = row_coordinates(row)
+    name = row["Pitch"].strip() or row["Club"].strip()
+    place = {
+        "@type": "SportsActivityLocation",
+        "@id": f"{page_url}#pitch-{index + 1}",
+        "name": name,
+        "url": page_url,
+        "sport": ["Gaelic games", "Gaelic football", "Hurling"],
+    }
+    if row["Club"].strip():
+        place["alternateName"] = row["Club"].strip()
+    if row_display_place(row):
+        place["address"] = {
+            "@type": "PostalAddress",
+            **place_address(row),
+        }
+    if coords:
+        place["geo"] = {
+            "@type": "GeoCoordinates",
+            "latitude": coords[0],
+            "longitude": coords[1],
+        }
+        place["hasMap"] = row_maps_url(row)
+    return place
+
+
+def club_page_schema(page, title, description, canonical_url):
+    first_county = ireland_county(page["rows"][0])
+    breadcrumbs = [("GAA Pitch Finder", SITE_BASE_URL), ("Clubs", absolute_url("clubs/"))]
+    if first_county:
+        breadcrumbs.append((first_county, absolute_url(county_url(first_county))))
+    breadcrumbs.append((page["club"], canonical_url))
+
+    graph = [
+        {
+            "@type": "WebPage",
+            "@id": canonical_url,
+            "url": canonical_url,
+            "name": title,
+            "description": description,
+            "isPartOf": {
+                "@type": "WebSite",
+                "@id": f"{SITE_BASE_URL}/#website",
+                "name": "GAA Pitch Finder",
+                "url": SITE_BASE_URL,
+            },
+            "about": [
+                {"@id": f"{canonical_url}#pitch-{index + 1}"}
+                for index, _row in enumerate(page["rows"])
+            ],
+        },
+        breadcrumb_schema(breadcrumbs),
+    ]
+    graph.extend(
+        row_place_schema(row, canonical_url, index)
+        for index, row in enumerate(page["rows"])
+    )
+    return json_ld_script({"@context": "https://schema.org", "@graph": graph})
+
+
+def county_index_schema(counties):
+    url = absolute_url("counties/")
+    return json_ld_script(
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "CollectionPage",
+                    "@id": url,
+                    "url": url,
+                    "name": "GAA Pitches By County",
+                    "description": "Browse GAA pitch and club pages by county in Ireland.",
+                    "isPartOf": {
+                        "@type": "WebSite",
+                        "@id": f"{SITE_BASE_URL}/#website",
+                        "name": "GAA Pitch Finder",
+                        "url": SITE_BASE_URL,
+                    },
+                    "mainEntity": {
+                        "@type": "ItemList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": index,
+                                "name": county,
+                                "url": absolute_url(county_url(county)),
+                            }
+                            for index, county in enumerate(counties, start=1)
+                        ],
+                    },
+                },
+                breadcrumb_schema(
+                    [
+                        ("GAA Pitch Finder", SITE_BASE_URL),
+                        ("Clubs", absolute_url("clubs/")),
+                        ("Counties", url),
+                    ]
+                ),
+            ],
+        }
+    )
+
+
+def club_index_schema(pages):
+    url = absolute_url("clubs/")
+    sorted_pages = sorted(
+        pages, key=lambda item: (item["club"].lower(), item["location_label"].lower())
+    )
+    return json_ld_script(
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "CollectionPage",
+                    "@id": url,
+                    "url": url,
+                    "name": "GAA Club Directory",
+                    "description": "Browse club and pitch pages for GAA clubs in Ireland and worldwide.",
+                    "isPartOf": {
+                        "@type": "WebSite",
+                        "@id": f"{SITE_BASE_URL}/#website",
+                        "name": "GAA Pitch Finder",
+                        "url": SITE_BASE_URL,
+                    },
+                    "mainEntity": {
+                        "@type": "ItemList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": index,
+                                "name": page["club"],
+                                "url": absolute_url(page["rel_url"]),
+                            }
+                            for index, page in enumerate(sorted_pages, start=1)
+                        ],
+                    },
+                },
+                breadcrumb_schema(
+                    [
+                        ("GAA Pitch Finder", SITE_BASE_URL),
+                        ("Clubs", url),
+                    ]
+                ),
+            ],
+        }
+    )
+
+
+def county_page_schema(county, pages, description):
+    url = absolute_url(county_url(county))
+    return json_ld_script(
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "CollectionPage",
+                    "@id": url,
+                    "url": url,
+                    "name": f"GAA Pitches In {county}",
+                    "description": description,
+                    "isPartOf": {
+                        "@type": "WebSite",
+                        "@id": f"{SITE_BASE_URL}/#website",
+                        "name": "GAA Pitch Finder",
+                        "url": SITE_BASE_URL,
+                    },
+                    "mainEntity": {
+                        "@type": "ItemList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": index,
+                                "name": page["club"],
+                                "url": absolute_url(page["rel_url"]),
+                            }
+                            for index, page in enumerate(pages, start=1)
+                        ],
+                    },
+                },
+                breadcrumb_schema(
+                    [
+                        ("GAA Pitch Finder", SITE_BASE_URL),
+                        ("Clubs", absolute_url("clubs/")),
+                        ("Counties", absolute_url("counties/")),
+                        (county, url),
+                    ]
+                ),
+            ],
+        }
+    )
 
 
 def page_title(page):
@@ -295,6 +525,7 @@ def render_club_page(page, pages):
     canonical_url = f"{SITE_BASE_URL}/{page['rel_url']}"
     title = page_title(page)
     description = page_description(page)
+    structured_data = club_page_schema(page, title, description, canonical_url)
     rows_html = []
 
     for row_index, row in enumerate(page["rows"]):
@@ -349,6 +580,7 @@ def render_club_page(page, pages):
 <meta property="og:type" content="website">
 <link rel="canonical" href="{esc(canonical_url)}">
 <meta name="description" content="{esc(description)}">
+{structured_data}
 {ga_snippet()}
 <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -388,6 +620,7 @@ document.querySelectorAll('.club-map').forEach((el) => {{
 
 
 def render_index_page(pages):
+    structured_data = club_index_schema(pages)
     groups = {}
     for page in pages:
         initial = page["club"][0].upper() if page["club"] else "#"
@@ -426,6 +659,7 @@ def render_index_page(pages):
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/clubs/">
 <meta name="description" content="Browse club and pitch pages for GAA clubs in Ireland and worldwide.">
+{structured_data}
 {ga_snippet()}
 <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -496,6 +730,7 @@ def county_pages(pages):
 
 
 def render_counties_index(counties):
+    structured_data = county_index_schema(counties)
     links = []
     for county, pages in counties.items():
         links.append(
@@ -517,6 +752,7 @@ def render_counties_index(counties):
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/counties/">
 <meta name="description" content="Browse GAA pitch and club pages by county in Ireland.">
+{structured_data}
 {ga_snippet()}
 <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -550,6 +786,7 @@ def render_county_page(county, pages):
         f"Browse GAA pitches in {county}, with club pages, exact coordinates, "
         "small maps, and Google Maps directions."
     )
+    structured_data = county_page_schema(county, pages, description)
     rows = []
     for page in pages:
         rows.append(
@@ -571,6 +808,7 @@ def render_county_page(county, pages):
 <meta property="og:type" content="website">
 <link rel="canonical" href="{esc(canonical_url)}">
 <meta name="description" content="{esc(description)}">
+{structured_data}
 {ga_snippet()}
 <link rel="stylesheet" href="../css/style.css">
 </head>
