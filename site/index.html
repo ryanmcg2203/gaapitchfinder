@@ -168,8 +168,10 @@ body.light .pop-sep { border-top-color: #eee; }
 @media (max-width: 600px) {
   body { overflow: hidden; }
   #filters-label { display: none; }
-  #topbar { padding: 8px 10px; gap: 6px; }
+  #topbar { padding: 8px 10px; gap: 6px; flex-wrap: wrap; }
+  #selects { flex: 1 1 100%; width: 100%; }
   select { font-size: 12px; padding: 6px 8px; flex-basis: calc(50% - 4px); }
+  .bar-btn { flex: 1 1 0; padding: 5px 8px; }
   #theme-btn { font-size: 18px; }
   #count-badge { display: none; }
 }
@@ -183,6 +185,8 @@ body.light .pop-sep { border-top-color: #eee; }
     GAA Pitch Finder
   </a>
   <ul class="nav-links">
+    <li><a href="clubs/">Clubs</a></li>
+    <li><a href="counties/">Counties</a></li>
     <li><a href="blog/">Blog</a></li>
     <li><a href="directions.html">Directions</a></li>
     <li><a href="about.html">About</a></li>
@@ -199,6 +203,8 @@ body.light .pop-sep { border-top-color: #eee; }
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
   <a href="/">GAA Pitch Finder</a>
+  <a href="clubs/">Clubs</a>
+  <a href="counties/">Counties</a>
   <a href="blog/">Blog</a>
   <a href="directions.html">Directions</a>
   <a href="dataset.html">Dataset</a>
@@ -226,6 +232,7 @@ body.light .pop-sep { border-top-color: #eee; }
   <button id="info-btn" aria-label="About this map" title="About"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
   <div id="info-panel">
     <p>Use the dropdowns to filter by region, county, club or pitch. Click any marker to see details and get Google Maps Directions.</p>
+    <p class="info-browse-links"><a href="clubs/">Browse clubs</a><a href="counties/">Browse counties</a></p>
     <p>The underlying data is freely available on <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
     <p>Enquiries or issues? <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a></p>
     <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="donate-link" target="_blank" rel="noopener noreferrer">Donate</a>

@@ -32,6 +32,7 @@ STATIC_URLS = [
     ("/about.html", 0.7),
     ("/blog/", 0.8),
 ]
+PROVINCE_ORDER = ["Connacht", "Leinster", "Munster", "Ulster"]
 
 
 def esc(value):
@@ -80,6 +81,8 @@ def nav_html(prefix="../"):
     GAA Pitch Finder
   </a>
   <ul class="nav-links">
+    <li><a href="/clubs/">Clubs</a></li>
+    <li><a href="/counties/">Counties</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="/directions.html">Directions</a></li>
     <li><a href="/about.html">About</a></li>
@@ -95,6 +98,8 @@ def nav_html(prefix="../"):
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
   <a href="/">GAA Pitch Finder</a>
+  <a href="/clubs/">Clubs</a>
+  <a href="/counties/">Counties</a>
   <a href="/blog/">Blog</a>
   <a href="/directions.html">Directions</a>
   <a href="/dataset.html">Dataset</a>
@@ -671,6 +676,8 @@ def render_index_page(pages):
     GAA Pitch Finder
   </a>
   <ul class="nav-links">
+    <li><a href="/clubs/">Clubs</a></li>
+    <li><a href="/counties/">Counties</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="/directions.html">Directions</a></li>
     <li><a href="/about.html">About</a></li>
@@ -686,6 +693,8 @@ def render_index_page(pages):
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
   <a href="/">GAA Pitch Finder</a>
+  <a href="/clubs/">Clubs</a>
+  <a href="/counties/">Counties</a>
   <a href="/blog/">Blog</a>
   <a href="/directions.html">Directions</a>
   <a href="/dataset.html">Dataset</a>
@@ -729,14 +738,40 @@ def county_pages(pages):
     }
 
 
+def counties_by_province(counties):
+    grouped = {}
+    for county, pages in counties.items():
+        province = pages[0]["rows"][0]["Province"].strip() or "Other"
+        grouped.setdefault(province, []).append((county, pages))
+    return {
+        province: sorted(items, key=lambda item: item[0])
+        for province, items in grouped.items()
+    }
+
+
 def render_counties_index(counties):
     structured_data = county_index_schema(counties)
-    links = []
-    for county, pages in counties.items():
-        links.append(
-            f"<li><a href=\"/{county_url(county)}\">{esc(county)}</a>"
-            f"<span>{len(pages)} pitches</span></li>"
+    province_groups = counties_by_province(counties)
+    sections = []
+    for province in PROVINCE_ORDER:
+        if province not in province_groups:
+            continue
+        links = []
+        for county, pages in province_groups[province]:
+            links.append(
+                f"<li><a href=\"/{county_url(county)}\">{esc(county)}</a>"
+                f"<span>{len(pages)} pitches</span></li>"
+            )
+        sections.append(
+            f"<section class=\"county-province-group\" id=\"{county_slug(province)}\">"
+            f"<h2>{esc(province)}</h2><ul>{''.join(links)}</ul></section>"
         )
+
+    toc = "".join(
+        f"<a href=\"#{county_slug(province)}\">{esc(province)}</a>"
+        for province in PROVINCE_ORDER
+        if province in province_groups
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -763,9 +798,10 @@ def render_counties_index(counties):
 <div class="page-content">
   <p class="clubs-breadcrumb"><a href="/clubs/">Clubs</a> / Counties</p>
   <h1>GAA Pitches By County</h1>
-  <p>Browse county pages for GAA clubs and pitches across Ireland. Each county page links through to recorded pitch coordinates and directions.</p>
+  <p>Browse county pages for GAA clubs and pitches across Ireland, grouped by province. Each county page links through to recorded pitch coordinates and directions.</p>
+  <div class="club-directory-toc">{toc}</div>
   <section class="county-directory">
-    <ul>{"".join(links)}</ul>
+    {"".join(sections)}
   </section>
 </div>
 
