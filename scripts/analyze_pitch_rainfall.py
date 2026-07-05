@@ -1,12 +1,9 @@
 import pandas as pd
-import numpy as np
 from collections import defaultdict
 import folium
-import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 import argparse
-from typing import Dict, List, Tuple
 from pathlib import Path
 
 # Configure logging
@@ -17,8 +14,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-DEFAULT_DATA_PATH = Path("../gaapitchfinder_data.csv")
-DEFAULT_OUTPUT_DIR = Path("../output")
+ROOT_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_DATA_PATH = ROOT_DIR / "gaapitchfinder_data.csv"
+DEFAULT_OUTPUT_DIR = ROOT_DIR / "output"
 MAP_CENTER = [53.4129, -7.9135]  # Center of Ireland
 MAP_ZOOM = 7
 PLOT_FIGSIZE = (15, 10)
@@ -158,8 +156,8 @@ def generate_report(df: pd.DataFrame, county_df: pd.DataFrame) -> None:
         f.write("| Rank | County | Average Rainfall (mm) | Total Clubs | Clubs with Data |\n")
         f.write("|------|--------|---------------------|-------------|----------------|\n")
         
-        for i, row in county_df.iterrows():
-            f.write(f"| {i+1} | {row['County']} | {row['Average Rainfall (mm)']} | {row['Total Clubs']} | {row['Clubs with Data']} |\n")
+        for rank, (_, row) in enumerate(county_df.iterrows(), 1):
+            f.write(f"| {rank} | {row['County']} | {row['Average Rainfall (mm)']} | {row['Total Clubs']} | {row['Clubs with Data']} |\n")
         
         f.write("\n## Notable Findings\n")
         f.write("1. Rainfall variation across counties\n")
@@ -214,4 +212,4 @@ def main():
         raise
 
 if __name__ == "__main__":
-    main() 
+    main()

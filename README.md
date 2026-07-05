@@ -1,114 +1,178 @@
 # GAA Pitch Finder
 
-A comprehensive dataset and analysis tool for GAA pitches across Ireland, including rainfall patterns, elevation data, and club information.
+GAA Pitch Finder is a static website and open dataset for GAA pitches in Ireland and around the world. It includes an interactive Leaflet map, Google Maps directions, blog/content pages, and analysis scripts for rainfall, elevation, and OpenStreetMap coverage.
+
+The main dataset currently contains 1,988 pitch records with coordinates, elevation, rainfall data, club details, and directions links.
+
+`gaapitchfinder_data.csv` is the canonical base dataset. Scripts should treat it as read-only input and write durable enrichments to `data/derived/`, with reports and charts going to `output/` and site assets going to `site/`.
 
 ## Project Structure
 
-```
+```text
 gaapitchfinder/
-├── additional_data/          # Supplementary data files
-│   └── club_images/         # Club crest images
-├── output/                   # Generated content
-│   ├── visualizations/      # Maps and charts
-│   └── reports/            # Analysis reports
-├── scripts/                 # Python analysis scripts
-├── gaapitchfinder_data.csv    # Main dataset containing club information
-├── requirements.txt         # Project dependencies
+├── site/                         # Public GitHub Pages website
+│   ├── index.html                # Main Leaflet pitch map
+│   ├── directions.html           # Browseable directions page
+│   ├── blog/                     # Static blog posts
+│   ├── css/                      # Shared site styles
+│   ├── img/                      # Logo and image assets
+│   └── vendor/                   # Vendored Leaflet assets
+├── map/                          # Standalone/legacy Leaflet map
+├── data/
+│   └── derived/                  # Durable generated datasets and coverage reports
+├── scripts/                      # Data generation and analysis scripts
+├── output/
+│   ├── reports/                  # Generated analysis reports
+│   └── visualizations/           # Generated maps and charts
+├── additional_data/              # Supplementary assets and source data
+├── gaapitchfinder_data.csv       # Main pitch dataset
+└── requirements.txt              # Python dependencies
 ```
 
-## Features
+## Data Flow
 
-- Comprehensive GAA club database with geographical coordinates
-- Rainfall analysis and visualization
-- Interactive maps with club locations
-- County-level statistics and analysis
+```text
+gaapitchfinder_data.csv
+  -> data/derived/               # durable enriched datasets and coverage outputs
+  -> site/data.json              # generated site payload
+  -> output/reports/             # markdown analysis output
+  -> output/visualizations/      # charts and HTML maps
+```
 
-## Data Sources
+## Website
 
-- GAA club locations and information
-- Open-Meteo API for rainfall data
-- OpenStreetMap elevation data
-- Club crest images from official sources
+The public site lives in `site/` and is deployed to GitHub Pages.
+
+The Leaflet pages load a generated `site/data.json` file. That file is intentionally ignored by git and is created from the main CSV:
+
+```bash
+python3 scripts/generate_map_data.py
+```
+
+GitHub Actions runs this generator automatically before deploying `site/`, so production builds do not need `site/data.json` committed.
+
+For local static testing, generate the data file and serve the site directory:
+
+```bash
+python3 scripts/generate_map_data.py
+python3 -m http.server 8000 --directory site
+```
+
+Then open `http://localhost:8000`.
 
 ## Setup
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/gaapitchfinder.git
-   cd gaapitchfinder
-   ```
+```bash
+git clone https://github.com/ryanmcg2203/gaapitchfinder.git
+cd gaapitchfinder
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+## Common Tasks
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Generate Map Data
 
-## Usage
+```bash
+python3 scripts/generate_map_data.py
+```
+
+Creates `site/data.json` from `gaapitchfinder_data.csv`.
 
 ### Rainfall Analysis
 
-To generate rainfall analysis and visualizations:
 ```bash
-python scripts/gaa_rainfall_analysis.py
+python3 scripts/analyze_pitch_rainfall.py
 ```
 
-This will create:
-- `output/visualizations/rainfall_heatmap.png`: Static map showing rainfall patterns
-- `output/visualizations/rainfall_heatmap.html`: Interactive map with detailed information
-- `output/reports/gaa_rainfall_analysis.md`: Detailed analysis report
+Creates:
+
+- `output/visualizations/rainfall_heatmap.png`
+- `output/visualizations/rainfall_heatmap.html`
+- `output/reports/gaa_rainfall_analysis.md`
 
 ### Elevation Analysis
 
-To analyze pitch elevations:
 ```bash
-python scripts/analyze_elevation.py
+python3 scripts/analyze_pitch_elevation.py
 ```
 
-This will generate:
-- `output/visualizations/elevation_heatmap.png`: Static map showing elevation patterns
-- `output/visualizations/elevation_heatmap.html`: Interactive map with pitch details
-- `output/reports/elevation_analysis.md`: Statistical analysis of pitch elevations
+Creates:
 
-## Output Files
+- `output/visualizations/elevation_distribution.png`
+- `output/reports/gaa_elevation_analysis.md`
 
-### Visualizations
-- `rainfall_heatmap.png`: Static map showing rainfall distribution across Ireland
-- `rainfall_heatmap.html`: Interactive map with clickable points showing club details
-- `elevation_heatmap.png`: Static map showing elevation distribution
-- `elevation_heatmap.html`: Interactive map with pitch elevation details
+### OpenStreetMap Coverage Check
 
-### Reports
-- `gaa_rainfall_analysis.md`: Comprehensive analysis of rainfall patterns by county
-- `elevation_analysis.md`: Analysis of pitch elevations and terrain patterns
+```bash
+python3 scripts/analyze_osm_coverage.py
+```
 
-## Dataset Description
+Checks nearby OSM pitch polygons for each club and writes `data/derived/osm_coverage_report.csv`.
 
-The main dataset (`gaapitchfinder_data.csv`) contains the following columns:
+You can limit the check to one or more counties:
 
-- `File`: Source file identifier
-- `Club`: Name of the GAA club
-- `Pitch`: Name of the pitch/ground
-- `Code`: Club code (if available)
-- `Latitude`: Decimal degrees (WGS84)
-- `Longitude`: Decimal degrees (WGS84)
-- `Province`: Irish province (Connacht, Leinster, Munster, Ulster)
-- `Country`: Country (Ireland)
-- `Division`: GAA division
-- `County`: County where the club is located
-- `Directions`: Google Maps link to the pitch
-- `Twitter`: Club's Twitter handle
-- `Elevation`: Height above sea level in meters
-- `annual_rainfall`: Total annual rainfall in millimeters
+```bash
+python3 scripts/analyze_osm_coverage.py Monaghan Down
+```
+
+### OpenStreetMap Geometry Enrichment
+
+```bash
+python3 scripts/enrich_pitch_geometry.py
+```
+
+Attempts to match each pitch to OSM geometry and write pitch dimensions, orientation, corner coordinates, and source metadata to `data/derived/pitch_geometry.csv`.
+
+This script uses the Overpass API, includes request delays, and supports checkpoint/resume with `data/derived/.pitch_geometry_checkpoint.json`.
+
+## Script Roles
+
+- `generate_map_data.py`: builds the compact JSON payload used by the public site
+- `analyze_pitch_rainfall.py`: creates rainfall reports and visualizations
+- `analyze_pitch_elevation.py`: creates elevation reports and visualizations
+- `analyze_osm_coverage.py`: produces an OSM coverage report in `data/derived/`
+- `enrich_pitch_geometry.py`: creates a reusable geometry-enriched derivative dataset
+
+## Dataset Columns
+
+`gaapitchfinder_data.csv` contains:
+
+- `File`: Source region identifier
+- `Club`: Club name
+- `Pitch`: Pitch or ground name
+- `Code`: Club code or sport code, where available
+- `Latitude`: Decimal latitude (WGS84)
+- `Longitude`: Decimal longitude (WGS84)
+- `Province`: Irish province, where applicable
+- `Country`: Country
+- `Division`: GAA division or county grouping
+- `County`: County, division, state, or local grouping
+- `Directions`: Google Maps directions link
+- `Twitter`: Club Twitter/X URL, where available
+- `Elevation`: Elevation in meters
+- `annual_rainfall`: Annual rainfall in millimeters
 - `rain_days`: Number of days with precipitation
+
+## Data Sources
+
+- GAA club and pitch locations collected and verified over time
+- Open-Meteo rainfall data
+- Elevation data
+- OpenStreetMap pitch geometry and coverage checks
+- Club images and supplementary assets in `additional_data/`
+
+## Deployment
+
+Deployment is handled by `.github/workflows/deploy.yml` on pushes to `main` or manual workflow dispatch. The workflow:
+
+1. Checks out the repository.
+2. Sets up Python.
+3. Runs `scripts/generate_map_data.py`.
+4. Uploads `site/` as the GitHub Pages artifact.
+5. Deploys to GitHub Pages.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
+This project is licensed under the MIT License. See `LICENSE` for details.

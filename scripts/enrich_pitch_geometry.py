@@ -22,8 +22,8 @@ import requests
 # Configuration
 # ---------------------------------------------------------------------------
 INPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "gaapitchfinder_data.csv")
-OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "gaapitchfinder_data_with_geometry.csv")
-CHECKPOINT_FILE = os.path.join(os.path.dirname(__file__), "..", ".osm_enrichment_checkpoint.json")
+OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "derived", "pitch_geometry.csv")
+CHECKPOINT_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "derived", ".pitch_geometry_checkpoint.json")
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 SEARCH_RADIUS_M = 200
@@ -327,15 +327,14 @@ def save_checkpoint(processed_indices):
 # Main processing
 # ---------------------------------------------------------------------------
 def main():
-    # Ensure scipy is available (needed for ConvexHull)
     try:
         from scipy.spatial import ConvexHull  # noqa
     except ImportError:
-        print("Installing scipy …")
-        import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "scipy", "-q"])
+        print("Missing dependency: scipy. Install project dependencies with `pip install -r requirements.txt`.")
+        sys.exit(1)
 
     print("Loading input data …")
+    os.makedirs(os.path.dirname(OUTPUT_CSV), exist_ok=True)
     df = pd.read_csv(INPUT_CSV)
     total = len(df)
     print(f"  {total} pitches loaded.")

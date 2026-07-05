@@ -3,13 +3,14 @@
 Check which GAA clubs have matching OSM pitch polygons, county by county in parallel.
 
 Usage:
-    python3 scripts/check_osm_coverage.py               # all counties
-    python3 scripts/check_osm_coverage.py Monaghan      # single county
-    python3 scripts/check_osm_coverage.py Monaghan Down # multiple counties
+    python3 scripts/analyze_osm_coverage.py               # all counties
+    python3 scripts/analyze_osm_coverage.py Monaghan      # single county
+    python3 scripts/analyze_osm_coverage.py Monaghan Down # multiple counties
 """
 
 import csv
 import math
+import os
 import sys
 import time
 import json
@@ -19,7 +20,9 @@ import urllib.error
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 
-INPUT_CSV = "gaapitchfinder_data.csv"
+ROOT_DIR = os.path.join(os.path.dirname(__file__), "..")
+INPUT_CSV = os.path.join(ROOT_DIR, "gaapitchfinder_data.csv")
+OUTPUT_CSV = os.path.join(ROOT_DIR, "data", "derived", "osm_coverage_report.csv")
 OVERPASS_URL = "https://overpass.openstreetmap.fr/api/interpreter"
 SEARCH_RADIUS_M = 200
 REQUEST_DELAY_S = 1.5
@@ -169,8 +172,8 @@ def main():
     print(f"{'TOTAL':<20} {grand_matched:>8} {grand_total:>8} {(grand_matched/grand_total*100) if grand_total else 0:>5.0f}%")
 
     # Write no-match list to CSV
-    output_file = "osm_coverage_report.csv"
-    with open(output_file, "w", newline="") as f:
+    os.makedirs(os.path.dirname(OUTPUT_CSV), exist_ok=True)
+    with open(OUTPUT_CSV, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["Club", "County", "Province", "Latitude", "Longitude", "Status"])
         for county, results in sorted(all_results.items()):
@@ -178,7 +181,7 @@ def main():
                 writer.writerow([club["Club"], club["County"], club.get("Province", ""),
                                  club["Latitude"], club["Longitude"], status])
 
-    print(f"\nFull results written to {output_file}")
+    print(f"\nFull results written to {OUTPUT_CSV}")
 
 
 if __name__ == "__main__":
