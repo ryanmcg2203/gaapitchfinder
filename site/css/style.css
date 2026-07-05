@@ -352,6 +352,16 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   margin-bottom: 16px !important;
 }
 
+.club-map {
+  width: 100%;
+  height: 220px;
+  margin: 0 0 18px;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  background: #f4f4f4;
+  overflow: hidden;
+}
+
 .club-detail-list {
   list-style: none !important;
   margin: 0 0 18px 0 !important;
@@ -384,6 +394,60 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 }
 
 .club-actions a:hover { color: #555; text-decoration: underline; }
+
+.club-context {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  border-top: 1px solid #eee;
+  margin-top: 8px;
+  padding-top: 28px;
+}
+
+.club-context-block h2 {
+  font-size: 17px !important;
+  margin: 0 0 12px !important;
+}
+
+.club-context-block ul,
+.county-directory ul {
+  list-style: none;
+  margin: 0;
+}
+
+.club-context-block li,
+.county-directory li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.club-context-block a,
+.county-directory a {
+  color: #111;
+  text-decoration: none;
+}
+
+.club-context-block a:hover,
+.county-directory a:hover {
+  color: #555;
+  text-decoration: underline;
+}
+
+.club-context-block span,
+.county-directory span {
+  color: #888;
+  font-size: 13px;
+  text-align: right;
+}
+
+.club-context-more {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+}
 
 .club-directory-toc {
   display: flex;
@@ -436,6 +500,22 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   color: #888;
   font-size: 13px;
   white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .club-context { grid-template-columns: 1fr; }
+  .club-detail-list li,
+  .club-context-block li,
+  .county-directory li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .club-detail-label { min-width: 0; }
+  .club-context-block span,
+  .county-directory span {
+    text-align: left;
+  }
 }
 
 /* ── Blog post navigation ────────────────────────────────────────── */

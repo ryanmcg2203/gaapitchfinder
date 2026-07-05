@@ -43,7 +43,7 @@ gaapitchfinder_data.csv
 
 The public site lives in `site/` and is deployed to GitHub Pages.
 
-The Leaflet pages load a generated `site/data.json` file. That file is intentionally ignored by git and is created from the main CSV:
+The Leaflet pages load a generated `site/data.json` file. Static club and county pages are generated into `site/clubs/` and `site/counties/`. These generated outputs are intentionally ignored by git and are created from the main CSV:
 
 ```bash
 python3 scripts/generate_map_data.py
@@ -82,13 +82,13 @@ python3 scripts/generate_map_data.py
 
 Creates `site/data.json` from `gaapitchfinder_data.csv`.
 
-### Generate Club Pages
+### Generate Club And County Pages
 
 ```bash
 python3 scripts/generate_club_pages.py
 ```
 
-Creates static SEO-focused club pages in `site/clubs/` and regenerates `site/sitemap.xml`.
+Creates static SEO-focused club pages in `site/clubs/`, county pages in `site/counties/`, and regenerates `site/sitemap.xml`.
 
 ### Rainfall Analysis
 
@@ -140,7 +140,7 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 ## Script Roles
 
 - `generate_map_data.py`: builds the compact JSON payload used by the public site
-- `generate_club_pages.py`: builds static club pages, a club directory, and sitemap entries
+- `generate_club_pages.py`: builds static club pages, county pages, directories, and sitemap entries
 - `analyze_pitch_rainfall.py`: creates rainfall reports and visualizations
 - `analyze_pitch_elevation.py`: creates elevation reports and visualizations
 - `analyze_osm_coverage.py`: produces an OSM coverage report in `data/derived/`
