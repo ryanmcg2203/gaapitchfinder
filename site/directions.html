@@ -47,7 +47,7 @@
 
 <div class="page-content">
   <h1>Directions</h1>
-  <p>Browse by province and county. Click a club name to open Google Maps directions to that pitch.</p>
+  <p>Browse by province and county. Open a club page for pitch details, or jump straight to Google Maps directions.</p>
   <div id="dir-loading">Loading pitches…</div>
   <div id="dir-toc" class="dir-toc"></div>
   <div id="dir-body"></div>
@@ -135,9 +135,8 @@ fetch('data.json')
         const clubs = byProvince[prov][county].sort((a, b) => a.c.localeCompare(b.c));
         html += `<div class="dir-county" id="${slug(county)}"><h3>${county}</h3><ul>`;
         clubs.forEach(c => {
-          const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
           const pitch = c.p ? `<span class="dir-pitch">${esc(c.p)}</span>` : '';
-          html += `<li><a href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><span class="dir-club">${esc(c.c)}</span>${pitch}</a></li>`;
+          html += `<li><a href="${escAttr(c.u)}"><span class="dir-club">${esc(c.c)}</span>${pitch}</a><a class="dir-directions-link" href="${escAttr(c.d)}" target="_blank" rel="noopener noreferrer">Directions</a></li>`;
         });
         html += '</ul></div>';
       });
@@ -151,9 +150,8 @@ fetch('data.json')
         const clubs = byRegion[region][country].sort((a, b) => a.c.localeCompare(b.c));
         html += `<div class="dir-county" id="${slug(country)}"><h3>${country}</h3><ul>`;
         clubs.forEach(c => {
-          const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
           const pitch = c.p ? `<span class="dir-pitch">${esc(c.p)}</span>` : '';
-          html += `<li><a href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><span class="dir-club">${esc(c.c)}</span>${pitch}</a></li>`;
+          html += `<li><a href="${escAttr(c.u)}"><span class="dir-club">${esc(c.c)}</span>${pitch}</a><a class="dir-directions-link" href="${escAttr(c.d)}" target="_blank" rel="noopener noreferrer">Directions</a></li>`;
         });
         html += '</ul></div>';
       });
@@ -168,6 +166,7 @@ fetch('data.json')
 
 function slug(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
 function esc(str) { return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function escAttr(str) { return esc(str).replace(/"/g, '&quot;'); }
 
 // County → Province lookup for Ireland
 const COUNTY_PROVINCE = {

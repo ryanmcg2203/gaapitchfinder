@@ -305,13 +305,138 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .dir-county { margin-bottom: 32px; }
 .dir-county h3 { font-size: 15px; font-weight: 600; color: #555; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 12px; }
 .dir-county ul { list-style: none; }
-.dir-county li { padding: 5px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
+.dir-county li { padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; display: flex; gap: 12px; justify-content: space-between; align-items: baseline; }
 .dir-county a { color: #111; text-decoration: none; }
 .dir-county a:hover { color: #555; text-decoration: underline; }
 .dir-club { font-weight: 500; }
 .dir-pitch { color: #999; font-size: 13px; margin-left: 6px; }
+.dir-directions-link { font-size: 12px; color: #777 !important; white-space: nowrap; }
+.dir-directions-link:hover { color: #111 !important; }
 
 #dir-loading { color: #999; font-size: 16px; padding: 40px 0; }
+
+/* ── Club pages ───────────────────────────────────────────────────── */
+.clubs-breadcrumb {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.clubs-breadcrumb a {
+  color: #666;
+  text-decoration: none;
+}
+
+.clubs-breadcrumb a:hover { color: #111; }
+
+.clubs-subtitle {
+  font-size: 15px !important;
+  color: #777 !important;
+  margin-top: -10px;
+  margin-bottom: 22px !important;
+}
+
+.club-entry {
+  border-top: 1px solid #eee;
+  padding: 24px 0;
+}
+
+.club-entry h2 {
+  font-size: 22px !important;
+  margin: 0 0 8px !important;
+}
+
+.club-place {
+  font-size: 14px !important;
+  color: #777 !important;
+  margin-bottom: 16px !important;
+}
+
+.club-detail-list {
+  list-style: none !important;
+  margin: 0 0 18px 0 !important;
+  padding: 0;
+}
+
+.club-detail-list li {
+  display: flex;
+  gap: 18px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f3f3;
+  font-size: 15px;
+}
+
+.club-detail-label {
+  min-width: 140px;
+  color: #777;
+}
+
+.club-actions {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.club-actions a {
+  font-size: 14px;
+  color: #111;
+  text-decoration: none;
+}
+
+.club-actions a:hover { color: #555; text-decoration: underline; }
+
+.club-directory-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 28px 0 38px;
+}
+
+.club-directory-toc a {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.club-directory-toc a:hover { color: #111; }
+
+.club-directory-group {
+  margin-bottom: 40px;
+}
+
+.club-directory-group h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #111;
+}
+
+.club-directory-group ul {
+  list-style: none;
+  margin: 0;
+}
+
+.club-directory-group li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 7px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.club-directory-group a {
+  color: #111;
+  text-decoration: none;
+}
+
+.club-directory-group a:hover { color: #555; text-decoration: underline; }
+
+.club-directory-meta {
+  color: #888;
+  font-size: 13px;
+  white-space: nowrap;
+}
 
 /* ── Blog post navigation ────────────────────────────────────────── */
 .post-nav {

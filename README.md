@@ -47,6 +47,7 @@ The Leaflet pages load a generated `site/data.json` file. That file is intention
 
 ```bash
 python3 scripts/generate_map_data.py
+python3 scripts/generate_club_pages.py
 ```
 
 GitHub Actions runs this generator automatically before deploying `site/`, so production builds do not need `site/data.json` committed.
@@ -55,6 +56,7 @@ For local static testing, generate the data file and serve the site directory:
 
 ```bash
 python3 scripts/generate_map_data.py
+python3 scripts/generate_club_pages.py
 python3 -m http.server 8000 --directory site
 ```
 
@@ -79,6 +81,14 @@ python3 scripts/generate_map_data.py
 ```
 
 Creates `site/data.json` from `gaapitchfinder_data.csv`.
+
+### Generate Club Pages
+
+```bash
+python3 scripts/generate_club_pages.py
+```
+
+Creates static SEO-focused club pages in `site/clubs/` and regenerates `site/sitemap.xml`.
 
 ### Rainfall Analysis
 
@@ -130,6 +140,7 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 ## Script Roles
 
 - `generate_map_data.py`: builds the compact JSON payload used by the public site
+- `generate_club_pages.py`: builds static club pages, a club directory, and sitemap entries
 - `analyze_pitch_rainfall.py`: creates rainfall reports and visualizations
 - `analyze_pitch_elevation.py`: creates elevation reports and visualizations
 - `analyze_osm_coverage.py`: produces an OSM coverage report in `data/derived/`
@@ -170,8 +181,9 @@ Deployment is handled by `.github/workflows/deploy.yml` on pushes to `main` or m
 1. Checks out the repository.
 2. Sets up Python.
 3. Runs `scripts/generate_map_data.py`.
-4. Uploads `site/` as the GitHub Pages artifact.
-5. Deploys to GitHub Pages.
+4. Runs `scripts/generate_club_pages.py`.
+5. Uploads `site/` as the GitHub Pages artifact.
+6. Deploys to GitHub Pages.
 
 ## License
 

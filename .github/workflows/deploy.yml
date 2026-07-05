@@ -31,6 +31,9 @@ jobs:
       - name: Generate map data from CSV
         run: python3 scripts/generate_map_data.py
 
+      - name: Generate club pages and sitemap
+        run: python3 scripts/generate_club_pages.py
+
       - uses: actions/configure-pages@v4
 
       - uses: actions/upload-pages-artifact@v3

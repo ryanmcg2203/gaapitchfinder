@@ -2,58 +2,45 @@
 Convert gaapitchfinder_data.csv to site/data.json for the Leaflet map.
 Run from repo root: python3 scripts/generate_map_data.py
 """
-import csv
 import json
-import os
-
-REGION_MAP = {
-    'Ireland': 'Ireland',
-    'Great Britain': 'Great Britain',
-    'USA': 'North America',
-    'Canada': 'North America',
-    'Europe': 'Rest of Europe',
-    'Australasia': 'Australasia',
-    'Asia': 'Asia',
-    'Middle East': 'Middle East',
-    'South America': 'South America',
-}
+from site_build_utils import SITE_DIR, build_club_page_records, load_rows, row_file_value, row_region
 
 clubs = []
 skipped = 0
 
-with open('gaapitchfinder_data.csv') as f:
-    for row in csv.DictReader(f):
-        lat = row['Latitude'].strip()
-        lng = row['Longitude'].strip()
-        if not lat or not lng:
-            skipped += 1
-            continue
-        try:
-            lat = float(lat)
-            lng = float(lng)
-        except ValueError:
-            skipped += 1
-            continue
+rows = load_rows()
+_page_records, row_to_url = build_club_page_records(rows)
 
-        file_val = row['File'].strip()
-        region = REGION_MAP.get(file_val, file_val)
+for index, row in enumerate(rows):
+    lat = row["Latitude"].strip()
+    lng = row["Longitude"].strip()
+    if not lat or not lng:
+        skipped += 1
+        continue
+    try:
+        lat = float(lat)
+        lng = float(lng)
+    except ValueError:
+        skipped += 1
+        continue
 
-        # County/Country filter: use County for Ireland, Country for overseas
-        county = row['County'].strip() if file_val == 'Ireland' else row['Country'].strip()
+    file_val = row_file_value(row)
+    county = row["County"].strip() if file_val == "Ireland" else row["Country"].strip()
 
-        clubs.append({
-            'c': row['Club'].strip(),
-            'p': row['Pitch'].strip(),
-            'r': region,
-            'k': county,
-            'la': lat,
-            'lo': lng,
-            'd': row['Directions'].strip(),
-        })
+    clubs.append({
+        "c": row["Club"].strip(),
+        "p": row["Pitch"].strip(),
+        "r": row_region(row),
+        "k": county,
+        "la": lat,
+        "lo": lng,
+        "d": row["Directions"].strip(),
+        "u": row_to_url[index],
+    })
 
-os.makedirs('site', exist_ok=True)
-out_path = 'site/data.json'
-with open(out_path, 'w') as f:
+SITE_DIR.mkdir(parents=True, exist_ok=True)
+out_path = SITE_DIR / "data.json"
+with out_path.open("w") as f:
     json.dump(clubs, f, separators=(',', ':'))
 
 print(f'Generated {len(clubs)} clubs → {out_path}')
