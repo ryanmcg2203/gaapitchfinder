@@ -76,6 +76,7 @@ select:disabled { opacity: 0.4; cursor: default; }
 }
 .bar-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .bar-btn.dots-active { border-color: #ffffcc; color: #ffffcc; }
+.bar-btn:disabled { cursor: wait; opacity: 0.6; }
 
 #theme-btn {
   flex-shrink: 0;
@@ -227,6 +228,8 @@ body.light .pop-sep { border-top-color: #eee; }
   </div>
   <span id="count-badge" aria-live="polite"></span>
   <button class="bar-btn" id="reset-btn" aria-label="Reset filters">Reset</button>
+  <button class="bar-btn" id="nearby-btn" aria-label="Find pitches near me">Near me</button>
+  <button class="bar-btn" id="random-btn" aria-label="Show a random visible pitch">Random</button>
   <button class="bar-btn" id="cluster-btn" aria-label="Switch to dots view">Dots</button>
   <button id="theme-btn" aria-label="Toggle day/night mode" title="Toggle day/night">🌙</button>
 </div>
@@ -294,6 +297,9 @@ const selCounty = document.getElementById('sel-county');
 const selClub   = document.getElementById('sel-club');
 const selPitch  = document.getElementById('sel-pitch');
 const countBadge = document.getElementById('count-badge');
+const resetBtn = document.getElementById('reset-btn');
+const nearbyBtn = document.getElementById('nearby-btn');
+const randomBtn = document.getElementById('random-btn');
 
 let allClubs = [];
 let clustered = true;
@@ -320,6 +326,25 @@ function getFiltered(region, county, club, pitch) {
   );
 }
 
+function currentFilters() {
+  return {
+    region: selRegion.value,
+    county: selCounty.value,
+    club: selClub.value,
+    pitch: selPitch.value
+  };
+}
+
+function currentVisible() {
+  const filters = currentFilters();
+  return getFiltered(filters.region, filters.county, filters.club, filters.pitch);
+}
+
+function hasUserFilters() {
+  const filters = currentFilters();
+  return filters.region !== 'Ireland' || filters.county || filters.club || filters.pitch;
+}
+
 function cascadeFilters() {
   const region = selRegion.value, county = selCounty.value, club = selClub.value;
   const counties = [...new Set(allClubs.filter(c => !region || c.r === region).map(c => c.k))].sort();
@@ -335,9 +360,45 @@ function escHtml(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function renderMarkers() {
+function updateShareUrl() {
+  const filters = currentFilters();
+  const params = new URLSearchParams();
+  const hasSpecificFilter = filters.county || filters.club || filters.pitch;
+  if (filters.region && (filters.region !== 'Ireland' || hasSpecificFilter)) params.set('region', filters.region);
+  if (filters.county) params.set('county', filters.county);
+  if (filters.club) params.set('club', filters.club);
+  if (filters.pitch) params.set('pitch', filters.pitch);
+
+  const query = params.toString();
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
+  window.history.replaceState(null, '', nextUrl);
+}
+
+function selectIfAvailable(select, value) {
+  if (!value) return false;
+  const values = Array.from(select.options).map(option => option.value);
+  if (!values.includes(value)) return false;
+  select.value = value;
+  return true;
+}
+
+function applyUrlFilters() {
+  const params = new URLSearchParams(window.location.search);
+
+  selectIfAvailable(selRegion, params.get('region')) || (selRegion.value = 'Ireland');
+  cascadeFilters();
+  selectIfAvailable(selCounty, params.get('county'));
+  cascadeFilters();
+  selectIfAvailable(selClub, params.get('club'));
+  cascadeFilters();
+  selectIfAvailable(selPitch, params.get('pitch'));
+
+  updateShareUrl();
+}
+
+function renderMarkers(options = {}) {
   markerLayer.clearLayers();
-  const visible = getFiltered(selRegion.value, selCounty.value, selClub.value, selPitch.value);
+  const visible = currentVisible();
   countBadge.textContent = `${visible.length.toLocaleString()} pitch${visible.length !== 1 ? 'es' : ''}`;
 
   visible.forEach(c => {
@@ -352,12 +413,49 @@ function renderMarkers() {
     if (!usesTouch) {
       marker.bindTooltip(tooltip, { sticky: true, opacity: 1 });
     }
+    c._marker = marker;
     marker.addTo(markerLayer);
   });
 
-  if (visible.length > 0 && visible.length < allClubs.length) {
+  if (options.fit !== false && visible.length > 0 && visible.length < allClubs.length) {
     map.fitBounds(visible.map(c => [c.la, c.lo]), { padding: [40, 40], maxZoom: 14 });
   }
+}
+
+function focusPitch(pitch) {
+  if (!pitch || !pitch._marker) return;
+  const open = () => pitch._marker.openPopup();
+  if (markerLayer.zoomToShowLayer) {
+    markerLayer.zoomToShowLayer(pitch._marker, open);
+  } else {
+    map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14));
+    open();
+  }
+}
+
+function showPitchLocation(pitch) {
+  if (!pitch) return;
+  selectIfAvailable(selRegion, pitch.r);
+  selCounty.value = '';
+  selClub.value = '';
+  selPitch.value = '';
+  cascadeFilters();
+  selectIfAvailable(selCounty, pitch.k);
+  cascadeFilters();
+  updateShareUrl();
+  renderMarkers();
+  focusPitch(pitch);
+}
+
+function distanceKm(aLat, aLng, bLat, bLng) {
+  const toRad = value => value * Math.PI / 180;
+  const earthKm = 6371;
+  const dLat = toRad(bLat - aLat);
+  const dLng = toRad(bLng - aLng);
+  const lat1 = toRad(aLat);
+  const lat2 = toRad(bLat);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * earthKm * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
 }
 
 // ── Cluster / dots toggle ─────────────────────────────────────────────────────
@@ -374,16 +472,57 @@ clusterBtn.addEventListener('click', () => {
 });
 
 // ── Reset ─────────────────────────────────────────────────────────────────────
-document.getElementById('reset-btn').addEventListener('click', () => {
+resetBtn.addEventListener('click', () => {
   selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = '';
-  cascadeFilters(); renderMarkers(); map.setView([53.5, -8], 7);
+  cascadeFilters(); updateShareUrl(); renderMarkers({ fit: false }); map.setView([53.5, -8], 7);
+});
+
+// ── Discovery tools ───────────────────────────────────────────────────────────
+randomBtn.addEventListener('click', () => {
+  const visible = currentVisible();
+  if (!visible.length) return;
+  focusPitch(visible[Math.floor(Math.random() * visible.length)]);
+});
+
+nearbyBtn.addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert('Location is not available in this browser.');
+    return;
+  }
+
+  nearbyBtn.disabled = true;
+  nearbyBtn.textContent = 'Finding...';
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      nearbyBtn.disabled = false;
+      nearbyBtn.textContent = 'Near me';
+      const visible = hasUserFilters() ? currentVisible() : allClubs;
+      if (!visible.length) return;
+      const { latitude, longitude } = position.coords;
+      const nearest = visible.reduce((best, pitch) => {
+        const distance = distanceKm(latitude, longitude, Number(pitch.la), Number(pitch.lo));
+        return !best || distance < best.distance ? { pitch, distance } : best;
+      }, null);
+      if (hasUserFilters()) {
+        focusPitch(nearest.pitch);
+      } else {
+        showPitchLocation(nearest.pitch);
+      }
+    },
+    () => {
+      nearbyBtn.disabled = false;
+      nearbyBtn.textContent = 'Near me';
+      alert('Could not get your location.');
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
+  );
 });
 
 // ── Event wiring ──────────────────────────────────────────────────────────────
-selRegion.addEventListener('change', () => { selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); renderMarkers(); });
-selCounty.addEventListener('change', () => { selClub.value = ''; selPitch.value = ''; cascadeFilters(); renderMarkers(); });
-selClub.addEventListener('change',   () => { selPitch.value = ''; cascadeFilters(); renderMarkers(); });
-selPitch.addEventListener('change', renderMarkers);
+selRegion.addEventListener('change', () => { selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
+selCounty.addEventListener('change', () => { selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
+selClub.addEventListener('change',   () => { selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
+selPitch.addEventListener('change', () => { updateShareUrl(); renderMarkers(); });
 
 // ── Load data ─────────────────────────────────────────────────────────────────
 fetch('data.json')
@@ -391,8 +530,8 @@ fetch('data.json')
   .then(data => {
     allClubs = data;
     setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
-    selRegion.value = 'Ireland';
-    cascadeFilters(); renderMarkers();
+    applyUrlFilters();
+    renderMarkers();
     document.getElementById('loading').remove();
   })
   .catch(() => {
