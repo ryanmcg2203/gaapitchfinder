@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="vendor/MarkerCluster.css">
 <link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
 <style>
-body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
 
 /* ── Map filter bar ── */
 #topbar {
@@ -30,6 +30,8 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   background: #242424;
   border-bottom: 1px solid #383838;
   flex-shrink: 0;
+  position: relative;
+  z-index: 900;
 }
 
 #filters-label {
@@ -91,7 +93,7 @@ select:disabled { opacity: 0.4; cursor: default; }
 #count-badge { flex-shrink: 0; font-size: 12px; color: #777; white-space: nowrap; }
 
 /* ── Map ── */
-#map { flex: 1; position: relative; }
+#map { flex: 1; position: relative; z-index: 0; }
 
 #loading {
   position: absolute;
@@ -295,6 +297,7 @@ const countBadge = document.getElementById('count-badge');
 
 let allClubs = [];
 let clustered = true;
+const usesTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
 function makeClusterLayer() {
   return L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 40, showCoverageOnHover: false, spiderfyOnMaxZoom: true });
@@ -344,10 +347,12 @@ function renderMarkers() {
     const clubUrl = c.u ? escHtml(c.u) : '';
     const clubLink = clubUrl ? `<a class="pop-dir" href="${clubUrl}">Club page</a>` : '';
     const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep">${clubLink}${clubLink ? '<br>' : ''}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a>`;
-    L.circleMarker([c.la, c.lo], { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 })
-      .bindTooltip(tooltip, { sticky: true, opacity: 1 })
-      .bindPopup(popup, { maxWidth: 280 })
-      .addTo(markerLayer);
+    const marker = L.circleMarker([c.la, c.lo], { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 })
+      .bindPopup(popup, { maxWidth: 280, keepInView: true });
+    if (!usesTouch) {
+      marker.bindTooltip(tooltip, { sticky: true, opacity: 1 });
+    }
+    marker.addTo(markerLayer);
   });
 
   if (visible.length > 0 && visible.length < allClubs.length) {

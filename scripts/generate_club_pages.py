@@ -157,6 +157,10 @@ def directory_search_script(input_id, item_selector, empty_id):
 """.strip()
 
 
+def back_to_top_link():
+    return '<a href="#top" class="back-to-top" aria-label="Back to top">Back to top</a>'
+
+
 def row_coordinates(row):
     try:
         return float(row["Latitude"].strip()), float(row["Longitude"].strip())
@@ -738,7 +742,7 @@ def render_index_page(pages):
   <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
 </div>
 
-<div class="page-content">
+<div class="page-content" id="top">
   <h1>Club Directory</h1>
   <p>Browse static club and pitch pages for GAA clubs in Ireland and worldwide. Each page includes the recorded pitch details, coordinates, and directions links from the GAA Pitch Finder dataset.</p>
   {directory_search_html("club-directory-search", "Search clubs, counties, or countries")}
@@ -746,6 +750,7 @@ def render_index_page(pages):
   {"".join(sections)}
   <p class="directory-empty" id="club-directory-empty" hidden>No matching clubs found.</p>
 </div>
+{back_to_top_link()}
 
 <footer class="site-footer">
   &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
@@ -835,7 +840,7 @@ def render_counties_index(counties):
 
 {nav_html()}
 
-<div class="page-content">
+<div class="page-content" id="top">
   <p class="clubs-breadcrumb"><a href="/clubs/">Clubs</a> / Counties</p>
   <h1>GAA Pitches By County</h1>
   <p>Browse county pages for GAA clubs and pitches across Ireland, grouped by province. Each county page links through to recorded pitch coordinates and directions.</p>
@@ -846,6 +851,7 @@ def render_counties_index(counties):
   </section>
   <p class="directory-empty" id="county-index-empty" hidden>No matching counties found.</p>
 </div>
+{back_to_top_link()}
 
 <footer class="site-footer">
   &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
@@ -896,7 +902,7 @@ def render_county_page(county, pages):
 
 {nav_html()}
 
-<div class="page-content">
+<div class="page-content" id="top">
   <p class="clubs-breadcrumb"><a href="/clubs/">Clubs</a> / <a href="/counties/">Counties</a></p>
   <h1>GAA Pitches In {esc(county)}</h1>
   <p class="clubs-subtitle">{esc(province)} · Ireland</p>
@@ -908,6 +914,7 @@ def render_county_page(county, pages):
   <p class="directory-empty" id="county-page-empty" hidden>No matching pitches found.</p>
   <a href="/counties/" class="back-link">Browse all counties</a>
 </div>
+{back_to_top_link()}
 
 <footer class="site-footer">
   &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
