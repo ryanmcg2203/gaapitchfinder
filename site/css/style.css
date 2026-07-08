@@ -6,6 +6,10 @@ html, body {
   background: #fff;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px;
@@ -25,8 +29,9 @@ html, body {
   display: flex;
   align-items: center;
   padding: 0 28px;
-  position: relative;
-  z-index: 200;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .nav-logo {
@@ -175,6 +180,11 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 /* Mobile nav drawer */
 .nav-drawer {
   display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 990;
   background: #111;
   padding: 8px 0 16px;
   border-top: 1px solid #2a2a2a;
@@ -211,6 +221,12 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   max-width: 760px;
   margin: 0 auto;
   padding: 56px 28px 80px;
+}
+
+.page-content[id],
+.club-directory-group,
+.county-province-group {
+  scroll-margin-top: 84px;
 }
 
 .page-content h1 {
@@ -510,6 +526,27 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   margin-top: 18px !important;
 }
 
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 20;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  color: #222;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 12px;
+  text-decoration: none;
+}
+
+.back-to-top:hover {
+  border-color: #bbb;
+  color: #111;
+}
+
 .club-directory-toc {
   display: flex;
   flex-wrap: wrap;
@@ -583,6 +620,12 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 @media (max-width: 640px) {
   .club-context { grid-template-columns: 1fr; }
+  .back-to-top {
+    right: 12px;
+    bottom: 12px;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
   .club-detail-list li,
   .club-context-block li,
   .county-directory li,
