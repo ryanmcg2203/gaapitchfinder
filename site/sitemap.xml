@@ -2,19 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://gaapitchfinder.com/</loc><lastmod>2026-07-12</lastmod><priority>1.0</priority></url>
   <url><loc>https://gaapitchfinder.com/pitch-of-the-day.html</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
-  <url><loc>https://gaapitchfinder.com/directions.html</loc><lastmod>2026-07-08</lastmod><priority>0.9</priority></url>
-  <url><loc>https://gaapitchfinder.com/dataset.html</loc><lastmod>2026-07-08</lastmod><priority>0.8</priority></url>
-  <url><loc>https://gaapitchfinder.com/about.html</loc><lastmod>2026-07-08</lastmod><priority>0.7</priority></url>
+  <url><loc>https://gaapitchfinder.com/directions.html</loc><lastmod>2026-07-12</lastmod><priority>0.9</priority></url>
+  <url><loc>https://gaapitchfinder.com/dataset.html</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
+  <url><loc>https://gaapitchfinder.com/about.html</loc><lastmod>2026-07-12</lastmod><priority>0.7</priority></url>
+  <url><loc>https://gaapitchfinder.com/donate.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/blog/</loc><lastmod>2026-07-08</lastmod><priority>0.8</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/elevation-analysis.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/most-remote-pitches.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-20.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-30.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-40.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-50.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-60.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-v10.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-v11.html</loc><lastmod>2026-07-08</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/elevation-analysis.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/most-remote-pitches.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-20.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-30.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-40.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-50.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-60.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-v10.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/blog/pitch-finder-v11.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/abbey-sarsfields-limerick.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/abbeydorney-kerry.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>

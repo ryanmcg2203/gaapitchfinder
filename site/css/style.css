@@ -418,6 +418,93 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   .potd-actions a { flex: 1 1 100%; text-align: center; }
 }
 
+/* ── Donate ───────────────────────────────────────────────────────── */
+.donate-hero {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+}
+
+.donate-hero p {
+  color: #555;
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+.donate-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  margin: 28px 0;
+  padding: 28px;
+}
+
+.donate-card h2 {
+  margin-top: 0;
+}
+
+.donate-uses {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none !important;
+  margin: 22px 0 0 !important;
+}
+
+.donate-uses li {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 16px;
+}
+
+.donate-cta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.donate-primary {
+  background: #111;
+  border-radius: 999px;
+  color: #fff !important;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 20px;
+  text-decoration: none;
+}
+
+.donate-primary:hover {
+  background: #333;
+  color: #fff !important;
+}
+
+.donate-note {
+  color: #777 !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .donate-uses {
+    grid-template-columns: 1fr;
+  }
+  .donate-card {
+    padding: 22px;
+  }
+  .donate-primary {
+    text-align: center;
+    width: 100%;
+  }
+}
+
 /* ── Directions ────────────────────────────────────────────────────── */
 .dir-toc { margin-bottom: 48px; }
 .dir-toc h2 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
