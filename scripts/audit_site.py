@@ -23,6 +23,7 @@ REQUIRED_META_PAGES = {
     "index.html",
     "about.html",
     "dataset.html",
+    "donate.html",
     "directions.html",
     "pitch-of-the-day.html",
 }

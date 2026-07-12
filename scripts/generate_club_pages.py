@@ -37,6 +37,7 @@ STATIC_URLS = [
     ("/directions.html", 0.9),
     ("/dataset.html", 0.8),
     ("/about.html", 0.7),
+    ("/donate.html", 0.6),
     ("/blog/", 0.8),
 ]
 PROVINCE_ORDER = ["Connacht", "Leinster", "Munster", "Ulster"]
@@ -95,7 +96,7 @@ def nav_html(prefix="../"):
     <li><a href="/about.html">About</a></li>
     <li><a href="/dataset.html">Dataset</a></li>
   </ul>
-  <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="nav-donate" target="_blank" rel="noopener noreferrer">Donate</a>
+  <a href="/donate.html" class="nav-donate">Donate</a>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
@@ -111,7 +112,7 @@ def nav_html(prefix="../"):
   <a href="/directions.html">Directions</a>
   <a href="/dataset.html">Dataset</a>
   <a href="/about.html">About</a>
-  <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
+  <a href="/donate.html">Donate</a>
 </div>
 """.strip()
 
@@ -714,7 +715,7 @@ def render_index_page(pages):
     <li><a href="/about.html">About</a></li>
     <li><a href="/dataset.html">Dataset</a></li>
   </ul>
-  <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="nav-donate" target="_blank" rel="noopener noreferrer">Donate</a>
+  <a href="/donate.html" class="nav-donate">Donate</a>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
@@ -730,7 +731,7 @@ def render_index_page(pages):
   <a href="/directions.html">Directions</a>
   <a href="/dataset.html">Dataset</a>
   <a href="/about.html">About</a>
-  <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
+  <a href="/donate.html">Donate</a>
 </div>
 
 <div class="page-content" id="top">
