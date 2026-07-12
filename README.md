@@ -197,4 +197,8 @@ Deployment is handled by `.github/workflows/deploy.yml` on pushes to `main` or m
 
 ## License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+The website code is licensed under the MIT License. See `LICENSE`.
+
+The dataset in `gaapitchfinder_data.csv` is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). If you use the dataset, please credit GAA Pitch Finder by Ryan McGuinness and link to `https://gaapitchfinder.com`.
+
+See `ATTRIBUTION.md` for suggested wording.
