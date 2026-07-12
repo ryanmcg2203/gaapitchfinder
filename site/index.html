@@ -164,6 +164,28 @@ select:disabled { opacity: 0.4; cursor: default; }
 .tt-loc { font-size: 11px; color: #666; margin-top: 2px; }
 .tt-hint { font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 0.2px; }
 
+/* ── Marker tap target ── */
+.pitch-dot-marker {
+  background: transparent;
+  border: 0;
+}
+.pitch-dot-hit {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+.pitch-dot-core {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #cccc88;
+  border-radius: 50%;
+  background: #ffffcc;
+  box-shadow: 0 0 0 2px rgba(255,255,204,0.18);
+}
+
 /* ── Popup ── */
 .leaflet-popup-content-wrapper {
   background: #1c1c1c;
@@ -452,6 +474,13 @@ const topbar = document.getElementById('topbar');
 let allClubs = [];
 let clustered = true;
 const usesTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const pitchDotIcon = L.divIcon({
+  className: 'pitch-dot-marker',
+  html: '<span class="pitch-dot-hit"><span class="pitch-dot-core"></span></span>',
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+  popupAnchor: [0, -10]
+});
 
 function makeClusterLayer() {
   return L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 40, showCoverageOnHover: false, spiderfyOnMaxZoom: true });
@@ -459,6 +488,14 @@ function makeClusterLayer() {
 
 let markerLayer = makeClusterLayer();
 map.addLayer(markerLayer);
+
+function makePitchMarker(c) {
+  const latLng = [c.la, c.lo];
+  if (usesTouch) {
+    return L.marker(latLng, { icon: pitchDotIcon, keyboard: false, riseOnHover: true });
+  }
+  return L.circleMarker(latLng, { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 });
+}
 
 function setOptions(el, values, placeholder) {
   const prev = el.value;
@@ -586,7 +623,7 @@ function renderMarkers(options = {}) {
     const clubUrl = c.u ? escHtml(c.u) : '';
     const clubLink = clubUrl ? `<a class="pop-dir" href="${clubUrl}">Club page</a>` : '';
     const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep">${clubLink}${clubLink ? '<br>' : ''}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a>`;
-    const marker = L.circleMarker([c.la, c.lo], { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 })
+    const marker = makePitchMarker(c)
       .bindPopup(popup, { maxWidth: 280, keepInView: true });
     if (!usesTouch) {
       marker.bindTooltip(tooltip, { sticky: true, opacity: 1 });
