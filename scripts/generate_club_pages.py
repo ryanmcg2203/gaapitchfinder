@@ -37,6 +37,7 @@ STATIC_URLS = [
     ("/directions.html", 0.9),
     ("/dataset.html", 0.8),
     ("/about.html", 0.7),
+    ("/privacy.html", 0.5),
     ("/donate.html", 0.6),
     ("/blog/", 0.8),
 ]
@@ -112,6 +113,7 @@ def nav_html(prefix="../"):
   <a href="/directions.html">Directions</a>
   <a href="/dataset.html">Dataset</a>
   <a href="/about.html">About</a>
+  <a href="/privacy.html">Privacy</a>
   <a href="/donate.html">Donate</a>
 </div>
 """.strip()
@@ -635,7 +637,7 @@ def render_club_page(page, pages):
 </div>
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 <script src="../vendor/leaflet.js"></script>
@@ -731,6 +733,7 @@ def render_index_page(pages):
   <a href="/directions.html">Directions</a>
   <a href="/dataset.html">Dataset</a>
   <a href="/about.html">About</a>
+  <a href="/privacy.html">Privacy</a>
   <a href="/donate.html">Donate</a>
 </div>
 
@@ -745,7 +748,7 @@ def render_index_page(pages):
 {back_to_top_link()}
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 <script>
@@ -846,7 +849,7 @@ def render_counties_index(counties):
 {back_to_top_link()}
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 {drawer_script()}
@@ -909,7 +912,7 @@ def render_county_page(county, pages):
 {back_to_top_link()}
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 {drawer_script()}
