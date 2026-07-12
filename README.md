@@ -90,6 +90,14 @@ python3 scripts/generate_club_pages.py
 
 Creates static SEO-focused club pages in `site/clubs/`, county pages in `site/counties/`, and regenerates `site/sitemap.xml`.
 
+### Audit Generated Site
+
+```bash
+python3 scripts/audit_site.py
+```
+
+Checks generated HTML links, required SEO tags, sitemap freshness metadata, and unsafe directions URLs in `site/data.json`.
+
 ### Rainfall Analysis
 
 ```bash
@@ -141,6 +149,7 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 
 - `generate_map_data.py`: builds the compact JSON payload used by the public site
 - `generate_club_pages.py`: builds static club pages, county pages, directories, and sitemap entries
+- `audit_site.py`: checks generated site output for link safety and SEO regressions
 - `analyze_pitch_rainfall.py`: creates rainfall reports and visualizations
 - `analyze_pitch_elevation.py`: creates elevation reports and visualizations
 - `analyze_osm_coverage.py`: produces an OSM coverage report in `data/derived/`

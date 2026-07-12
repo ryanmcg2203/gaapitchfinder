@@ -11,15 +11,20 @@ from __future__ import annotations
 import html
 import json
 import math
+from datetime import datetime, timezone
 from pathlib import Path
 
 from site_build_utils import (
+    ALLOWED_DIRECTIONS_HOSTS,
+    ALLOWED_SOCIAL_HOSTS,
+    DATASET_PATH,
     SITE_BASE_URL,
     SITE_DIR,
     build_club_page_records,
     load_rows,
     row_display_place,
     row_region,
+    sanitized_external_url,
 )
 
 
@@ -170,8 +175,9 @@ def row_coordinates(row):
 
 def row_maps_url(row):
     coords = row_coordinates(row)
-    if row["Directions"].strip():
-        return row["Directions"].strip()
+    directions_url = sanitized_external_url(row["Directions"], ALLOWED_DIRECTIONS_HOSTS)
+    if directions_url:
+        return directions_url
     if coords:
         return f"https://maps.google.com/?daddr={coords[0]},{coords[1]}"
     return "https://maps.google.com/"
@@ -576,13 +582,13 @@ def render_club_page(page, pages):
         pitch = row["Pitch"].strip() or "Pitch details"
         place = row_display_place(row)
         maps_url = row_maps_url(row)
-        twitter = row["Twitter"].strip()
+        twitter = sanitized_external_url(row["Twitter"], ALLOWED_SOCIAL_HOSTS)
         actions = [
-            f"<a href=\"{esc(maps_url)}\" target=\"_blank\" rel=\"noopener noreferrer\">Google Maps Directions</a>"
+            f"<a href=\"{esc_attr(maps_url)}\" target=\"_blank\" rel=\"noopener noreferrer\">Google Maps Directions</a>"
         ]
         if twitter:
             actions.append(
-                f"<a href=\"{esc(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">Club Twitter</a>"
+                f"<a href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">Club Social</a>"
             )
 
         rows_html.append(
@@ -927,27 +933,44 @@ def render_county_page(county, pages):
 """
 
 
+def lastmod_for_path(path):
+    if path == "/":
+        source_path = SITE_DIR / "index.html"
+    else:
+        source_path = SITE_DIR / path.lstrip("/")
+    if source_path.exists():
+        timestamp = source_path.stat().st_mtime
+    else:
+        timestamp = max(DATASET_PATH.stat().st_mtime, Path(__file__).stat().st_mtime)
+    return datetime.fromtimestamp(timestamp, timezone.utc).date().isoformat()
+
+
 def write_sitemap(pages, counties):
     urls = []
     for path, priority in STATIC_URLS:
-        urls.append((f"{SITE_BASE_URL}{path}", priority))
+        urls.append((path, f"{SITE_BASE_URL}{path}", priority))
 
     blog_dir = SITE_DIR / "blog"
     for blog_file in sorted(blog_dir.glob("*.html")):
         if blog_file.name == "index.html":
             continue
-        urls.append((f"{SITE_BASE_URL}/blog/{blog_file.name}", 0.6))
+        path = f"/blog/{blog_file.name}"
+        urls.append((path, f"{SITE_BASE_URL}{path}", 0.6))
 
-    urls.append((f"{SITE_BASE_URL}/clubs/", 0.8))
+    urls.append(("/clubs/", f"{SITE_BASE_URL}/clubs/", 0.8))
     for page in pages:
-        urls.append((f"{SITE_BASE_URL}/{page['rel_url']}", 0.6))
-    urls.append((f"{SITE_BASE_URL}/counties/", 0.8))
+        path = f"/{page['rel_url']}"
+        urls.append((path, f"{SITE_BASE_URL}{path}", 0.6))
+    urls.append(("/counties/", f"{SITE_BASE_URL}/counties/", 0.8))
     for county in counties:
-        urls.append((f"{SITE_BASE_URL}/{county_url(county)}", 0.7))
+        path = f"/{county_url(county)}"
+        urls.append((path, f"{SITE_BASE_URL}{path}", 0.7))
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for url, priority in urls:
-        lines.append(f"  <url><loc>{html.escape(url)}</loc><priority>{priority:.1f}</priority></url>")
+    for path, url, priority in urls:
+        lines.append(
+            f"  <url><loc>{html.escape(url)}</loc><lastmod>{lastmod_for_path(path)}</lastmod><priority>{priority:.1f}</priority></url>"
+        )
     lines.append("</urlset>")
     (SITE_DIR / "sitemap.xml").write_text("\n".join(lines) + "\n")
 
