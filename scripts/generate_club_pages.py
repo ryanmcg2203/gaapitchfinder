@@ -630,14 +630,14 @@ def render_club_page(page, pages):
   <p class="clubs-breadcrumb">{breadcrumb}</p>
   <h1>{esc(page["club"])}</h1>
   <p class="clubs-subtitle">{esc(page["location_label"])} · {esc(row_region(page["rows"][0]))}</p>
-  <p>This page lists the pitch details recorded for {esc(page["club"])} on GAA Pitch Finder, including coordinates and Google Maps directions.</p>
+  <p>Find {esc(page["club"])} GAA pitch information, location details, coordinates, and Google Maps directions from the open GAA Pitch Finder dataset.</p>
   {body}
   {context_html}
   <a href="/directions.html" class="back-link">Browse all directions</a>
 </div>
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 <script src="../vendor/leaflet.js"></script>
@@ -739,7 +739,7 @@ def render_index_page(pages):
 
 <div class="page-content" id="top">
   <h1>Club Directory</h1>
-  <p>Browse static club and pitch pages for GAA clubs in Ireland and worldwide. Each page includes the recorded pitch details, coordinates, and directions links from the GAA Pitch Finder dataset.</p>
+  <p>Browse static GAA club and pitch pages for Ireland and the worldwide GAA community. Each page includes recorded pitch details, coordinates, county or region information, and Google Maps directions from the open GAA Pitch Finder dataset.</p>
   {directory_search_html("club-directory-search", "Search clubs, counties, or countries")}
   <div class="club-directory-toc">{toc}</div>
   {"".join(sections)}
@@ -748,7 +748,7 @@ def render_index_page(pages):
 {back_to_top_link()}
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 <script>
@@ -838,7 +838,7 @@ def render_counties_index(counties):
 <div class="page-content" id="top">
   <p class="clubs-breadcrumb"><a href="/clubs/">Clubs</a> / Counties</p>
   <h1>GAA Pitches By County</h1>
-  <p>Browse county pages for GAA clubs and pitches across Ireland, grouped by province. Each county page links through to recorded pitch coordinates and directions.</p>
+  <p>Browse county pages for GAA clubs and pitches across Ireland, grouped by province. Each county page links through to club pages with recorded pitch coordinates, location details, and Google Maps directions.</p>
   {directory_search_html("county-index-search", "Search counties or provinces")}
   <div class="club-directory-toc">{toc}</div>
   <section class="county-directory">
@@ -849,7 +849,7 @@ def render_counties_index(counties):
 {back_to_top_link()}
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 {drawer_script()}
@@ -863,8 +863,8 @@ def render_county_page(county, pages):
     canonical_url = f"{SITE_BASE_URL}/{county_url(county)}"
     province = pages[0]["rows"][0]["Province"].strip()
     description = (
-        f"Browse GAA pitches in {county}, with club pages, exact coordinates, "
-        "small maps, and Google Maps directions."
+        f"Find GAA clubs and pitches in {county}, with club pages, exact coordinates, "
+        "location details, small maps, and Google Maps directions."
     )
     structured_data = county_page_schema(county, pages, description)
     rows = []
@@ -901,7 +901,7 @@ def render_county_page(county, pages):
   <p class="clubs-breadcrumb"><a href="/clubs/">Clubs</a> / <a href="/counties/">Counties</a></p>
   <h1>GAA Pitches In {esc(county)}</h1>
   <p class="clubs-subtitle">{esc(province)} · Ireland</p>
-  <p>{esc(description)}</p>
+  <p>{esc(description)} This county directory is generated from the open GAA Pitch Finder dataset.</p>
   {directory_search_html("county-page-search", f"Search clubs or pitches in {county}")}
   <section class="county-directory">
     <ul>{"".join(rows)}</ul>
@@ -912,7 +912,7 @@ def render_county_page(county, pages):
 {back_to_top_link()}
 
 <footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
 {drawer_script()}
