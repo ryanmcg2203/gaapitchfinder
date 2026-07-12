@@ -24,6 +24,7 @@ REQUIRED_META_PAGES = {
     "about.html",
     "dataset.html",
     "directions.html",
+    "pitch-of-the-day.html",
 }
 
 
