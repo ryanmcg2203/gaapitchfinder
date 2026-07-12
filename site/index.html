@@ -16,7 +16,7 @@
 <meta name="twitter:image" content="https://gaapitchfinder.com/img/logo-black.png">
 <link rel="canonical" href="https://gaapitchfinder.com/">
 <meta name="description" content="Interactive map of nearly 2,000 GAA pitches in Ireland and worldwide. Filter by county, club or pitch and get Google Maps directions.">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://gaapitchfinder.com/#website","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","description":"Interactive map of nearly 2,000 GAA pitches in Ireland and worldwide.","inLanguage":"en","publisher":{"@id":"https://gaapitchfinder.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://gaapitchfinder.com/?club={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://gaapitchfinder.com/#organization","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","logo":"https://gaapitchfinder.com/img/logo-black.png","email":"gaapitchfinder@gmail.com"},{"@type":"WebPage","@id":"https://gaapitchfinder.com/#webpage","url":"https://gaapitchfinder.com/","name":"GAA Pitch Finder","isPartOf":{"@id":"https://gaapitchfinder.com/#website"},"about":{"@id":"https://gaapitchfinder.com/#organization"},"description":"Interactive map of nearly 2,000 GAA pitches in Ireland and worldwide. Filter by county, club or pitch and get Google Maps directions."}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://gaapitchfinder.com/#website","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","description":"Interactive map of nearly 2,000 GAA pitches in Ireland and worldwide.","inLanguage":"en","publisher":{"@id":"https://gaapitchfinder.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://gaapitchfinder.com/?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://gaapitchfinder.com/#organization","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","logo":"https://gaapitchfinder.com/img/logo-black.png","email":"gaapitchfinder@gmail.com"},{"@type":"WebPage","@id":"https://gaapitchfinder.com/#webpage","url":"https://gaapitchfinder.com/","name":"GAA Pitch Finder","isPartOf":{"@id":"https://gaapitchfinder.com/#website"},"about":{"@id":"https://gaapitchfinder.com/#organization"},"description":"Interactive map of nearly 2,000 GAA pitches in Ireland and worldwide. Filter by county, club or pitch and get Google Maps directions."}]}</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
 <script src="/js/ga.js"></script>
 <link rel="stylesheet" href="css/style.css">
@@ -52,6 +52,13 @@ body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; ove
 
 #selects { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
 
+.search-wrap {
+  flex: 1.4 1 190px;
+  position: relative;
+  min-width: 170px;
+}
+
+#search-input,
 select {
   flex: 1 1 140px;
   background: #333;
@@ -63,8 +70,34 @@ select {
   cursor: pointer;
   min-width: 0;
 }
+#search-input {
+  width: 100%;
+  cursor: text;
+  padding-right: 30px;
+}
+#search-input::placeholder { color: #888; }
+#search-input:focus,
 select:focus { outline: none; border-color: #888; }
 select:disabled { opacity: 0.4; cursor: default; }
+
+.search-clear {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+}
+.search-clear:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.search-clear[hidden] { display: none; }
 
 .bar-btn {
   flex-shrink: 0;
@@ -153,7 +186,11 @@ select:disabled { opacity: 0.4; cursor: default; }
 /* ── Light theme ── */
 body.light #topbar { background: #f5f5f5; border-bottom-color: #e0e0e0; }
 body.light #filters-label { color: #333; border-right-color: #ddd; }
+body.light #search-input,
 body.light select { background: #fff; color: #333; border-color: #ccc; }
+body.light #search-input::placeholder { color: #999; }
+body.light .search-clear { color: #999; }
+body.light .search-clear:hover { color: #333; background: rgba(0,0,0,0.06); }
 body.light .bar-btn { border-color: #ddd; color: #666; }
 body.light .bar-btn:hover { background: rgba(0,0,0,0.05); color: #333; }
 body.light .bar-btn.dots-active { border-color: #999900; color: #999900; }
@@ -178,7 +215,9 @@ body.light .pop-sep { border-top-color: #eee; }
   #filters-label { display: none; }
   #topbar { padding: 8px 10px; gap: 6px; flex-wrap: wrap; }
   #selects { flex: 1 1 100%; width: 100%; }
+  .search-wrap { flex-basis: 100%; min-width: 100%; }
   select { font-size: 12px; padding: 6px 8px; flex-basis: calc(50% - 4px); }
+  #search-input { font-size: 12px; padding: 6px 30px 6px 8px; }
   .bar-btn { flex: 1 1 0; padding: 5px 8px; }
   #theme-btn { font-size: 18px; }
   #count-badge { display: none; }
@@ -226,6 +265,10 @@ body.light .pop-sep { border-top-color: #eee; }
 <div id="topbar">
   <div id="filters-label">FILTERS</div>
   <div id="selects">
+    <div class="search-wrap">
+      <input id="search-input" type="search" placeholder="Search club, pitch or place" autocomplete="off" aria-label="Search by club, pitch or location">
+      <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" hidden>&times;</button>
+    </div>
     <select id="sel-region" aria-label="Filter by region"><option value="">Region (All)</option></select>
     <select id="sel-county" aria-label="Filter by county or country"><option value="">Location (All)</option></select>
     <select id="sel-club"   aria-label="Filter by club"><option value="">Club (All)</option></select>
@@ -243,7 +286,7 @@ body.light .pop-sep { border-top-color: #eee; }
   <div id="loading">Loading pitches…</div>
   <button id="info-btn" aria-label="About this map" title="About"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
   <div id="info-panel">
-    <p>Use the dropdowns to filter by region, county, club or pitch. Click any marker to see details and get Google Maps Directions.</p>
+    <p>Search or use the dropdowns to filter by region, county, club or pitch. Click any marker to see details and get Google Maps Directions.</p>
     <p class="info-browse-links"><a href="clubs/">Browse clubs</a><a href="counties/">Browse counties</a></p>
     <p>The underlying data is freely available on <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
     <p>Enquiries or issues? <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a></p>
@@ -301,6 +344,8 @@ const selRegion = document.getElementById('sel-region');
 const selCounty = document.getElementById('sel-county');
 const selClub   = document.getElementById('sel-club');
 const selPitch  = document.getElementById('sel-pitch');
+const searchInput = document.getElementById('search-input');
+const searchClear = document.getElementById('search-clear');
 const countBadge = document.getElementById('count-badge');
 const resetBtn = document.getElementById('reset-btn');
 const nearbyBtn = document.getElementById('nearby-btn');
@@ -324,10 +369,30 @@ function setOptions(el, values, placeholder) {
   if (values.includes(prev)) el.value = prev;
 }
 
-function getFiltered(region, county, club, pitch) {
+function normalizeSearch(str) {
+  return (str || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function updateSearchClear() {
+  searchClear.hidden = !searchInput.value.trim();
+}
+
+function matchesSearch(c, query) {
+  if (!query) return true;
+  const terms = normalizeSearch(query).split(/\s+/).filter(Boolean);
+  if (!terms.length) return true;
+  return terms.every(term => c.s.includes(term));
+}
+
+function getFiltered(region, county, club, pitch, query = '') {
   return allClubs.filter(c =>
     (!region || c.r === region) && (!county || c.k === county) &&
-    (!club || c.c === club) && (!pitch || c.p === pitch)
+    (!club || c.c === club) && (!pitch || c.p === pitch) &&
+    matchesSearch(c, query)
   );
 }
 
@@ -336,18 +401,19 @@ function currentFilters() {
     region: selRegion.value,
     county: selCounty.value,
     club: selClub.value,
-    pitch: selPitch.value
+    pitch: selPitch.value,
+    query: searchInput.value.trim()
   };
 }
 
 function currentVisible() {
   const filters = currentFilters();
-  return getFiltered(filters.region, filters.county, filters.club, filters.pitch);
+  return getFiltered(filters.region, filters.county, filters.club, filters.pitch, filters.query);
 }
 
 function hasUserFilters() {
   const filters = currentFilters();
-  return filters.region !== 'Ireland' || filters.county || filters.club || filters.pitch;
+  return filters.region !== 'Ireland' || filters.county || filters.club || filters.pitch || filters.query;
 }
 
 function cascadeFilters() {
@@ -373,6 +439,7 @@ function updateShareUrl() {
   if (filters.county) params.set('county', filters.county);
   if (filters.club) params.set('club', filters.club);
   if (filters.pitch) params.set('pitch', filters.pitch);
+  if (filters.query) params.set('q', filters.query);
 
   const query = params.toString();
   const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
@@ -397,6 +464,8 @@ function applyUrlFilters() {
   selectIfAvailable(selClub, params.get('club'));
   cascadeFilters();
   selectIfAvailable(selPitch, params.get('pitch'));
+  searchInput.value = params.get('q') || '';
+  updateSearchClear();
 
   updateShareUrl();
 }
@@ -478,7 +547,8 @@ clusterBtn.addEventListener('click', () => {
 
 // ── Reset ─────────────────────────────────────────────────────────────────────
 resetBtn.addEventListener('click', () => {
-  selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = '';
+  selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; searchInput.value = '';
+  updateSearchClear();
   cascadeFilters(); updateShareUrl(); renderMarkers({ fit: false }); map.setView([53.5, -8], 7);
 });
 
@@ -528,12 +598,14 @@ selRegion.addEventListener('change', () => { selCounty.value = ''; selClub.value
 selCounty.addEventListener('change', () => { selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
 selClub.addEventListener('change',   () => { selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
 selPitch.addEventListener('change', () => { updateShareUrl(); renderMarkers(); });
+searchInput.addEventListener('input', () => { updateSearchClear(); updateShareUrl(); renderMarkers(); });
+searchClear.addEventListener('click', () => { searchInput.value = ''; updateSearchClear(); updateShareUrl(); renderMarkers(); searchInput.focus(); });
 
 // ── Load data ─────────────────────────────────────────────────────────────────
 fetch('data.json')
   .then(r => r.json())
   .then(data => {
-    allClubs = data;
+    allClubs = data.map(c => ({ ...c, s: normalizeSearch(`${c.c} ${c.p} ${c.k} ${c.r}`) }));
     setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
     applyUrlFilters();
     renderMarkers();

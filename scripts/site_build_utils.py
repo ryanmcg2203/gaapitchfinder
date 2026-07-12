@@ -5,6 +5,7 @@ import re
 import unicodedata
 from collections import defaultdict
 from pathlib import Path
+from typing import Iterable, Mapping
 from urllib.parse import urlparse
 
 
@@ -35,27 +36,27 @@ REGION_MAP = {
 }
 
 
-def load_rows():
+def load_rows() -> list[dict[str, str]]:
     with DATASET_PATH.open() as f:
         return list(csv.DictReader(f))
 
 
-def row_file_value(row):
+def row_file_value(row: Mapping[str, str]) -> str:
     return row["File"].strip()
 
 
-def row_region(row):
+def row_region(row: Mapping[str, str]) -> str:
     return REGION_MAP.get(row_file_value(row), row_file_value(row))
 
 
-def row_location_label(row):
+def row_location_label(row: Mapping[str, str]) -> str:
     file_val = row_file_value(row)
     if file_val == "Ireland":
         return row["County"].strip()
     return row["Country"].strip() or row["County"].strip()
 
 
-def row_display_place(row):
+def row_display_place(row: Mapping[str, str]) -> str:
     file_val = row_file_value(row)
     county = row["County"].strip()
     province = row["Province"].strip()
@@ -68,14 +69,14 @@ def row_display_place(row):
     return ", ".join(dict.fromkeys(parts))
 
 
-def slugify(value):
+def slugify(value: str) -> str:
     normalized = unicodedata.normalize("NFKD", value)
     ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
     slug = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_text.lower()).strip("-")
     return slug or "club"
 
 
-def sanitized_external_url(value, allowed_hosts):
+def sanitized_external_url(value: str | None, allowed_hosts: set[str]) -> str:
     url = (value or "").strip()
     if not url:
         return ""
@@ -88,7 +89,33 @@ def sanitized_external_url(value, allowed_hosts):
     return url
 
 
-def build_club_page_records(rows):
+def row_coordinates(row: Mapping[str, str]) -> tuple[float, float] | None:
+    """Return valid numeric coordinates, or ``None`` for incomplete rows."""
+    try:
+        latitude = row["Latitude"].strip()
+        longitude = row["Longitude"].strip()
+        if not latitude or not longitude:
+            return None
+        return float(latitude), float(longitude)
+    except (KeyError, AttributeError, ValueError):
+        return None
+
+
+def row_maps_url(row: Mapping[str, str]) -> str:
+    """Return a safe directions URL, falling back to coordinates when possible."""
+    directions_url = sanitized_external_url(
+        row.get("Directions"), ALLOWED_DIRECTIONS_HOSTS
+    )
+    if directions_url:
+        return directions_url
+
+    coordinates = row_coordinates(row)
+    if coordinates:
+        return f"https://maps.google.com/?daddr={coordinates[0]},{coordinates[1]}"
+    return "https://maps.google.com/"
+
+
+def build_club_page_records(rows: Iterable[dict[str, str]]):
     grouped_rows = defaultdict(list)
     for index, row in enumerate(rows):
         key = (row["Club"].strip(), row_file_value(row), row_location_label(row))

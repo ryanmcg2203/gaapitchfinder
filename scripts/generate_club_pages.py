@@ -15,14 +15,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from site_build_utils import (
-    ALLOWED_DIRECTIONS_HOSTS,
     ALLOWED_SOCIAL_HOSTS,
     DATASET_PATH,
     SITE_BASE_URL,
     SITE_DIR,
     build_club_page_records,
     load_rows,
+    row_coordinates,
     row_display_place,
+    row_maps_url,
     row_region,
     sanitized_external_url,
 )
@@ -164,23 +165,6 @@ def directory_search_script(input_id, item_selector, empty_id):
 
 def back_to_top_link():
     return '<a href="#top" class="back-to-top" aria-label="Back to top">Back to top</a>'
-
-
-def row_coordinates(row):
-    try:
-        return float(row["Latitude"].strip()), float(row["Longitude"].strip())
-    except ValueError:
-        return None
-
-
-def row_maps_url(row):
-    coords = row_coordinates(row)
-    directions_url = sanitized_external_url(row["Directions"], ALLOWED_DIRECTIONS_HOSTS)
-    if directions_url:
-        return directions_url
-    if coords:
-        return f"https://maps.google.com/?daddr={coords[0]},{coords[1]}"
-    return "https://maps.google.com/"
 
 
 def page_coordinates(page):
