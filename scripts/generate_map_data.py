@@ -3,7 +3,15 @@ Convert gaapitchfinder_data.csv to site/data.json for the Leaflet map.
 Run from repo root: python3 scripts/generate_map_data.py
 """
 import json
-from site_build_utils import SITE_DIR, build_club_page_records, load_rows, row_file_value, row_region
+from site_build_utils import (
+    ALLOWED_DIRECTIONS_HOSTS,
+    SITE_DIR,
+    build_club_page_records,
+    load_rows,
+    row_file_value,
+    row_region,
+    sanitized_external_url,
+)
 
 clubs = []
 skipped = 0
@@ -26,6 +34,9 @@ for index, row in enumerate(rows):
 
     file_val = row_file_value(row)
     county = row["County"].strip() if file_val == "Ireland" else row["Country"].strip()
+    directions_url = sanitized_external_url(row["Directions"], ALLOWED_DIRECTIONS_HOSTS)
+    if not directions_url:
+        directions_url = f"https://maps.google.com/?daddr={lat},{lng}"
 
     clubs.append({
         "c": row["Club"].strip(),
@@ -34,7 +45,7 @@ for index, row in enumerate(rows):
         "k": county,
         "la": lat,
         "lo": lng,
-        "d": row["Directions"].strip(),
+        "d": directions_url,
         "u": row_to_url[index],
     })
 

@@ -5,12 +5,22 @@ import re
 import unicodedata
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DATASET_PATH = ROOT_DIR / "gaapitchfinder_data.csv"
 SITE_DIR = ROOT_DIR / "site"
 SITE_BASE_URL = "https://gaapitchfinder.com"
+ALLOWED_DIRECTIONS_HOSTS = {"maps.google.com"}
+ALLOWED_SOCIAL_HOSTS = {
+    "twitter.com",
+    "www.twitter.com",
+    "x.com",
+    "www.x.com",
+    "instagram.com",
+    "www.instagram.com",
+}
 
 REGION_MAP = {
     "Ireland": "Ireland",
@@ -63,6 +73,19 @@ def slugify(value):
     ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
     slug = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_text.lower()).strip("-")
     return slug or "club"
+
+
+def sanitized_external_url(value, allowed_hosts):
+    url = (value or "").strip()
+    if not url:
+        return ""
+
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"}:
+        return ""
+    if not parsed.hostname or parsed.hostname.lower() not in allowed_hosts:
+        return ""
+    return url
 
 
 def build_club_page_records(rows):
