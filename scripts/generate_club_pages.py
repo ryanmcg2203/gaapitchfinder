@@ -739,7 +739,7 @@ def render_index_page(pages):
 
 <div class="page-content" id="top">
   <h1>Club Directory</h1>
-  <p>Browse static GAA club and pitch pages for Ireland and the worldwide GAA community. Each page includes recorded pitch details, coordinates, county or region information, and Google Maps directions from the open GAA Pitch Finder dataset.</p>
+  <p>Browse static GAA club and pitch pages for Ireland and the worldwide Gaelic games community. Each page includes recorded pitch details, coordinates, county or region information, and Google Maps directions from the open GAA Pitch Finder dataset.</p>
   {directory_search_html("club-directory-search", "Search clubs, counties, or countries")}
   <div class="club-directory-toc">{toc}</div>
   {"".join(sections)}
