@@ -331,6 +331,93 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 }
 .back-link:hover { color: #333; }
 
+/* ── Pitch of the Day ─────────────────────────────────────────────── */
+.potd-kicker {
+  color: #888 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px !important;
+  text-transform: uppercase;
+}
+
+.potd-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  margin: 28px 0;
+  overflow: hidden;
+}
+
+.potd-map {
+  background: #111;
+  height: 260px;
+  position: relative;
+}
+
+.potd-map iframe {
+  border: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.potd-body {
+  padding: 26px;
+}
+
+.potd-body h2 {
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+
+.potd-pitch {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.potd-meta {
+  color: #777;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 14px;
+  gap: 8px 14px;
+  margin: 0 0 20px;
+}
+
+.potd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.potd-actions a {
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  color: #111;
+  font-size: 14px;
+  padding: 9px 15px;
+  text-decoration: none;
+}
+
+.potd-actions a:hover {
+  background: #f6f6f6;
+  color: #111;
+}
+
+.potd-loading {
+  color: #999;
+  padding: 28px;
+}
+
+@media (max-width: 600px) {
+  .potd-map { height: 220px; }
+  .potd-body { padding: 20px; }
+  .potd-body h2 { font-size: 24px; }
+  .potd-actions a { flex: 1 1 100%; text-align: center; }
+}
+
 /* ── Directions ────────────────────────────────────────────────────── */
 .dir-toc { margin-bottom: 48px; }
 .dir-toc h2 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }

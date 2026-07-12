@@ -12,6 +12,7 @@ The main dataset currently contains 1,988 pitch records with coordinates, elevat
 gaapitchfinder/
 ├── site/                         # Public GitHub Pages website
 │   ├── index.html                # Main Leaflet pitch map
+│   ├── pitch-of-the-day.html     # Daily featured pitch page
 │   ├── directions.html           # Browseable directions page
 │   ├── blog/                     # Static blog posts
 │   ├── css/                      # Shared site styles
@@ -43,7 +44,7 @@ gaapitchfinder_data.csv
 
 The public site lives in `site/` and is deployed to GitHub Pages.
 
-The Leaflet pages load a generated `site/data.json` file. Static club and county pages are generated into `site/clubs/` and `site/counties/`. These generated outputs are intentionally ignored by git and are created from the main CSV:
+The Leaflet pages and Pitch of the Day load a generated `site/data.json` file. Static club and county pages are generated into `site/clubs/` and `site/counties/`. These generated outputs are intentionally ignored by git and are created from the main CSV:
 
 ```bash
 python3 scripts/generate_map_data.py

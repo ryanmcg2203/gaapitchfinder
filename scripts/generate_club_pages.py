@@ -33,6 +33,7 @@ CLUBS_DIR = SITE_DIR / "clubs"
 COUNTIES_DIR = SITE_DIR / "counties"
 STATIC_URLS = [
     ("/", 1.0),
+    ("/pitch-of-the-day.html", 0.8),
     ("/directions.html", 0.9),
     ("/dataset.html", 0.8),
     ("/about.html", 0.7),

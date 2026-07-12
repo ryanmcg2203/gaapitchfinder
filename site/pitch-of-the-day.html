@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch of the Day – GAA Pitch Finder</title>
+<link rel="icon" type="image/png" href="img/logo-icon.png">
+<meta property="og:title" content="Pitch of the Day – GAA Pitch Finder">
+<meta property="og:description" content="Discover a different GAA pitch every day from the GAA Pitch Finder map.">
+<meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<meta property="og:url" content="https://gaapitchfinder.com/pitch-of-the-day.html">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://gaapitchfinder.com/pitch-of-the-day.html">
+<meta name="description" content="Discover a different GAA pitch every day from the GAA Pitch Finder map.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Pitch of the Day – GAA Pitch Finder","description":"Discover a different GAA pitch every day from the GAA Pitch Finder map.","url":"https://gaapitchfinder.com/pitch-of-the-day.html","isPartOf":{"@type":"WebSite","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/"}}</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
+<script src="/js/ga.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="clubs/">Clubs</a></li>
+    <li><a href="counties/">Counties</a></li>
+    <li><a href="blog/">Blog</a></li>
+    <li><a href="directions.html">Directions</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="dataset.html">Dataset</a></li>
+  </ul>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" class="nav-donate" target="_blank" rel="noopener noreferrer">Donate</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="/">GAA Pitch Finder</a>
+  <a href="clubs/">Clubs</a>
+  <a href="counties/">Counties</a>
+  <a href="blog/">Blog</a>
+  <a href="directions.html">Directions</a>
+  <a href="dataset.html">Dataset</a>
+  <a href="about.html">About</a>
+  <a href="https://www.paypal.com/paypalme/gaapitchfinder" target="_blank" rel="noopener noreferrer">Donate</a>
+</div>
+
+<main class="page-content">
+  <p class="potd-kicker" id="potd-date">Pitch of the Day</p>
+  <h1>Pitch of the Day</h1>
+  <p>Every day, this page picks one pitch from the GAA Pitch Finder dataset. No leaderboard, no judgement — just a small daily wander around the GAA map.</p>
+
+  <section class="potd-card" id="potd-card" aria-live="polite">
+    <p class="potd-loading">Loading today’s pitch…</p>
+  </section>
+
+  <p><a href="/" class="back-link">Back to the map</a></p>
+</main>
+
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>
+</footer>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+});
+document.getElementById('drawer-close').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.remove('open');
+});
+</script>
+<script>
+(function() {
+  const card = document.getElementById('potd-card');
+  const dateLabel = document.getElementById('potd-date');
+  const today = new Date();
+  const dayKey = today.toISOString().slice(0, 10);
+  const displayDate = new Intl.DateTimeFormat(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(today);
+
+  function esc(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function dayIndex(key, count) {
+    let hash = 2166136261;
+    for (let index = 0; index < key.length; index += 1) {
+      hash ^= key.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0) % count;
+  }
+
+  function renderPitch(pitch, count) {
+    const club = esc(pitch.c);
+    const pitchName = esc(pitch.p || 'Pitch location');
+    const location = esc([pitch.k, pitch.r].filter(Boolean).join(', '));
+    const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(pitch.la)},${encodeURIComponent(pitch.lo)}`;
+    const mapEmbed = `https://maps.google.com/maps?q=${encodeURIComponent(`${pitch.la},${pitch.lo}`)}&z=13&output=embed`;
+    const clubUrl = pitch.u ? esc(pitch.u) : '';
+    const mapSearchUrl = `/?q=${encodeURIComponent(pitch.c)}`;
+
+    dateLabel.textContent = `Pitch of the Day · ${displayDate}`;
+    card.innerHTML = `
+      <div class="potd-map">
+        <iframe src="${mapEmbed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map showing ${club}"></iframe>
+      </div>
+      <div class="potd-body">
+        <h2>${club}</h2>
+        <p class="potd-pitch">${pitchName}</p>
+        <p class="potd-meta">
+          <span>${location}</span>
+          <span>${Number(pitch.la).toFixed(5)}, ${Number(pitch.lo).toFixed(5)}</span>
+          <span>Picked from ${count.toLocaleString()} pitches</span>
+        </p>
+        <div class="potd-actions">
+          ${clubUrl ? `<a href="${clubUrl}">Club page</a>` : ''}
+          <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Google Maps directions</a>
+          <a href="${mapSearchUrl}">Find on the map</a>
+        </div>
+      </div>
+    `;
+  }
+
+  fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+      const pitches = data.filter(pitch => Number.isFinite(Number(pitch.la)) && Number.isFinite(Number(pitch.lo)));
+      if (!pitches.length) throw new Error('No pitch data available');
+      renderPitch(pitches[dayIndex(dayKey, pitches.length)], pitches.length);
+    })
+    .catch(() => {
+      card.innerHTML = '<p class="potd-loading">Could not load today’s pitch. Try refreshing the page.</p>';
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://gaapitchfinder.com/</loc><lastmod>2026-07-12</lastmod><priority>1.0</priority></url>
+  <url><loc>https://gaapitchfinder.com/pitch-of-the-day.html</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://gaapitchfinder.com/directions.html</loc><lastmod>2026-07-08</lastmod><priority>0.9</priority></url>
   <url><loc>https://gaapitchfinder.com/dataset.html</loc><lastmod>2026-07-08</lastmod><priority>0.8</priority></url>
   <url><loc>https://gaapitchfinder.com/about.html</loc><lastmod>2026-07-08</lastmod><priority>0.7</priority></url>
@@ -372,7 +373,7 @@
   <url><loc>https://gaapitchfinder.com/clubs/causeway-gaa-kerry.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/cavan-gaa-cavan.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/cavan-gaels-cavan.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/clubs/cayman-gaa-cayman-island.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/clubs/cayman-gaa-cayman-islands.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/ceann-creige-hurling-and-camogie-club-scotland.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/celbridge-kildare.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/central-coast-australia.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
@@ -800,7 +801,6 @@
   <url><loc>https://gaapitchfinder.com/clubs/gusserane-o-rahillys-gaa-wexford.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/gwened-vannes-france.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/half-way-house-bunclody-wexford.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/clubs/halloway-gaels-england.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/hamburg-gaa-germany.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/harlesden-harps-england.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/harps-australia.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
@@ -809,6 +809,7 @@
   <url><loc>https://gaapitchfinder.com/clubs/heber-mcmahon-s-gaa-brookeborough-fermanagh.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/helsinki-harps-gaa-finland.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/henry-joy-mccracken-s-gaa-moneymore-derry.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/clubs/holloway-gaels-england.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/hollymount-carramore-gaa-mayo.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/hollywood-gaa-wicklow.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/holycross-ballycahill-tipperary.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
@@ -1473,7 +1474,7 @@
   <url><loc>https://gaapitchfinder.com/clubs/silverbridge-harps-armagh.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/silvermines-tipperary.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/simonstown-gaels-meath.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
-  <url><loc>https://gaapitchfinder.com/clubs/singapore-gaelic-lions-signapore.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://gaapitchfinder.com/clubs/singapore-gaelic-lions-singapore.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/sinn-fein-australia.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/sixmilebridge-clare.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://gaapitchfinder.com/clubs/skehana-gaa-galway.html</loc><lastmod>2026-07-12</lastmod><priority>0.6</priority></url>
