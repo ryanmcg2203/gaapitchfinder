@@ -7,7 +7,9 @@ under data/derived/ but does not modify the site or the canonical dataset.
 
 Usage:
     python3 scripts/enrich_club_wikipedia.py --limit 25
+    python3 scripts/enrich_club_wikipedia.py --county Leitrim --county Monaghan
     python3 scripts/enrich_club_wikipedia.py --club "Portobello GAA"
+    python3 scripts/enrich_club_wikipedia.py --county Leitrim --workers 2
     python3 scripts/enrich_club_wikipedia.py --min-confidence 80
 """
 
@@ -22,6 +24,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Iterable
 
@@ -31,8 +34,44 @@ from site_build_utils import DATASET_PATH, ROOT_DIR, row_location_label
 OUTPUT_CSV = ROOT_DIR / "data" / "derived" / "club_wikipedia_links.csv"
 WIKIDATA_API_URL = "https://www.wikidata.org/w/api.php"
 USER_AGENT = "gaapitchfinder/1.0 (https://github.com/ryanmcg2203/gaapitchfinder)"
-REQUEST_DELAY_S = 0.2
+REQUEST_DELAY_S = 0.35
 REQUEST_TIMEOUT_S = 20
+MAX_RETRIES = 3
+RETRY_BACKOFF_S = 2
+IRISH_COUNTIES = {
+    "antrim",
+    "armagh",
+    "carlow",
+    "cavan",
+    "clare",
+    "cork",
+    "derry",
+    "donegal",
+    "down",
+    "dublin",
+    "fermanagh",
+    "galway",
+    "kerry",
+    "kildare",
+    "kilkenny",
+    "laois",
+    "leitrim",
+    "limerick",
+    "longford",
+    "louth",
+    "mayo",
+    "meath",
+    "monaghan",
+    "offaly",
+    "roscommon",
+    "sligo",
+    "tipperary",
+    "tyrone",
+    "waterford",
+    "westmeath",
+    "wexford",
+    "wicklow",
+}
 
 CLUB_SUFFIX_RE = re.compile(
     r"\b("
@@ -87,8 +126,15 @@ def wikidata_request(params: dict[str, str | int]) -> dict:
         f"{WIKIDATA_API_URL}?{query}",
         headers={"User-Agent": USER_AGENT},
     )
-    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_S) as response:
-        return json.loads(response.read())
+    for attempt in range(MAX_RETRIES):
+        try:
+            with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_S) as response:
+                return json.loads(response.read())
+        except urllib.error.HTTPError as error:
+            if error.code != 429 or attempt == MAX_RETRIES - 1:
+                raise
+            time.sleep(RETRY_BACKOFF_S * (2 ** attempt))
+    return {}
 
 
 def search_wikidata(term: str) -> list[dict]:
@@ -217,6 +263,16 @@ def score_candidate(row: dict[str, str], candidate: dict, entity: dict, term: st
         score = min(score, 65)
         reasons.append("capped_no_sport_context")
 
+    county_norm = normalize(county)
+    mentioned_counties = {
+        county_name
+        for county_name in IRISH_COUNTIES
+        if re.search(rf"\b{re.escape(county_name)}\b", haystack)
+    }
+    if county_norm in IRISH_COUNTIES and mentioned_counties and county_norm not in mentioned_counties:
+        score = min(score, 60)
+        reasons.append("capped_county_mismatch")
+
     return min(score, 100), reasons
 
 
@@ -312,49 +368,98 @@ def write_results(rows: list[dict[str, str]], output_path: Path) -> None:
             writer.writerow({field: row.get(field, "") for field in fields})
 
 
+def process_club(index: int, total: int, row: dict[str, str], min_confidence: int) -> dict[str, str]:
+    print(f"[{index}/{total}] {row['Club']} ({row['County'] or row['Country']})")
+    result = best_candidate(row)
+    confidence = int(result.get("match_confidence") or 0)
+    if result.get("match_status") == "api_error":
+        status = "api_error"
+    elif confidence >= min_confidence and result.get("wikipedia_url"):
+        status = "suggested"
+    elif confidence:
+        status = "needs_review"
+    else:
+        status = "no_match"
+
+    merged = {
+        "Club": row["Club"].strip(),
+        "County": row["County"].strip(),
+        "Country": row["Country"].strip(),
+        "Division": row["Division"].strip(),
+        "Pitch Count": row["Pitch Count"],
+        **result,
+        "match_status": status,
+    }
+    print(
+        f"  {status}: {merged.get('candidate_label', '')} "
+        f"{merged.get('wikidata_id', '')} ({confidence})"
+    )
+    return merged
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--club", help="Only process clubs containing this text")
+    parser.add_argument(
+        "--county",
+        action="append",
+        help="Only process clubs in this county/location. Can be passed more than once.",
+    )
+    parser.add_argument(
+        "--country",
+        action="append",
+        help="Only process clubs in this country. Can be passed more than once.",
+    )
     parser.add_argument("--limit", type=int, help="Limit number of grouped clubs to process")
     parser.add_argument("--min-confidence", type=int, default=75)
     parser.add_argument("--output", type=Path, default=OUTPUT_CSV)
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Number of clubs to process concurrently. Keep low to be polite to Wikidata.",
+    )
     args = parser.parse_args()
 
     clubs = load_clubs()
+    if args.county:
+        county_filters = {normalize(value) for value in args.county}
+        clubs = [
+            row
+            for row in clubs
+            if normalize(row["County"]) in county_filters
+            or normalize(row_location_label(row)) in county_filters
+        ]
+    if args.country:
+        country_filters = {normalize(value) for value in args.country}
+        clubs = [row for row in clubs if normalize(row["Country"]) in country_filters]
     if args.club:
         club_filter = normalize(args.club)
         clubs = [row for row in clubs if club_filter in normalize(row["Club"])]
     if args.limit:
         clubs = clubs[: args.limit]
 
-    results = []
-    for index, row in enumerate(clubs, 1):
-        print(f"[{index}/{len(clubs)}] {row['Club']} ({row['County'] or row['Country']})")
-        result = best_candidate(row)
-        confidence = int(result.get("match_confidence") or 0)
-        if result.get("match_status") == "api_error":
-            status = "api_error"
-        elif confidence >= args.min_confidence and result.get("wikipedia_url"):
-            status = "suggested"
-        elif confidence:
-            status = "needs_review"
-        else:
-            status = "no_match"
+    if not clubs:
+        print("No matching clubs found.")
+        return
 
-        merged = {
-            "Club": row["Club"].strip(),
-            "County": row["County"].strip(),
-            "Country": row["Country"].strip(),
-            "Division": row["Division"].strip(),
-            "Pitch Count": row["Pitch Count"],
-            **result,
-            "match_status": status,
-        }
-        results.append(merged)
-        print(
-            f"  {status}: {merged.get('candidate_label', '')} "
-            f"{merged.get('wikidata_id', '')} ({confidence})"
-        )
+    worker_count = max(1, min(args.workers, 4))
+    if worker_count == 1:
+        results = [
+            process_club(index, len(clubs), row, args.min_confidence)
+            for index, row in enumerate(clubs, 1)
+        ]
+    else:
+        indexed_rows = list(enumerate(clubs, 1))
+        results_by_index = {}
+        with ThreadPoolExecutor(max_workers=worker_count) as executor:
+            futures = {
+                executor.submit(process_club, index, len(clubs), row, args.min_confidence): index
+                for index, row in indexed_rows
+            }
+            for future in as_completed(futures):
+                results_by_index[futures[future]] = future.result()
+        results = [results_by_index[index] for index, _row in indexed_rows]
 
     write_results(results, args.output)
     print(f"\nWrote {len(results)} rows to {args.output}")

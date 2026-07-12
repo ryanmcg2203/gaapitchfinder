@@ -1,0 +1,57 @@
+Club,County,Country,Division,Pitch Count,candidate_label,wikidata_id,wikipedia_url,match_confidence,match_status,source_query,candidate_description,notes
+Aghabog Emmets,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+"Allen Gaels GAA, Drumshanbo",Leitrim,Ireland,Leitrim,1,Allen Gaels GAA,Q60756077,https://en.wikipedia.org/wiki/Allen_Gaels_GAA,88,suggested,Allen Gaels GAA,Irish Gaelic football club,clean_name_in_label;token_overlap_3;gaa_context;club_context;enwiki_sitelink;query_label_exact
+Annaduff GAA,Leitrim,Ireland,Leitrim,1,Annaduff GAA,Q136505149,https://en.wikipedia.org/wiki/Annaduff_GAA,100,suggested,Annaduff GAA,leitrim-based Gaelic games club,label_exact;token_overlap_2;gaa_context;club_context;county_context;division_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+Aughavas GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Aughawillan GAA,Leitrim,Ireland,Leitrim,1,Aughawillan GAA,Q60750189,https://en.wikipedia.org/wiki/Aughawillan_GAA,100,suggested,Aughawillan GAA,Irish Gaelic football club,label_exact;token_overlap_2;gaa_context;club_context;enwiki_sitelink;instance_claim;query_label_exact
+Aughnamullen Sarsfields,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Aughnasheelin GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Ballinaglera GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Ballybay Pearse Brothers,Monaghan,Ireland,Monaghan,1,Ballybay Pearse Brothers GAA,Q60751926,https://en.wikipedia.org/wiki/Ballybay_Pearse_Brothers_GAA,94,suggested,Ballybay Pearse Brothers,Irish Gaelic football club,clean_name_in_label;token_overlap_3;gaa_context;club_context;enwiki_sitelink;sport_claim;instance_claim
+Blackhill Emeralds,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Bornacoola GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Carrickmacross Emmets,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Carrigallen GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Castleblayney Faughs,Monaghan,Ireland,Monaghan,1,Castleblayney Faugh's GAC,Q3663084,https://en.wikipedia.org/wiki/Castleblayney_Faughs_GFC,75,suggested,Castleblayney Faughs,"gaelic games club in County Monaghan, Ireland",gaa_context;club_context;county_context;division_context;country_context;enwiki_sitelink;sport_claim;instance_claim
+Clones,Monaghan,Ireland,Monaghan,1,Clones,Q1102275,https://en.wikipedia.org/wiki/Clones%2C_County_Monaghan,65,needs_review,Clones,"town in County Monaghan, Ireland",label_exact;county_context;division_context;country_context;enwiki_sitelink;instance_claim;query_label_exact;capped_no_sport_context
+Clontibret O'Neills,Monaghan,Ireland,Monaghan,1,Clontibret O'Neills GAA,Q60755349,https://en.wikipedia.org/wiki/Clontibret_O%27Neills_GAA,85,suggested,Clontibret O'Neills,Irish Gaelic football club,clean_name_in_label;token_overlap_3;gaa_context;club_context;enwiki_sitelink
+Cloone GAA,Leitrim,Ireland,Leitrim,1,Cloone GAA,Q104855074,https://en.wikipedia.org/wiki/Cloone_GAA,100,suggested,Cloone GAA,leitrim-based Gaelic games club,label_exact;token_overlap_2;gaa_context;club_context;county_context;division_context;enwiki_sitelink;query_label_exact
+Corduff Gaels,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Cremartin Shamrocks,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Currin Sons of St Patrick,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Donaghmoyne Fontenoys,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Doohamlet O'Neills,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Drumhowan Geraldines,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Drumkeerin GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Drumreilly GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Eire Og Na Mullai,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Emyvale,Monaghan,Ireland,Monaghan,1,Emyvale,Q59732211,,65,needs_review,Emyvale,"electoral district in County Monaghan, Ireland",label_exact;county_context;division_context;country_context;instance_claim;query_label_exact;capped_no_sport_context
+Eslin GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Fenagh St. Caillins GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Glencar Manorhamilton GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Glenfarne Kiltyclogher GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Gortletteragh  GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Inniskeen Grattans,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Kileevan Sarsfields,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Killanny Geraldines,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Kiltubrid GAA,Leitrim,Ireland,Leitrim,1,Kiltubrid GAA,Q104846833,https://en.wikipedia.org/wiki/Kiltubrid_GAA,100,suggested,Kiltubrid GAA,leitrim-based Gaelic games club,label_exact;token_overlap_2;gaa_context;club_context;county_context;division_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+Latton O'Rahillys,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Leitrim GAA,Leitrim,Ireland,Leitrim,1,Leitrim GAA,Q1778347,https://en.wikipedia.org/wiki/Leitrim_GAA,100,suggested,Leitrim GAA,county board of the Gaelic Athletic Association,label_exact;token_overlap_2;gaa_context;county_context;division_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+Leitrim Gaels,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Magheracloone Mitchells,Monaghan,Ireland,Monaghan,2,,,,0,no_match,,,no_candidates
+Melvin Gaels GAA,Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+Mohill GAA,Leitrim,Ireland,Leitrim,1,Mohill GAA,Q6894171,https://en.wikipedia.org/wiki/Mohill_GAA,100,suggested,Mohill GAA,"gaelic games club in County Leitrim, Ireland",label_exact;token_overlap_2;gaa_context;club_context;county_context;division_context;country_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+Monaghan Centre of Excellence,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Monaghan GAA,Monaghan,Ireland,Monaghan,1,Monaghan GAA,Q1778329,https://en.wikipedia.org/wiki/Monaghan_GAA,100,suggested,Monaghan GAA,governing body of Gaelic games in Ireland,label_exact;token_overlap_2;gaa_context;county_context;division_context;country_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+Monaghan Harps,Monaghan,Ireland,Monaghan,1,Monaghan Harps GAA,Q137756407,https://en.wikipedia.org/wiki/Monaghan_Harps_GAA,100,suggested,Monaghan Harps,gaelic games club in County Monaghan,clean_name_in_label;token_overlap_2;gaa_context;club_context;county_context;division_context;enwiki_sitelink;sport_claim;instance_claim
+Oram Sarsfields,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Rockcorry,Monaghan,Ireland,Monaghan,1,Rockcorry,Q878435,https://en.wikipedia.org/wiki/Rockcorry,64,needs_review,Rockcorry,human settlement,label_exact;enwiki_sitelink;instance_claim;query_label_exact;capped_no_sport_context
+Scotstown,Monaghan,Ireland,Monaghan,1,Scotstown GAA,Q20713900,https://en.wikipedia.org/wiki/Scotstown_GAA,100,suggested,Scotstown GAA,"gaelic games club in County Monaghan, Ireland",clean_name_in_label;gaa_context;club_context;county_context;division_context;country_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+Sean Mac Diarmada,Monaghan,Ireland,Monaghan,1,Seán Mac Diarmada,Q3320941,https://en.wikipedia.org/wiki/Se%C3%A1n_Mac_Diarmada,26,needs_review,Sean Mac Diarmada,Irish revolutionary (1883-1916),token_overlap_2;enwiki_sitelink;instance_claim;capped_no_sport_context
+"Sean O'Heslin's GAA, Ballinamore",Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+"St. Mary's GAA, Kiltoghert",Leitrim,Ireland,Leitrim,1,St. Mary's GAA,Q7590345,https://en.wikipedia.org/wiki/St_Mary%27s_GAA_%28Leitrim%29,100,suggested,St. Mary's GAA,"gaelic games club in County Leitrim, Ireland",clean_name_in_label;token_overlap_4;gaa_context;club_context;county_context;division_context;country_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact
+"St. Osnat's GAA, Glencar",Leitrim,Ireland,Leitrim,1,,,,0,no_match,,,no_candidates
+"St. Patrick's GAA, Dromahaire",Leitrim,Ireland,Leitrim,1,St. Patrick's GAA,Q7595098,https://en.wikipedia.org/wiki/St_Patrick%27s_GAA_%28Meath%29,60,needs_review,St. Patrick's GAA,"gaelic games club in County Meath, Ireland",clean_name_in_label;token_overlap_4;gaa_context;club_context;country_context;enwiki_sitelink;sport_claim;instance_claim;query_label_exact;capped_county_mismatch
+Toome St. Victors,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
+Truagh Gaels,Monaghan,Ireland,Monaghan,1,Truagh Gaels GAC,Q111940932,https://en.wikipedia.org/wiki/Truagh_Gaels_GAC,56,needs_review,Truagh Gaels,,clean_name_in_label;token_overlap_2;enwiki_sitelink;instance_claim;capped_no_sport_context
+Tyholland St. Patricks,Monaghan,Ireland,Monaghan,1,,,,0,no_match,,,no_candidates
