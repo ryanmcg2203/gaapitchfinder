@@ -16,9 +16,12 @@
 <meta name="twitter:image" content="https://gaapitchfinder.com/img/logo-black.png">
 <link rel="canonical" href="https://gaapitchfinder.com/">
 <meta name="description" content="Find GAA clubs, pitches and Google Maps directions across Ireland and worldwide using the open GAA Pitch Finder dataset. Search by club, county, pitch or place.">
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com">
+<link rel="preconnect" href="https://b.basemaps.cartocdn.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://gaapitchfinder.com/#website","name":"GAA Pitch Finder","alternateName":["GAA Club Finder","GAA Pitch Directions","GAA Club Map"],"url":"https://gaapitchfinder.com/","description":"Interactive map of nearly 2,000 GAA clubs and pitches in Ireland and worldwide, with Google Maps directions and an open dataset.","inLanguage":"en","publisher":{"@id":"https://gaapitchfinder.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://gaapitchfinder.com/?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://gaapitchfinder.com/#organization","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","logo":"https://gaapitchfinder.com/img/logo-black.png","email":"gaapitchfinder@gmail.com","sameAs":["https://github.com/ryanmcg2203/gaapitchfinder"]},{"@type":"WebPage","@id":"https://gaapitchfinder.com/#webpage","url":"https://gaapitchfinder.com/","name":"GAA Pitch Finder - GAA Club & Pitch Directions Map","isPartOf":{"@id":"https://gaapitchfinder.com/#website"},"about":{"@id":"https://gaapitchfinder.com/#organization"},"description":"Find GAA clubs, pitches and Google Maps directions across Ireland and worldwide using the open GAA Pitch Finder dataset."}]}</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
-<script src="/js/ga.js"></script>
+<script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="stylesheet" href="vendor/MarkerCluster.css">
@@ -130,10 +133,10 @@ select:disabled { opacity: 0.4; cursor: default; }
 }
 #theme-btn:hover { background: rgba(255,255,255,0.1); }
 
-#count-badge { flex-shrink: 0; font-size: 12px; color: #777; white-space: nowrap; }
+#count-badge { flex-shrink: 0; min-width: 72px; font-size: 12px; color: #777; text-align: right; white-space: nowrap; }
 
 /* ── Map ── */
-#map { flex: 1; position: relative; z-index: 0; }
+#map { flex: 1 1 auto; min-height: 0; position: relative; z-index: 0; background: #111; }
 
 #loading {
   position: absolute;
@@ -221,6 +224,7 @@ body.light .mobile-filter-toggle[aria-expanded="true"] { border-color: #777; col
 body.light #count-badge { color: #aaa; }
 body.light #theme-btn:hover { background: rgba(0,0,0,0.06); }
 body.light #loading { background: rgba(245,245,245,0.92); color: #555; }
+body.light #map { background: #e7ecef; }
 body.light .leaflet-tooltip { background: rgba(255,255,255,0.96); border-color: #ddd; }
 body.light .tt-club { color: #111; }
 body.light .tt-pitch { color: #555; }
@@ -243,6 +247,7 @@ body.light .pop-sep { border-top-color: #eee; }
     align-items: stretch;
     gap: 7px;
     padding: 8px 10px;
+    min-height: 100px;
   }
   #selects {
     display: contents;
@@ -287,6 +292,8 @@ body.light .pop-sep { border-top-color: #eee; }
     border-radius: 4px;
     font-size: 11px;
     color: #aaa;
+    min-width: 0;
+    text-align: center;
   }
   body.light #count-badge {
     border-color: #ddd;
@@ -637,6 +644,14 @@ function renderMarkers(options = {}) {
   }
 }
 
+function scheduleInitialRender(callback) {
+  if ('requestAnimationFrame' in window) {
+    requestAnimationFrame(() => requestAnimationFrame(callback));
+  } else {
+    setTimeout(callback, 0);
+  }
+}
+
 function focusPitch(pitch) {
   if (!pitch || !pitch._marker) return;
   const open = () => pitch._marker.openPopup();
@@ -753,8 +768,10 @@ fetch('data.json')
     allClubs = data.map(c => ({ ...c, s: normalizeSearch(`${c.c} ${c.p} ${c.k} ${c.r}`) }));
     setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
     applyUrlFilters();
-    renderMarkers();
-    document.getElementById('loading').remove();
+    scheduleInitialRender(() => {
+      renderMarkers();
+      document.getElementById('loading').remove();
+    });
   })
   .catch(() => {
     const el = document.getElementById('loading');
