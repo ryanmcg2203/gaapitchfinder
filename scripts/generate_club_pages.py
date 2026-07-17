@@ -13,6 +13,7 @@ import json
 import math
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 from site_build_utils import (
     ALLOWED_SOCIAL_HOSTS,
@@ -59,6 +60,30 @@ def ga_snippet():
 
 def absolute_url(path):
     return f"{SITE_BASE_URL}/{path.lstrip('/')}"
+
+
+def correction_mailto(row, page):
+    pitch = row["Pitch"].strip()
+    location = row_display_place(row)
+    lat, lon = row_coordinates(row)
+    subject = f"Correction for {page['club']}"
+    body = "\n".join(
+        [
+            "Hi Ryan,",
+            "",
+            "I noticed a possible correction for this GAA Pitch Finder entry:",
+            "",
+            f"Club: {page['club']}",
+            f"Pitch: {pitch}",
+            f"Location: {location}",
+            f"Coordinates: {lat:.6f}, {lon:.6f}",
+            f"Page: {absolute_url(page['rel_url'])}",
+            "",
+            "Suggested correction:",
+            "",
+        ]
+    )
+    return f"mailto:gaapitchfinder@gmail.com?subject={quote(subject, safe='')}&body={quote(body, safe='')}"
 
 
 def json_ld_script(data):
@@ -580,6 +605,9 @@ def render_club_page(page, pages):
             actions.append(
                 f"<a href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">Club Social</a>"
             )
+        actions.append(
+            f"<a href=\"{esc_attr(correction_mailto(row, page))}\">Report a correction</a>"
+        )
 
         rows_html.append(
             f"""

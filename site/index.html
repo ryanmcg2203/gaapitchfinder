@@ -193,6 +193,8 @@ select:disabled { opacity: 0.4; cursor: default; }
 .pop-sep { border: none; border-top: 1px solid #2e2e2e; margin: 10px 0 8px; }
 .pop-dir { display: inline-flex; align-items: center; gap: 5px; color: #5b9cf6; font-size: 13px; font-weight: 500; text-decoration: none; }
 .pop-dir:hover { color: #82b4f8; }
+.pop-correction { color: #999; }
+.pop-correction:hover { color: #ccc; }
 
 /* ── Light theme ── */
 body.light #topbar { background: #f5f5f5; border-bottom-color: #e0e0e0; }
@@ -561,6 +563,26 @@ function escHtml(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function correctionMailto(pitch) {
+  const subject = `Correction for ${pitch.c}`;
+  const body = [
+    'Hi Ryan,',
+    '',
+    'I noticed a possible correction for this GAA Pitch Finder entry:',
+    '',
+    `Club: ${pitch.c || ''}`,
+    `Pitch: ${pitch.p || ''}`,
+    `Location: ${[pitch.k, pitch.r].filter(Boolean).join(', ')}`,
+    `Coordinates: ${pitch.la}, ${pitch.lo}`,
+    `Page: ${window.location.href}`,
+    '',
+    'Suggested correction:',
+    ''
+  ].join('\n');
+
+  return `mailto:gaapitchfinder@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 function updateShareUrl() {
   const filters = currentFilters();
   const params = new URLSearchParams();
@@ -610,7 +632,8 @@ function renderMarkers(options = {}) {
     const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
     const clubUrl = c.u ? escHtml(c.u) : '';
     const clubLink = clubUrl ? `<a class="pop-dir" href="${clubUrl}">Club page</a>` : '';
-    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep">${clubLink}${clubLink ? '<br>' : ''}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a>`;
+    const correctionUrl = escHtml(correctionMailto(c));
+    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep">${clubLink}${clubLink ? '<br>' : ''}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a><br><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a>`;
     const marker = makePitchMarker(c)
       .bindPopup(popup, { maxWidth: 280, keepInView: true });
     c._marker = marker;
