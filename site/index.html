@@ -152,21 +152,6 @@ select:disabled { opacity: 0.4; cursor: default; }
   pointer-events: none;
 }
 
-/* ── Tooltip ── */
-.leaflet-tooltip {
-  background: rgba(20,20,20,0.93);
-  border: 1px solid #383838;
-  border-radius: 6px;
-  padding: 6px 10px;
-  box-shadow: 0 2px 14px rgba(0,0,0,0.55);
-  pointer-events: none;
-}
-.leaflet-tooltip::before { display: none; }
-.tt-club { font-size: 13px; font-weight: 600; color: #f0f0f0; line-height: 1.35; }
-.tt-pitch { font-size: 12px; color: #999; margin-top: 1px; }
-.tt-loc { font-size: 11px; color: #666; margin-top: 2px; }
-.tt-hint { font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 0.2px; }
-
 /* ── Marker tap target ── */
 .pitch-dot-marker {
   background: transparent;
@@ -225,11 +210,6 @@ body.light #count-badge { color: #aaa; }
 body.light #theme-btn:hover { background: rgba(0,0,0,0.06); }
 body.light #loading { background: rgba(245,245,245,0.92); color: #555; }
 body.light #map { background: #e7ecef; }
-body.light .leaflet-tooltip { background: rgba(255,255,255,0.96); border-color: #ddd; }
-body.light .tt-club { color: #111; }
-body.light .tt-pitch { color: #555; }
-body.light .tt-loc { color: #999; }
-body.light .tt-hint { color: #bbb; }
 body.light .leaflet-popup-content-wrapper { background: #fff; border-color: #ddd; }
 body.light .leaflet-popup-tip { background: #fff; }
 body.light .pop-club { color: #111; }
@@ -628,15 +608,11 @@ function renderMarkers(options = {}) {
   visible.forEach(c => {
     const eC = escHtml(c.c), eP = escHtml(c.p), eL = escHtml(c.k);
     const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
-    const tooltip = `<div class="tt-club">${eC}</div>${eP ? `<div class="tt-pitch">${eP}</div>` : ''}<div class="tt-loc">${eL}</div><div class="tt-hint">Click for directions</div>`;
     const clubUrl = c.u ? escHtml(c.u) : '';
     const clubLink = clubUrl ? `<a class="pop-dir" href="${clubUrl}">Club page</a>` : '';
     const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep">${clubLink}${clubLink ? '<br>' : ''}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a>`;
     const marker = makePitchMarker(c)
       .bindPopup(popup, { maxWidth: 280, keepInView: true });
-    if (!usesTouch) {
-      marker.bindTooltip(tooltip, { sticky: true, opacity: 1 });
-    }
     c._marker = marker;
     marker.addTo(markerLayer);
   });
