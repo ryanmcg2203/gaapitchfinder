@@ -595,17 +595,53 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 .club-actions {
   display: flex;
-  gap: 18px;
+  gap: 10px;
   flex-wrap: wrap;
+  margin: 0 0 18px;
 }
 
-.club-actions a {
+.club-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
   font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.club-action svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.club-action:hover {
+  border-color: #111;
   color: #111;
   text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-.club-actions a:hover { color: #555; text-decoration: underline; }
+.club-action-primary {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.club-action-primary:hover { background: #2b2b2b; color: #fff; }
+
+.club-action-muted { color: #555; }
 
 .club-context {
   display: grid;
@@ -809,6 +845,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
     gap: 2px;
   }
   .club-detail-label { min-width: 0; }
+  .club-action { width: 100%; }
   .club-context-block span,
   .county-directory span,
   .county-province-group span {

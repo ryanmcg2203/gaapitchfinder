@@ -198,6 +198,15 @@ def back_to_top_link():
     return '<a href="#top" class="back-to-top" aria-label="Back to top">Back to top</a>'
 
 
+def icon_svg(name):
+    icons = {
+        "map": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>',
+        "x": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.3L5 21H1.9l7.3-8.3L1.5 3h6.4l4.4 5.7L17.5 3Zm-1.1 16.2h1.7L7 4.7H5.2l11.2 14.5Z"/></svg>',
+        "correction": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.3V20h2.7L17.8 8.9l-2.7-2.7L4 17.3ZM19.7 7c.4-.4.4-1 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0l-1 1 2.7 2.7 1-1Z"/></svg>',
+    }
+    return icons[name]
+
+
 def page_coordinates(page):
     coords = [row_coordinates(row) for row in page["rows"]]
     coords = [coord for coord in coords if coord]
@@ -599,14 +608,14 @@ def render_club_page(page, pages):
         maps_url = row_maps_url(row)
         twitter = sanitized_external_url(row["Twitter"], ALLOWED_SOCIAL_HOSTS)
         actions = [
-            f"<a href=\"{esc_attr(maps_url)}\" target=\"_blank\" rel=\"noopener noreferrer\">Google Maps Directions</a>"
+            f"<a class=\"club-action club-action-primary\" href=\"{esc_attr(maps_url)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('map')}<span>Google Maps Directions</span></a>"
         ]
         if twitter:
             actions.append(
-                f"<a href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">Club Social</a>"
+                f"<a class=\"club-action\" href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('x')}<span>X / Twitter</span></a>"
             )
         actions.append(
-            f"<a href=\"{esc_attr(correction_mailto(row, page))}\">Report a correction</a>"
+            f"<a class=\"club-action club-action-muted\" href=\"{esc_attr(correction_mailto(row, page))}\">{icon_svg('correction')}<span>Report a correction</span></a>"
         )
 
         rows_html.append(
@@ -615,12 +624,12 @@ def render_club_page(page, pages):
   <h2>{esc(pitch)}</h2>
   <p class="club-place">{esc(place)}</p>
   {map_html(row, f"club-map-{row_index}")}
-  <ul class="club-detail-list">
-    {row_details_html(row)}
-  </ul>
   <div class="club-actions">
     {"".join(actions)}
   </div>
+  <ul class="club-detail-list">
+    {row_details_html(row)}
+  </ul>
 </section>
 """.strip()
         )
