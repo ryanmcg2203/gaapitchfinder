@@ -190,11 +190,15 @@ select:disabled { opacity: 0.4; cursor: default; }
 .pop-club { font-size: 15px; font-weight: 600; color: #fff; line-height: 1.3; }
 .pop-pitch { font-size: 13px; color: #999; margin-top: 2px; }
 .pop-loc { font-size: 12px; color: #666; margin-top: 4px; }
-.pop-sep { border: none; border-top: 1px solid #2e2e2e; margin: 10px 0 8px; }
-.pop-dir { display: inline-flex; align-items: center; gap: 5px; color: #5b9cf6; font-size: 13px; font-weight: 500; text-decoration: none; }
-.pop-dir:hover { color: #82b4f8; }
-.pop-correction { color: #999; }
-.pop-correction:hover { color: #ccc; }
+.pop-sep { border: none; border-top: 1px solid #2e2e2e; margin: 10px 0 10px; }
+.pop-actions { display: grid; gap: 7px; }
+.pop-dir { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 8px 10px; border: 1px solid #3d4d68; border-radius: 999px; background: #25344d; color: #d9e8ff; font-size: 13px; font-weight: 700; text-decoration: none; }
+.pop-dir svg { width: 13px; height: 13px; fill: currentColor; }
+.pop-dir:hover { background: #31527d; border-color: #5b9cf6; color: #fff; }
+.pop-secondary { background: transparent; border-color: #444; color: #ddd; }
+.pop-secondary:hover { background: #2a2a2a; border-color: #777; color: #fff; }
+.pop-correction { background: transparent; border-color: #3a3a3a; color: #aaa; }
+.pop-correction:hover { background: #242424; border-color: #666; color: #eee; }
 
 /* ── Light theme ── */
 body.light #topbar { background: #f5f5f5; border-bottom-color: #e0e0e0; }
@@ -631,9 +635,9 @@ function renderMarkers(options = {}) {
     const eC = escHtml(c.c), eP = escHtml(c.p), eL = escHtml(c.k);
     const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
     const clubUrl = c.u ? escHtml(c.u) : '';
-    const clubLink = clubUrl ? `<a class="pop-dir" href="${clubUrl}">Club page</a>` : '';
+    const clubLink = clubUrl ? `<a class="pop-dir pop-secondary" href="${clubUrl}">Club page</a>` : '';
     const correctionUrl = escHtml(correctionMailto(c));
-    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep">${clubLink}${clubLink ? '<br>' : ''}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Google Maps Directions</a><br><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a>`;
+    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep"><div class="pop-actions">${clubLink}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>Directions</a><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a></div>`;
     const marker = makePitchMarker(c)
       .bindPopup(popup, { maxWidth: 280, keepInView: true });
     c._marker = marker;
