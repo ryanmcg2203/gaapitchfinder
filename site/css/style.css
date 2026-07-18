@@ -639,7 +639,16 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   color: #fff;
 }
 
-.club-action-primary:hover { background: #2b2b2b; color: #fff; }
+.page-content .club-action-primary,
+.page-content .club-action-primary:visited {
+  color: #fff;
+}
+
+.page-content .club-action-primary:hover,
+.page-content .club-action-primary:focus-visible {
+  background: #2b2b2b;
+  color: #fff;
+}
 
 .club-action-muted { color: #555; }
 
