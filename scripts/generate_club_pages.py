@@ -201,7 +201,7 @@ def back_to_top_link():
 def icon_svg(name):
     icons = {
         "map": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>',
-        "social": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.1c-.8 0-1.5.3-2 .8L8.9 12.8a3.4 3.4 0 0 0 0-1.6L16 7.1a3 3 0 1 0-1-1.7L7.9 9.5a3 3 0 1 0 0 5l7.1 4.2a3 3 0 1 0 3-2.6Z"/></svg>',
+        "x": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.3L5 21H1.9l7.3-8.3L1.5 3h6.4l4.4 5.7L17.5 3Zm-1.1 16.2h1.7L7 4.7H5.2l11.2 14.5Z"/></svg>',
         "correction": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.3V20h2.7L17.8 8.9l-2.7-2.7L4 17.3ZM19.7 7c.4-.4.4-1 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0l-1 1 2.7 2.7 1-1Z"/></svg>',
     }
     return icons[name]
@@ -612,7 +612,7 @@ def render_club_page(page, pages):
         ]
         if twitter:
             actions.append(
-                f"<a class=\"club-action\" href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('social')}<span>Club Social</span></a>"
+                f"<a class=\"club-action\" href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('x')}<span>X / Twitter</span></a>"
             )
         actions.append(
             f"<a class=\"club-action club-action-muted\" href=\"{esc_attr(correction_mailto(row, page))}\">{icon_svg('correction')}<span>Report a correction</span></a>"
