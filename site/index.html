@@ -636,8 +636,10 @@ function renderMarkers(options = {}) {
     const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
     const clubUrl = c.u ? escHtml(c.u) : '';
     const clubLink = clubUrl ? `<a class="pop-dir pop-secondary" href="${clubUrl}">Club page</a>` : '';
+    const wikipediaUrl = c.w ? escHtml(c.w) : '';
+    const wikipediaLink = wikipediaUrl ? `<a class="pop-dir pop-secondary" href="${wikipediaUrl}" target="_blank" rel="noopener noreferrer">Wikipedia</a>` : '';
     const correctionUrl = escHtml(correctionMailto(c));
-    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep"><div class="pop-actions">${clubLink}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>Directions</a><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a></div>`;
+    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep"><div class="pop-actions">${clubLink}${wikipediaLink}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>Directions</a><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a></div>`;
     const marker = makePitchMarker(c)
       .bindPopup(popup, { maxWidth: 280, keepInView: true });
     c._marker = marker;

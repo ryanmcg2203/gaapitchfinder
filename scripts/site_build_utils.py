@@ -22,6 +22,11 @@ ALLOWED_SOCIAL_HOSTS = {
     "instagram.com",
     "www.instagram.com",
 }
+ALLOWED_REFERENCE_HOSTS = {
+    "wikipedia.org",
+    "www.wikipedia.org",
+    "*.wikipedia.org",
+}
 
 REGION_MAP = {
     "Ireland": "Ireland",
@@ -84,7 +89,13 @@ def sanitized_external_url(value: str | None, allowed_hosts: set[str]) -> str:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"}:
         return ""
-    if not parsed.hostname or parsed.hostname.lower() not in allowed_hosts:
+    hostname = parsed.hostname.lower() if parsed.hostname else ""
+    if not hostname:
+        return ""
+    if hostname not in allowed_hosts and not any(
+        allowed_host.startswith("*.") and hostname.endswith(allowed_host[1:])
+        for allowed_host in allowed_hosts
+    ):
         return ""
     return url
 

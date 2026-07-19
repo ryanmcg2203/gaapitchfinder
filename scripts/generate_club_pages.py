@@ -17,6 +17,7 @@ from urllib.parse import quote
 
 from site_build_utils import (
     ALLOWED_SOCIAL_HOSTS,
+    ALLOWED_REFERENCE_HOSTS,
     DATASET_PATH,
     SITE_BASE_URL,
     SITE_DIR,
@@ -296,6 +297,9 @@ def row_place_schema(row, page_url, index=0):
             "longitude": coords[1],
         }
         place["hasMap"] = row_maps_url(row)
+    wikipedia = sanitized_external_url(row.get("Wikipedia"), ALLOWED_REFERENCE_HOSTS)
+    if wikipedia:
+        place["sameAs"] = [wikipedia]
     return place
 
 
@@ -607,9 +611,14 @@ def render_club_page(page, pages):
         place = row_display_place(row)
         maps_url = row_maps_url(row)
         twitter = sanitized_external_url(row["Twitter"], ALLOWED_SOCIAL_HOSTS)
+        wikipedia = sanitized_external_url(row.get("Wikipedia"), ALLOWED_REFERENCE_HOSTS)
         actions = [
             f"<a class=\"club-action club-action-primary\" href=\"{esc_attr(maps_url)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('map')}<span>Google Maps Directions</span></a>"
         ]
+        if wikipedia:
+            actions.append(
+                f"<a href=\"{esc_attr(wikipedia)}\" target=\"_blank\" rel=\"noopener noreferrer\">Wikipedia</a>"
+            )
         if twitter:
             actions.append(
                 f"<a class=\"club-action\" href=\"{esc_attr(twitter)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('x')}<span>X / Twitter</span></a>"

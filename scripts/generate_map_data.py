@@ -11,6 +11,8 @@ from site_build_utils import (
     row_file_value,
     row_maps_url,
     row_region,
+    sanitized_external_url,
+    ALLOWED_REFERENCE_HOSTS,
 )
 
 
@@ -44,6 +46,7 @@ def build_map_records(rows):
                 "lo": longitude,
                 "d": row_maps_url(row),
                 "u": row_to_url[index],
+                "w": sanitized_external_url(row.get("Wikipedia"), ALLOWED_REFERENCE_HOSTS),
             }
         )
 

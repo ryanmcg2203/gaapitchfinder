@@ -172,6 +172,7 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 - `County`: County, division, state, or local grouping
 - `Directions`: Google Maps directions link
 - `Twitter`: Club Twitter/X URL, where available
+- `Wikipedia`: Reviewed club Wikipedia URL, where available
 - `Elevation`: Elevation in meters
 - `annual_rainfall`: Annual rainfall in millimeters
 - `rain_days`: Number of days with precipitation
