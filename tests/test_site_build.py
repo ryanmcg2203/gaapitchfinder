@@ -35,6 +35,16 @@ class SiteBuildUtilsTests(unittest.TestCase):
         self.assertIsNone(row_coordinates(pitch_row(Longitude="unknown")))
         self.assertIsNone(row_coordinates({}))
 
+    def test_row_coordinates_rejects_values_outside_world_bounds(self):
+        self.assertIsNone(row_coordinates(pitch_row(Latitude="90.1")))
+        self.assertIsNone(row_coordinates(pitch_row(Latitude="-90.1")))
+        self.assertIsNone(row_coordinates(pitch_row(Longitude="180.1")))
+        self.assertIsNone(row_coordinates(pitch_row(Longitude="-180.1")))
+        self.assertEqual(
+            row_coordinates(pitch_row(Latitude="90", Longitude="-180")),
+            (90.0, -180.0),
+        )
+
     def test_maps_url_rejects_untrusted_hosts_and_uses_coordinates(self):
         row = pitch_row(Directions="https://example.com/redirect")
         self.assertEqual(
@@ -53,6 +63,18 @@ class SiteBuildUtilsTests(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]["c"], "Valid")
         self.assertEqual(records[0]["u"], "clubs/valid-galway.html")
+
+    def test_map_records_skip_coordinates_outside_world_bounds(self):
+        records, skipped = build_map_records(
+            [
+                pitch_row(Club="Impossible Latitude", Latitude="999"),
+                pitch_row(Club="Impossible Longitude", Longitude="-999"),
+                pitch_row(Club="Valid"),
+            ]
+        )
+
+        self.assertEqual(skipped, 2)
+        self.assertEqual([record["c"] for record in records], ["Valid"])
 
 
 if __name__ == "__main__":

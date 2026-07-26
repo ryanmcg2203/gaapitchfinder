@@ -1,22 +1,49 @@
 name: Deploy Site to GitHub Pages
 
 on:
+  pull_request:
   push:
     branches: [main]
   workflow_dispatch: # allow manual trigger from GitHub UI
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Generate map data from CSV
+        run: python3 scripts/generate_map_data.py
+
+      - name: Generate club pages and sitemap
+        run: python3 scripts/generate_club_pages.py
+
+      - name: Audit generated site
+        run: python3 scripts/audit_site.py
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

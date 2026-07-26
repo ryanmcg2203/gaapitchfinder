@@ -107,7 +107,11 @@ def row_coordinates(row: Mapping[str, str]) -> tuple[float, float] | None:
         longitude = row["Longitude"].strip()
         if not latitude or not longitude:
             return None
-        return float(latitude), float(longitude)
+        latitude_value = float(latitude)
+        longitude_value = float(longitude)
+        if not (-90 <= latitude_value <= 90) or not (-180 <= longitude_value <= 180):
+            return None
+        return latitude_value, longitude_value
     except (KeyError, AttributeError, ValueError):
         return None
 
