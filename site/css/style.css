@@ -650,6 +650,10 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   color: #fff;
 }
 
+.club-action-reference {
+  background: #f8f8f8;
+}
+
 .club-action-muted { color: #555; }
 
 .club-context {

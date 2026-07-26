@@ -202,6 +202,7 @@ def back_to_top_link():
 def icon_svg(name):
     icons = {
         "map": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>',
+        "reference": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Zm2.5-.5a.5.5 0 0 0-.5.5v12.6c.2-.1.3-.1.5-.1H18V4H7.5Zm2 3H16v2H9.5V7Zm0 4H16v2H9.5v-2Z"/></svg>',
         "x": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.3L5 21H1.9l7.3-8.3L1.5 3h6.4l4.4 5.7L17.5 3Zm-1.1 16.2h1.7L7 4.7H5.2l11.2 14.5Z"/></svg>',
         "correction": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.3V20h2.7L17.8 8.9l-2.7-2.7L4 17.3ZM19.7 7c.4-.4.4-1 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0l-1 1 2.7 2.7 1-1Z"/></svg>',
     }
@@ -617,7 +618,7 @@ def render_club_page(page, pages):
         ]
         if wikipedia:
             actions.append(
-                f"<a href=\"{esc_attr(wikipedia)}\" target=\"_blank\" rel=\"noopener noreferrer\">Wikipedia</a>"
+                f"<a class=\"club-action club-action-reference\" href=\"{esc_attr(wikipedia)}\" target=\"_blank\" rel=\"noopener noreferrer\">{icon_svg('reference')}<span>Wikipedia</span></a>"
             )
         if twitter:
             actions.append(
