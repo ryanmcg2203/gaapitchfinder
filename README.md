@@ -29,7 +29,7 @@ gaapitchfinder/
 │   ├── generate_map_data.py      # Builds site/data.json
 │   └── generate_club_pages.py    # Builds club/county pages and sitemap
 ├── tests/                        # Unit tests for site build helpers
-.github/workflows/deploy.yml      # PR validation and GitHub Pages deployment
+├── .github/workflows/deploy.yml  # PR validation and GitHub Pages deployment
 ├── output/
 │   ├── reports/                  # Generated analysis reports
 │   └── visualizations/           # Generated maps and charts

@@ -9,7 +9,15 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from generate_map_data import build_map_records  # noqa: E402
-from site_build_utils import row_coordinates, row_maps_url  # noqa: E402
+from generate_club_pages import render_club_page  # noqa: E402
+from site_build_utils import (  # noqa: E402
+    ALLOWED_REFERENCE_HOSTS,
+    ALLOWED_SOCIAL_HOSTS,
+    build_club_page_records,
+    row_coordinates,
+    row_maps_url,
+    sanitized_external_url,
+)
 
 
 def pitch_row(**overrides):
@@ -24,6 +32,12 @@ def pitch_row(**overrides):
         "Province": "Connacht",
         "Division": "",
         "Directions": "",
+        "Code": "",
+        "Twitter": "",
+        "Elevation": "",
+        "annual_rainfall": "",
+        "rain_days": "",
+        "Wikipedia": "",
     }
     row.update(overrides)
     return row
@@ -75,6 +89,64 @@ class SiteBuildUtilsTests(unittest.TestCase):
 
         self.assertEqual(skipped, 2)
         self.assertEqual([record["c"] for record in records], ["Valid"])
+
+    def test_external_url_sanitization_uses_allowlists(self):
+        self.assertEqual(
+            sanitized_external_url(
+                "https://en.wikipedia.org/wiki/Test", ALLOWED_REFERENCE_HOSTS
+            ),
+            "https://en.wikipedia.org/wiki/Test",
+        )
+        self.assertEqual(
+            sanitized_external_url("https://x.com/testclub", ALLOWED_SOCIAL_HOSTS),
+            "https://x.com/testclub",
+        )
+        self.assertEqual(
+            sanitized_external_url(
+                "https://example.com/wiki/Test", ALLOWED_REFERENCE_HOSTS
+            ),
+            "",
+        )
+        self.assertEqual(
+            sanitized_external_url("javascript:alert(1)", ALLOWED_SOCIAL_HOSTS),
+            "",
+        )
+
+    def test_club_page_records_disambiguate_slug_collisions(self):
+        pages, row_to_url = build_club_page_records(
+            [
+                pitch_row(Club="St. John's", County="Cork"),
+                pitch_row(Club="St Johns", County="Cork"),
+            ]
+        )
+
+        self.assertEqual(
+            sorted(page["slug"] for page in pages), ["st-john-s-cork", "st-johns-cork"]
+        )
+        self.assertEqual(row_to_url[0], "clubs/st-john-s-cork.html")
+        self.assertEqual(row_to_url[1], "clubs/st-johns-cork.html")
+
+    def test_generated_club_page_escapes_content_and_styles_wikipedia_action(self):
+        row = pitch_row(
+            Club='Test <Club>',
+            Pitch='Ground "One"',
+            Wikipedia="https://en.wikipedia.org/wiki/Test_Club",
+            Twitter="https://twitter.com/testclub",
+        )
+        page = {
+            "club": row["Club"].strip(),
+            "location_label": "Galway",
+            "slug": "test-club-galway",
+            "rel_url": "clubs/test-club-galway.html",
+            "rows": [row],
+        }
+
+        html = render_club_page(page, [page])
+
+        self.assertIn("Test &lt;Club&gt;", html)
+        self.assertIn("Ground &quot;One&quot;", html)
+        self.assertIn('class="club-action club-action-reference"', html)
+        self.assertNotIn(">Wikipedia</a>", html)
 
 
 if __name__ == "__main__":
