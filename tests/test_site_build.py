@@ -9,7 +9,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from generate_map_data import build_map_records  # noqa: E402
-from generate_club_pages import render_club_page  # noqa: E402
+from generate_club_pages import directory_initial, render_club_page  # noqa: E402
 from site_build_utils import (  # noqa: E402
     ALLOWED_REFERENCE_HOSTS,
     ALLOWED_SOCIAL_HOSTS,
@@ -125,6 +125,12 @@ class SiteBuildUtilsTests(unittest.TestCase):
         )
         self.assertEqual(row_to_url[0], "clubs/st-john-s-cork.html")
         self.assertEqual(row_to_url[1], "clubs/st-johns-cork.html")
+
+    def test_directory_initial_folds_accents_for_grouping(self):
+        self.assertEqual(directory_initial("Éire Óg"), "E")
+        self.assertEqual(directory_initial("Ó Dálaigh GAA"), "O")
+        self.assertEqual(directory_initial("O'Donovan Rossa"), "O")
+        self.assertEqual(directory_initial("123 Club"), "#")
 
     def test_generated_club_page_escapes_content_and_styles_wikipedia_action(self):
         row = pitch_row(
