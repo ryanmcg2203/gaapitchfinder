@@ -11,6 +11,7 @@ from __future__ import annotations
 import html
 import json
 import math
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
@@ -116,13 +117,14 @@ def nav_html(prefix="../"):
     GAA Pitch Finder
   </a>
   <ul class="nav-links">
+    <li><a href="/">Map</a></li>
     <li><a href="/clubs/">Clubs</a></li>
     <li><a href="/counties/">Counties</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/pitch-of-the-day.html">Daily Pitch</a></li>
     <li><a href="/directions.html">Directions</a></li>
-    <li><a href="/about.html">About</a></li>
+    <li><a href="/pitch-of-the-day.html">Daily Pitch</a></li>
+    <li><a href="/blog/">Blog</a></li>
     <li><a href="/dataset.html">Dataset</a></li>
+    <li><a href="/about.html">About</a></li>
   </ul>
   <a href="/donate.html" class="nav-donate">Donate</a>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
@@ -133,12 +135,12 @@ def nav_html(prefix="../"):
   <button class="drawer-close" id="drawer-close" aria-label="Close menu">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
-  <a href="/">GAA Pitch Finder</a>
+  <a href="/">Map</a>
   <a href="/clubs/">Clubs</a>
   <a href="/counties/">Counties</a>
-  <a href="/blog/">Blog</a>
-  <a href="/pitch-of-the-day.html">Daily Pitch</a>
   <a href="/directions.html">Directions</a>
+  <a href="/pitch-of-the-day.html">Daily Pitch</a>
+  <a href="/blog/">Blog</a>
   <a href="/dataset.html">Dataset</a>
   <a href="/about.html">About</a>
   <a href="/privacy.html">Privacy</a>
@@ -207,6 +209,16 @@ def icon_svg(name):
         "correction": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.3V20h2.7L17.8 8.9l-2.7-2.7L4 17.3ZM19.7 7c.4-.4.4-1 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0l-1 1 2.7 2.7 1-1Z"/></svg>',
     }
     return icons[name]
+
+
+def directory_initial(value):
+    if not value:
+        return "#"
+    normalized = unicodedata.normalize("NFKD", value[0])
+    ascii_initial = normalized.encode("ascii", "ignore").decode("ascii").upper()
+    if ascii_initial and ascii_initial[0].isalpha():
+        return ascii_initial[0]
+    return "#"
 
 
 def page_coordinates(page):
@@ -710,9 +722,7 @@ def render_index_page(pages):
     structured_data = club_index_schema(pages)
     groups = {}
     for page in pages:
-        initial = page["club"][0].upper() if page["club"] else "#"
-        if not initial.isalpha():
-            initial = "#"
+        initial = directory_initial(page["club"])
         groups.setdefault(initial, []).append(page)
 
     sections = []
@@ -759,13 +769,14 @@ def render_index_page(pages):
     GAA Pitch Finder
   </a>
   <ul class="nav-links">
+    <li><a href="/">Map</a></li>
     <li><a href="/clubs/">Clubs</a></li>
     <li><a href="/counties/">Counties</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/pitch-of-the-day.html">Daily Pitch</a></li>
     <li><a href="/directions.html">Directions</a></li>
-    <li><a href="/about.html">About</a></li>
+    <li><a href="/pitch-of-the-day.html">Daily Pitch</a></li>
+    <li><a href="/blog/">Blog</a></li>
     <li><a href="/dataset.html">Dataset</a></li>
+    <li><a href="/about.html">About</a></li>
   </ul>
   <a href="/donate.html" class="nav-donate">Donate</a>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
@@ -776,12 +787,12 @@ def render_index_page(pages):
   <button class="drawer-close" id="drawer-close" aria-label="Close menu">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
-  <a href="/">GAA Pitch Finder</a>
+  <a href="/">Map</a>
   <a href="/clubs/">Clubs</a>
   <a href="/counties/">Counties</a>
-  <a href="/blog/">Blog</a>
-  <a href="/pitch-of-the-day.html">Daily Pitch</a>
   <a href="/directions.html">Directions</a>
+  <a href="/pitch-of-the-day.html">Daily Pitch</a>
+  <a href="/blog/">Blog</a>
   <a href="/dataset.html">Dataset</a>
   <a href="/about.html">About</a>
   <a href="/privacy.html">Privacy</a>
