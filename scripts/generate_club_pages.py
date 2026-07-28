@@ -42,8 +42,21 @@ STATIC_URLS = [
     ("/about.html", 0.7),
     ("/privacy.html", 0.5),
     ("/donate.html", 0.6),
+    ("/donate-thanks.html", 0.4),
     ("/blog/", 0.8),
 ]
+LEGACY_REDIRECTS = {
+    "/home": "/",
+    "/cart": "/donate.html",
+    "/directions": "/directions.html",
+    "/blog/category/list": "/blog/",
+    "/blog/tag/ireland": "/blog/",
+    "/blog/tag/update": "/blog/",
+    "/blog/2020update": "/blog/",
+    "/clubs/halloway-gaels-england.html": "/clubs/holloway-gaels-england.html",
+    "/clubs/cayman-gaa-cayman-island.html": "/clubs/cayman-gaa-cayman-islands.html",
+    "/clubs/singapore-gaelic-lions-signapore.html": "/clubs/singapore-gaelic-lions-singapore.html",
+}
 PROVINCE_ORDER = ["Connacht", "Leinster", "Munster", "Ulster"]
 
 
@@ -1026,6 +1039,40 @@ def write_sitemap(pages, counties):
     (SITE_DIR / "sitemap.xml").write_text("\n".join(lines) + "\n")
 
 
+def legacy_page_path(path):
+    if path.endswith(".html"):
+        return SITE_DIR / path.lstrip("/")
+    return SITE_DIR / path.lstrip("/") / "index.html"
+
+
+def render_legacy_redirect_page(source_path, target_path):
+    target_url = absolute_url(target_path)
+    source_url = absolute_url(source_path)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, follow">
+<meta http-equiv="refresh" content="0; url={esc_attr(target_path)}">
+<title>Moved – GAA Pitch Finder</title>
+<link rel="canonical" href="{esc_attr(target_url)}">
+</head>
+<body>
+<p>This page has moved to <a href="{esc_attr(target_path)}">{esc(target_url)}</a>.</p>
+<!-- Legacy URL: {esc(source_url)} -->
+</body>
+</html>
+"""
+
+
+def write_legacy_redirects():
+    for source_path, target_path in LEGACY_REDIRECTS.items():
+        output_path = legacy_page_path(source_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(render_legacy_redirect_page(source_path, target_path))
+
+
 def main():
     rows = load_rows()
     pages, _row_to_url = build_club_page_records(rows)
@@ -1047,11 +1094,13 @@ def main():
         (COUNTIES_DIR / f"{county_slug(county)}.html").write_text(
             render_county_page(county, county_page_records)
         )
+    write_legacy_redirects()
     write_sitemap(pages, counties)
 
     print(f"Generated {len(pages)} club pages → {CLUBS_DIR}")
     print(f"Generated club index → {CLUBS_DIR / 'index.html'}")
     print(f"Generated {len(counties)} county pages → {COUNTIES_DIR}")
+    print(f"Generated {len(LEGACY_REDIRECTS)} legacy redirects")
     print(f"Generated sitemap → {SITE_DIR / 'sitemap.xml'}")
 
 

@@ -17,5 +17,11 @@ map/data.json
 site/data.json
 site/clubs/
 site/counties/
+site/blog/2020update/
+site/blog/category/
+site/blog/tag/
+site/cart/
+site/directions/
+site/home/
 data/derived/pitch_geometry.csv
 data/derived/.pitch_geometry_checkpoint.json
