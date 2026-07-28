@@ -37,6 +37,7 @@ class PageParser(HTMLParser):
         self.description = False
         self.canonical = False
         self.json_ld = False
+        self.noindex = False
         self.links = []
 
     def handle_starttag(self, tag, attrs):
@@ -45,6 +46,8 @@ class PageParser(HTMLParser):
             self.in_title = True
         if tag == "meta" and attrs.get("name") == "description" and attrs.get("content"):
             self.description = True
+        if tag == "meta" and attrs.get("name") == "robots":
+            self.noindex = "noindex" in attrs.get("content", "").lower()
         if tag == "link" and attrs.get("rel") == "canonical" and attrs.get("href"):
             self.canonical = True
         if tag == "script" and attrs.get("type") == "application/ld+json":
@@ -69,7 +72,8 @@ def is_safe_href(href):
 def audit_html_file(path):
     rel_path = path.relative_to(SITE_DIR)
     parser = PageParser()
-    parser.feed(path.read_text(errors="replace"))
+    page_html = path.read_text(errors="replace")
+    parser.feed(page_html)
     errors = []
 
     if rel_path.as_posix() in REQUIRED_META_PAGES:
@@ -81,6 +85,8 @@ def audit_html_file(path):
             errors.append("missing canonical link")
     if rel_path.as_posix() == "index.html" and not parser.json_ld:
         errors.append("homepage missing JSON-LD")
+    if "search_term_string" in page_html:
+        errors.append("declares URL-based SearchAction without a search results page")
 
     for attrs in parser.links:
         href = attrs.get("href", "")
@@ -113,14 +119,44 @@ def audit_sitemap():
     namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     root = ET.parse(path).getroot()
     errors = []
+    sitemap_paths = set()
     for url in root.findall("sm:url", namespace):
         loc = url.findtext("sm:loc", default="", namespaces=namespace)
         lastmod = url.findtext("sm:lastmod", default="", namespaces=namespace)
         if not loc:
             errors.append("sitemap URL missing loc")
+            continue
         if not lastmod:
             errors.append(f"sitemap URL missing lastmod: {loc}")
+        parsed = urlparse(loc)
+        if parsed.netloc and parsed.netloc != "gaapitchfinder.com":
+            errors.append(f"sitemap URL has unexpected host: {loc}")
+            continue
+        url_path = parsed.path or "/"
+        local_path = sitemap_local_path(url_path)
+        sitemap_paths.add(local_path.relative_to(SITE_DIR).as_posix())
+        if not local_path.exists():
+            errors.append(f"sitemap URL has no generated HTML file: {loc}")
+
+    for html_path in sorted(SITE_DIR.rglob("*.html")):
+        if html_path.name == "404.html":
+            continue
+        rel_path = html_path.relative_to(SITE_DIR).as_posix()
+        parser = PageParser()
+        parser.feed(html_path.read_text(errors="replace"))
+        if parser.noindex:
+            continue
+        if rel_path not in sitemap_paths:
+            errors.append(f"generated HTML page missing from sitemap: {rel_path}")
     return errors
+
+
+def sitemap_local_path(url_path):
+    if url_path == "/":
+        return SITE_DIR / "index.html"
+    if url_path.endswith("/"):
+        return SITE_DIR / url_path.lstrip("/") / "index.html"
+    return SITE_DIR / url_path.lstrip("/")
 
 
 def main():
