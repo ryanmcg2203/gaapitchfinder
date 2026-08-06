@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Validate canonical dataset
+        run: python3 scripts/validate_dataset.py
+
       - name: Run unit tests
         run: python3 -m unittest discover -s tests
 
@@ -54,6 +57,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
+
+      - name: Validate canonical dataset
+        run: python3 scripts/validate_dataset.py
 
       - name: Generate map data from CSV
         run: python3 scripts/generate_map_data.py
