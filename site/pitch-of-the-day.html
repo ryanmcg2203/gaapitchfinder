@@ -111,6 +111,13 @@ document.getElementById('drawer-close').addEventListener('click', () => {
     return (hash >>> 0) % count;
   }
 
+  function pitchKey(pitch) {
+    return JSON.stringify([
+      pitch.c || '', pitch.p || '', pitch.k || '', pitch.r || '',
+      Number(pitch.la), Number(pitch.lo)
+    ]);
+  }
+
   function renderPitch(pitch, count) {
     const club = esc(pitch.c);
     const pitchName = esc(pitch.p || 'Pitch location');
@@ -118,7 +125,14 @@ document.getElementById('drawer-close').addEventListener('click', () => {
     const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(pitch.la)},${encodeURIComponent(pitch.lo)}`;
     const mapEmbed = `https://maps.google.com/maps?q=${encodeURIComponent(`${pitch.la},${pitch.lo}`)}&z=13&output=embed`;
     const clubUrl = pitch.u ? esc(pitch.u) : '';
-    const mapSearchUrl = `/?q=${encodeURIComponent(pitch.c)}`;
+    const mapParams = new URLSearchParams();
+    if (pitch.r) mapParams.set('region', pitch.r);
+    if (pitch.k) mapParams.set('county', pitch.k);
+    if (pitch.c) mapParams.set('club', pitch.c);
+    if (pitch.p) mapParams.set('pitch', pitch.p);
+    if (pitch.c) mapParams.set('q', pitch.c);
+    mapParams.set('focus', pitchKey(pitch));
+    const mapSearchUrl = esc(`/?${mapParams.toString()}`);
 
     dateLabel.textContent = `Pitch of the Day · ${displayDate}`;
     card.innerHTML = `
