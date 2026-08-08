@@ -468,6 +468,8 @@ const topbar = document.getElementById('topbar');
 
 let allClubs = [];
 let clustered = true;
+let regionIsExplicit = false;
+let focusedPitchKey = '';
 const usesTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const pitchDotIcon = L.divIcon({
   className: 'pitch-dot-marker',
@@ -507,6 +509,13 @@ function normalizeSearch(str) {
     .trim();
 }
 
+function pitchKey(pitch) {
+  return JSON.stringify([
+    pitch.c || '', pitch.p || '', pitch.k || '', pitch.r || '',
+    Number(pitch.la), Number(pitch.lo)
+  ]);
+}
+
 function updateSearchClear() {
   searchClear.hidden = !searchInput.value.trim();
 }
@@ -533,12 +542,17 @@ function getFiltered(region, county, club, pitch, query = '') {
 }
 
 function currentFilters() {
+  const county = selCounty.value;
+  const club = selClub.value;
+  const pitch = selPitch.value;
+  const query = searchInput.value.trim();
+
   return {
     region: selRegion.value,
-    county: selCounty.value,
-    club: selClub.value,
-    pitch: selPitch.value,
-    query: searchInput.value.trim()
+    county,
+    club,
+    pitch,
+    query
   };
 }
 
@@ -553,14 +567,24 @@ function hasUserFilters() {
 }
 
 function cascadeFilters() {
-  const region = selRegion.value, county = selCounty.value, club = selClub.value;
+  const region = selRegion.value;
   const counties = [...new Set(allClubs.filter(c => !region || c.r === region).map(c => c.k))].sort();
   setOptions(selCounty, counties, 'Location (All)');
+  const county = selCounty.value;
   const clubs = [...new Set(allClubs.filter(c => (!region || c.r === region) && (!county || c.k === county)).map(c => c.c))].sort();
   setOptions(selClub, clubs, 'Club (All)');
+  const club = selClub.value;
   const pitches = [...new Set(getFiltered(region, county, club, '').map(c => c.p).filter(Boolean))].sort();
   setOptions(selPitch, pitches, 'Pitch (All)');
   selPitch.disabled = pitches.length < 2;
+}
+
+function syncImplicitSearchRegion() {
+  if (regionIsExplicit) return;
+  const region = searchInput.value.trim() ? '' : 'Ireland';
+  if (selRegion.value === region) return;
+  selRegion.value = region;
+  cascadeFilters();
 }
 
 function escHtml(str) {
@@ -591,11 +615,12 @@ function updateShareUrl() {
   const filters = currentFilters();
   const params = new URLSearchParams();
   const hasSpecificFilter = filters.county || filters.club || filters.pitch;
-  if (filters.region && (filters.region !== 'Ireland' || hasSpecificFilter)) params.set('region', filters.region);
+  if (filters.region && (regionIsExplicit || filters.region !== 'Ireland' || hasSpecificFilter)) params.set('region', filters.region);
   if (filters.county) params.set('county', filters.county);
   if (filters.club) params.set('club', filters.club);
   if (filters.pitch) params.set('pitch', filters.pitch);
   if (filters.query) params.set('q', filters.query);
+  if (focusedPitchKey) params.set('focus', focusedPitchKey);
 
   const query = params.toString();
   const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
@@ -613,7 +638,8 @@ function selectIfAvailable(select, value) {
 function applyUrlFilters() {
   const params = new URLSearchParams(window.location.search);
 
-  selectIfAvailable(selRegion, params.get('region')) || (selRegion.value = 'Ireland');
+  regionIsExplicit = selectIfAvailable(selRegion, params.get('region'));
+  if (!regionIsExplicit) selRegion.value = 'Ireland';
   cascadeFilters();
   selectIfAvailable(selCounty, params.get('county'));
   cascadeFilters();
@@ -621,6 +647,11 @@ function applyUrlFilters() {
   cascadeFilters();
   selectIfAvailable(selPitch, params.get('pitch'));
   searchInput.value = params.get('q') || '';
+  syncImplicitSearchRegion();
+  focusedPitchKey = params.get('focus') || '';
+  if (focusedPitchKey && !allClubs.some(pitch => pitchKey(pitch) === focusedPitchKey)) {
+    focusedPitchKey = '';
+  }
   updateSearchClear();
 
   updateShareUrl();
@@ -672,6 +703,7 @@ function focusPitch(pitch) {
 
 function showPitchLocation(pitch) {
   if (!pitch) return;
+  focusedPitchKey = '';
   selectIfAvailable(selRegion, pitch.r);
   selCounty.value = '';
   selClub.value = '';
@@ -710,6 +742,8 @@ clusterBtn.addEventListener('click', () => {
 
 // ── Reset ─────────────────────────────────────────────────────────────────────
 resetBtn.addEventListener('click', () => {
+  regionIsExplicit = false;
+  focusedPitchKey = '';
   selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; searchInput.value = '';
   updateSearchClear();
   cascadeFilters(); updateShareUrl(); renderMarkers({ fit: false }); map.setView([53.5, -8], 7);
@@ -757,12 +791,12 @@ nearbyBtn.addEventListener('click', () => {
 });
 
 // ── Event wiring ──────────────────────────────────────────────────────────────
-selRegion.addEventListener('change', () => { selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
-selCounty.addEventListener('change', () => { selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
-selClub.addEventListener('change',   () => { selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
-selPitch.addEventListener('change', () => { updateShareUrl(); renderMarkers(); });
-searchInput.addEventListener('input', () => { updateSearchClear(); updateShareUrl(); renderMarkers(); });
-searchClear.addEventListener('click', () => { searchInput.value = ''; updateSearchClear(); updateShareUrl(); renderMarkers(); searchInput.focus(); });
+selRegion.addEventListener('change', () => { regionIsExplicit = true; focusedPitchKey = ''; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
+selCounty.addEventListener('change', () => { focusedPitchKey = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
+selClub.addEventListener('change',   () => { focusedPitchKey = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
+selPitch.addEventListener('change', () => { focusedPitchKey = ''; updateShareUrl(); renderMarkers(); });
+searchInput.addEventListener('input', () => { focusedPitchKey = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkers(); });
+searchClear.addEventListener('click', () => { focusedPitchKey = ''; searchInput.value = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkers(); searchInput.focus(); });
 mobileFilterToggle.addEventListener('click', () => {
   topbar.classList.toggle('filters-open');
   updateMobileFilterToggle();
@@ -777,6 +811,8 @@ fetch('data.json')
     applyUrlFilters();
     scheduleInitialRender(() => {
       renderMarkers();
+      const focusedPitch = allClubs.find(pitch => pitchKey(pitch) === focusedPitchKey);
+      focusPitch(focusedPitch);
       document.getElementById('loading').remove();
     });
   })

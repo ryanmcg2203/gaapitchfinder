@@ -24,11 +24,18 @@ jobs:
         with:
           python-version: '3.x'
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Validate canonical dataset
         run: python3 scripts/validate_dataset.py
 
       - name: Run unit tests
         run: python3 -m unittest discover -s tests
+
+      - name: Run JavaScript tests
+        run: node --test tests/*.js
 
       - name: Generate map data from CSV
         run: python3 scripts/generate_map_data.py
