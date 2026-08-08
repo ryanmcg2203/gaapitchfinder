@@ -62,7 +62,7 @@ python3 scripts/generate_club_pages.py
 
 GitHub Actions runs this generator automatically before deploying `site/`, so production builds do not need `site/data.json` committed.
 
-For local static testing, generate the data file and serve the site directory:
+For local static testing over plain HTTP, generate the data file and serve the site directory:
 
 ```bash
 python3 scripts/generate_map_data.py
@@ -71,7 +71,7 @@ python3 scripts/audit_site.py
 python3 -m http.server 8000 --directory site
 ```
 
-Then open `http://localhost:8000`.
+Then open `http://localhost:8000`. HTTPS is provided by the production host, not the local Python server.
 
 ## Setup
 
