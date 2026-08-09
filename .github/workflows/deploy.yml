@@ -29,6 +29,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci
 
       - name: Validate canonical dataset
         run: python3 scripts/validate_dataset.py
@@ -47,6 +51,12 @@ jobs:
 
       - name: Audit generated site
         run: python3 scripts/audit_site.py
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser regression tests
+        run: npm run test:browser
 
       - uses: actions/configure-pages@v5
         if: github.ref == 'refs/heads/main'

@@ -25,3 +25,8 @@ site/directions/
 site/home/
 data/derived/pitch_geometry.csv
 data/derived/.pitch_geometry_checkpoint.json
+
+# Browser test output
+node_modules/
+playwright-report/
+test-results/
