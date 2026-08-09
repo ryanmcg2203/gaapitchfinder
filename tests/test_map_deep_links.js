@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const { performance } = require('node:perf_hooks');
 const test = require('node:test');
 const vm = require('node:vm');
 
@@ -53,6 +54,7 @@ class Element {
     this.textContent = '';
     this.hidden = false;
     this.disabled = false;
+    this.dataset = {};
   }
 
   set innerHTML(value) {
@@ -125,8 +127,22 @@ function createMapHarness(search, data) {
   function layer() {
     return {
       markers: [],
+      addLayer(marker) {
+        this.markers.push(marker);
+        return this;
+      },
+      addLayers(markers) {
+        this.markers.push(...markers);
+        return this;
+      },
       clearLayers() {
         this.markers = [];
+      },
+      getLayers() {
+        return this.markers.slice();
+      },
+      hasLayer(marker) {
+        return this.markers.includes(marker);
       },
       zoomToShowLayer(marker, callback) {
         state.zoomedMarker = marker;
@@ -162,6 +178,7 @@ function createMapHarness(search, data) {
     getZoom() {
       return 7;
     },
+    stop() {},
     setView(center, zoom) {
       state.setViews.push({ center, zoom });
     }
@@ -206,7 +223,9 @@ function createMapHarness(search, data) {
     fetch: async () => ({ json: async () => data }),
     L,
     navigator,
+    performance,
     requestAnimationFrame,
+    clearTimeout,
     setTimeout,
     window
   };
