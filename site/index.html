@@ -460,6 +460,7 @@ const lightTiles = L.tileLayer(
 );
 
 const map = L.map('map', { center: [53.5, -8], zoom: 7, layers: [darkTiles], preferCanvas: true });
+const mapElement = document.getElementById('map');
 
 let isDark = true;
 
@@ -491,6 +492,11 @@ let allClubs = [];
 let clustered = true;
 let regionIsExplicit = false;
 let focusedPitchKey = '';
+let markerCreationCount = 0;
+let completedRenderCount = 0;
+let searchRenderTimer = null;
+let searchRenderRequest = 0;
+const SEARCH_RENDER_DELAY_MS = 140;
 const usesTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const pitchDotIcon = L.divIcon({
   className: 'pitch-dot-marker',
@@ -501,7 +507,8 @@ const pitchDotIcon = L.divIcon({
 });
 
 function makeClusterLayer() {
-  return L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 40, showCoverageOnHover: false, spiderfyOnMaxZoom: true });
+  // One synchronous bulk add keeps marker ownership consistent when a newer filter wins.
+  return L.markerClusterGroup({ maxClusterRadius: 40, showCoverageOnHover: false, spiderfyOnMaxZoom: true });
 }
 
 let markerLayer = makeClusterLayer();
@@ -509,10 +516,14 @@ map.addLayer(markerLayer);
 
 function makePitchMarker(c) {
   const latLng = [c.la, c.lo];
+  let marker;
   if (usesTouch) {
-    return L.marker(latLng, { icon: pitchDotIcon, keyboard: false, riseOnHover: true });
+    marker = L.marker(latLng, { icon: pitchDotIcon, keyboard: false, riseOnHover: true });
+  } else {
+    marker = L.circleMarker(latLng, { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 });
   }
-  return L.circleMarker(latLng, { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 });
+  markerCreationCount += 1;
+  return marker.bindPopup(() => pitchPopup(c), { maxWidth: 280, keepInView: true });
 }
 
 function setOptions(el, values, placeholder) {
@@ -643,6 +654,19 @@ function correctionMailto(pitch) {
   return `mailto:gaapitchfinder@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
+function pitchPopup(pitch) {
+  const club = escHtml(pitch.c);
+  const name = escHtml(pitch.p);
+  const location = escHtml(pitch.k);
+  const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(pitch.la)},${encodeURIComponent(pitch.lo)}`;
+  const clubUrl = pitch.u ? escHtml(pitch.u) : '';
+  const clubLink = clubUrl ? `<a class="pop-dir pop-secondary" href="${clubUrl}">Club page</a>` : '';
+  const wikipediaUrl = pitch.w ? escHtml(pitch.w) : '';
+  const wikipediaLink = wikipediaUrl ? `<a class="pop-dir pop-secondary" href="${wikipediaUrl}" target="_blank" rel="noopener noreferrer">Wikipedia</a>` : '';
+  const correctionUrl = escHtml(correctionMailto(pitch));
+  return `<div class="pop-club">${club}</div>${name ? `<div class="pop-pitch">${name}</div>` : ''}<div class="pop-loc">${location}</div><hr class="pop-sep"><div class="pop-actions">${clubLink}${wikipediaLink}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>Directions</a><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a></div>`;
+}
+
 function updateShareUrl() {
   const filters = currentFilters();
   const params = new URLSearchParams();
@@ -689,29 +713,57 @@ function applyUrlFilters() {
   updateShareUrl();
 }
 
+function addVisibleMarkers(markers) {
+  if (typeof markerLayer.addLayers === 'function') {
+    markerLayer.addLayers(markers);
+    return;
+  }
+  markers.forEach(marker => markerLayer.addLayer(marker));
+}
+
 function renderMarkers(options = {}) {
+  const startedAt = performance.now();
   markerLayer.clearLayers();
   const visible = currentVisible();
   countBadge.textContent = `${visible.length.toLocaleString()} pitch${visible.length !== 1 ? 'es' : ''}`;
-
-  visible.forEach(c => {
-    const eC = escHtml(c.c), eP = escHtml(c.p), eL = escHtml(c.k);
-    const mapsUrl = `https://maps.google.com/?daddr=${encodeURIComponent(c.la)},${encodeURIComponent(c.lo)}`;
-    const clubUrl = c.u ? escHtml(c.u) : '';
-    const clubLink = clubUrl ? `<a class="pop-dir pop-secondary" href="${clubUrl}">Club page</a>` : '';
-    const wikipediaUrl = c.w ? escHtml(c.w) : '';
-    const wikipediaLink = wikipediaUrl ? `<a class="pop-dir pop-secondary" href="${wikipediaUrl}" target="_blank" rel="noopener noreferrer">Wikipedia</a>` : '';
-    const correctionUrl = escHtml(correctionMailto(c));
-    const popup   = `<div class="pop-club">${eC}</div>${eP ? `<div class="pop-pitch">${eP}</div>` : ''}<div class="pop-loc">${eL}</div><hr class="pop-sep"><div class="pop-actions">${clubLink}${wikipediaLink}<a class="pop-dir" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>Directions</a><a class="pop-dir pop-correction" href="${correctionUrl}">Report a correction</a></div>`;
-    const marker = makePitchMarker(c)
-      .bindPopup(popup, { maxWidth: 280, keepInView: true });
-    c._marker = marker;
-    marker.addTo(markerLayer);
-  });
+  addVisibleMarkers(visible.map(pitch => pitch._marker));
 
   if (options.fit !== false && visible.length > 0 && visible.length < allClubs.length) {
-    map.fitBounds(visible.map(c => [c.la, c.lo]), { padding: [40, 40], maxZoom: 14 });
+    map.fitBounds(visible.map(c => [c.la, c.lo]), { padding: [40, 40], maxZoom: 14, animate: false });
   }
+
+  completedRenderCount += 1;
+  mapElement.dataset.renderCount = String(completedRenderCount);
+  mapElement.dataset.renderedPitchCount = String(visible.length);
+  mapElement.dataset.markerCreationCount = String(markerCreationCount);
+  mapElement.dataset.renderDurationMs = (performance.now() - startedAt).toFixed(2);
+}
+
+function cancelScheduledSearchRender() {
+  searchRenderRequest += 1;
+  if (searchRenderTimer === null) return;
+  clearTimeout(searchRenderTimer);
+  searchRenderTimer = null;
+}
+
+function renderMarkersNow(options = {}) {
+  cancelScheduledSearchRender();
+  renderMarkers(options);
+}
+
+function scheduleSearchRender() {
+  if (searchRenderTimer !== null) clearTimeout(searchRenderTimer);
+  const request = ++searchRenderRequest;
+  searchRenderTimer = setTimeout(() => {
+    if (request !== searchRenderRequest) return;
+    searchRenderTimer = null;
+    renderMarkers();
+  }, SEARCH_RENDER_DELAY_MS);
+}
+
+function flushScheduledSearchRender(options = {}) {
+  if (searchRenderTimer === null) return;
+  renderMarkersNow(options);
 }
 
 function scheduleInitialRender(callback) {
@@ -724,13 +776,17 @@ function scheduleInitialRender(callback) {
 
 function focusPitch(pitch) {
   if (!pitch || !pitch._marker) return;
-  const open = () => pitch._marker.openPopup();
-  if (markerLayer.zoomToShowLayer) {
-    markerLayer.zoomToShowLayer(pitch._marker, open);
-  } else {
-    map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14));
-    open();
-  }
+  map.stop();
+  requestAnimationFrame(() => {
+    if (!markerLayer.hasLayer(pitch._marker)) return;
+    const open = () => pitch._marker.openPopup();
+    if (markerLayer.zoomToShowLayer) {
+      markerLayer.zoomToShowLayer(pitch._marker, open);
+    } else {
+      map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14));
+      open();
+    }
+  });
 }
 
 function showPitchLocation(pitch) {
@@ -744,7 +800,7 @@ function showPitchLocation(pitch) {
   selectIfAvailable(selCounty, pitch.k);
   cascadeFilters();
   updateShareUrl();
-  renderMarkers();
+  renderMarkersNow();
   focusPitch(pitch);
 }
 
@@ -763,13 +819,14 @@ function distanceKm(aLat, aLng, bLat, bLng) {
 const clusterBtn = document.getElementById('cluster-btn');
 clusterBtn.addEventListener('click', () => {
   clustered = !clustered;
+  markerLayer.clearLayers();
   map.removeLayer(markerLayer);
   markerLayer = clustered ? makeClusterLayer() : L.layerGroup();
   map.addLayer(markerLayer);
   clusterBtn.textContent = clustered ? 'Dots' : 'Cluster';
   clusterBtn.setAttribute('aria-label', clustered ? 'Switch to dots view' : 'Switch to cluster view');
   clusterBtn.classList.toggle('dots-active', !clustered);
-  renderMarkers();
+  renderMarkersNow();
 });
 
 // ── Reset ─────────────────────────────────────────────────────────────────────
@@ -778,11 +835,12 @@ resetBtn.addEventListener('click', () => {
   focusedPitchKey = '';
   selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; searchInput.value = '';
   updateSearchClear();
-  cascadeFilters(); updateShareUrl(); renderMarkers({ fit: false }); map.setView([53.5, -8], 7);
+  cascadeFilters(); updateShareUrl(); renderMarkersNow({ fit: false }); map.setView([53.5, -8], 7);
 });
 
 // ── Discovery tools ───────────────────────────────────────────────────────────
 randomBtn.addEventListener('click', () => {
+  flushScheduledSearchRender({ fit: false });
   const visible = currentVisible();
   if (!visible.length) return;
   focusPitch(visible[Math.floor(Math.random() * visible.length)]);
@@ -800,6 +858,7 @@ nearbyBtn.addEventListener('click', () => {
     position => {
       nearbyBtn.disabled = false;
       nearbyBtn.textContent = 'Near me';
+      flushScheduledSearchRender({ fit: false });
       const visible = hasUserFilters() ? currentVisible() : allClubs;
       if (!visible.length) return;
       const { latitude, longitude } = position.coords;
@@ -823,12 +882,12 @@ nearbyBtn.addEventListener('click', () => {
 });
 
 // ── Event wiring ──────────────────────────────────────────────────────────────
-selRegion.addEventListener('change', () => { regionIsExplicit = true; focusedPitchKey = ''; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
-selCounty.addEventListener('change', () => { focusedPitchKey = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
-selClub.addEventListener('change',   () => { focusedPitchKey = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkers(); });
-selPitch.addEventListener('change', () => { focusedPitchKey = ''; updateShareUrl(); renderMarkers(); });
-searchInput.addEventListener('input', () => { focusedPitchKey = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkers(); });
-searchClear.addEventListener('click', () => { focusedPitchKey = ''; searchInput.value = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkers(); searchInput.focus(); });
+selRegion.addEventListener('change', () => { regionIsExplicit = true; focusedPitchKey = ''; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
+selCounty.addEventListener('change', () => { focusedPitchKey = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
+selClub.addEventListener('change',   () => { focusedPitchKey = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
+selPitch.addEventListener('change', () => { focusedPitchKey = ''; updateShareUrl(); renderMarkersNow(); });
+searchInput.addEventListener('input', () => { focusedPitchKey = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); scheduleSearchRender(); });
+searchClear.addEventListener('click', () => { focusedPitchKey = ''; searchInput.value = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkersNow(); searchInput.focus(); });
 mobileFilterToggle.addEventListener('click', () => {
   setMobileFiltersExpanded(!topbar.classList.contains('filters-open'));
 });
@@ -847,11 +906,15 @@ document.addEventListener('keydown', event => {
 fetch('data.json')
   .then(r => r.json())
   .then(data => {
-    allClubs = data.map(c => ({ ...c, s: normalizeSearch(`${c.c} ${c.p} ${c.k} ${c.r}`) }));
+    allClubs = data.map(c => {
+      const pitch = { ...c, s: normalizeSearch(`${c.c} ${c.p} ${c.k} ${c.r}`) };
+      pitch._marker = makePitchMarker(pitch);
+      return pitch;
+    });
     setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
     applyUrlFilters();
     scheduleInitialRender(() => {
-      renderMarkers();
+      renderMarkersNow();
       const focusedPitch = allClubs.find(pitch => pitchKey(pitch) === focusedPitchKey);
       focusPitch(focusedPitch);
       document.getElementById('loading').remove();
