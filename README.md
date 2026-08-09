@@ -100,6 +100,7 @@ python3 scripts/generate_club_pages.py
 ```
 
 Creates static SEO-focused club pages in `site/clubs/`, county pages in `site/counties/`, and regenerates `site/sitemap.xml`.
+Sitemap modification dates come from Git history, so run this command from a Git checkout with the relevant history available.
 
 ### Audit Generated Site
 
@@ -217,16 +218,15 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 
 ## Deployment
 
-Deployment is handled by `.github/workflows/deploy.yml`. Pull requests and pushes run validation; deployment only runs for `main` or manual workflow dispatch. The workflow:
+Deployment is handled by `.github/workflows/deploy.yml`. Pull requests and pushes run validation; deployment only runs for `main`, including manual workflow dispatches from that branch. The workflow:
 
 1. Checks out the repository.
-2. Sets up Python.
-3. Runs `python3 -m unittest discover -s tests`.
-4. Runs `scripts/generate_map_data.py`.
-5. Runs `scripts/generate_club_pages.py`.
-6. Runs `scripts/audit_site.py`.
-7. Uploads `site/` as the GitHub Pages artifact.
-8. Deploys to GitHub Pages.
+2. Sets up pinned Python and Node versions.
+3. Validates the canonical dataset and runs the Python and JavaScript tests.
+4. Generates map data, club pages, county pages, redirects, and the sitemap once.
+5. Audits the generated site.
+6. Uploads that exact audited `site/` directory as the GitHub Pages artifact.
+7. Deploys the previously uploaded artifact without checking out or rebuilding it.
 
 ## License
 
