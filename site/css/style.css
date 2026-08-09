@@ -65,7 +65,9 @@ html {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 400;
-  padding-bottom: 3px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   border-bottom: 1px solid transparent;
   transition: border-color 0.15s;
 }
@@ -89,6 +91,9 @@ html {
   border-radius: 3px;
   transition: background 0.15s, border-color 0.15s;
   white-space: nowrap;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 .nav-donate:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.7); color: #fff; }
 
@@ -98,7 +103,9 @@ html {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  width: 44px;
+  height: 44px;
+  padding: 11px;
   margin-left: auto;
   flex-direction: column;
   gap: 5px;
@@ -188,6 +195,8 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   background: #111;
   padding: 8px 0 16px;
   border-top: 1px solid #2a2a2a;
+  max-height: calc(100dvh - 64px);
+  overflow-y: auto;
 }
 .nav-drawer a {
   display: block;
@@ -196,7 +205,8 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 12px 28px;
+  min-height: 44px;
+  padding: 14px 28px;
 }
 .nav-drawer a:hover { color: #fff; }
 .nav-drawer.open { display: block; }
@@ -205,6 +215,8 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   background: none;
   border: none;
   cursor: pointer;
+  width: 100%;
+  min-height: 44px;
   padding: 12px 28px;
   display: flex;
   color: #777;
@@ -214,6 +226,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 @media (max-width: 820px) {
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
+  .nav-donate { display: none; }
 }
 
 /* ── Page layout ───────────────────────────────────────────────────── */
@@ -269,7 +282,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 /* ── Footer ────────────────────────────────────────────────────────── */
 .site-footer {
   background: #111;
-  color: #777;
+  color: #a0a0a0;
   font-size: 12px;
   letter-spacing: 0.05em;
   text-align: center;
@@ -297,8 +310,8 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 }
 .post-list a:hover { color: #555; }
 
-.post-meta { font-size: 13px; color: #999; }
-.post-excerpt { font-size: 14px; color: #777; line-height: 1.6; margin-top: 6px; }
+.post-meta { font-size: 13px; color: #666; }
+.post-excerpt { font-size: 14px; color: #666; line-height: 1.6; margin-top: 6px; }
 
 /* ── Blog post ─────────────────────────────────────────────────────── */
 .post-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
@@ -310,7 +323,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   margin-bottom: 10px;
 }
 
-.post-date { font-size: 13px; color: #999; }
+.post-date { font-size: 13px; color: #666; }
 
 .post-body { font-size: 16px; line-height: 1.75; color: #333; }
 .post-body p { margin-bottom: 20px; }
@@ -521,8 +534,8 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .dir-county a { color: #111; text-decoration: none; }
 .dir-county a:hover { color: #555; text-decoration: underline; }
 .dir-club { font-weight: 500; }
-.dir-pitch { color: #999; font-size: 13px; margin-left: 6px; }
-.dir-directions-link { font-size: 12px; color: #777 !important; white-space: nowrap; }
+.dir-pitch { color: #666; font-size: 13px; margin-left: 6px; }
+.dir-directions-link { font-size: 12px; color: #595959 !important; white-space: nowrap; }
 .dir-directions-link:hover { color: #111 !important; }
 
 #dir-loading { color: #999; font-size: 16px; padding: 40px 0; }
@@ -530,7 +543,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 /* ── Club pages ───────────────────────────────────────────────────── */
 .clubs-breadcrumb {
   font-size: 13px;
-  color: #999;
+  color: #666;
   margin-bottom: 10px;
 }
 
@@ -543,7 +556,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 .clubs-subtitle {
   font-size: 15px !important;
-  color: #777 !important;
+  color: #666 !important;
   margin-top: -10px;
   margin-bottom: 22px !important;
 }
@@ -560,7 +573,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 .club-place {
   font-size: 14px !important;
-  color: #777 !important;
+  color: #666 !important;
   margin-bottom: 16px !important;
 }
 
@@ -590,7 +603,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 .club-detail-label {
   min-width: 140px;
-  color: #777;
+  color: #666;
 }
 
 .club-actions {
@@ -704,7 +717,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .club-context-block span,
 .county-directory span,
 .county-province-group span {
-  color: #888;
+  color: #666;
   font-size: 13px;
   text-align: right;
 }
@@ -721,7 +734,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 .directory-search label {
   display: block;
-  color: #777;
+  color: #666;
   font-size: 12px;
   letter-spacing: 0.08em;
   margin-bottom: 7px;
@@ -740,7 +753,6 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 
 .directory-search input:focus {
   border-color: #888;
-  outline: none;
 }
 
 .directory-empty {
@@ -824,7 +836,7 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .club-directory-group a:hover { color: #555; text-decoration: underline; }
 
 .club-directory-meta {
-  color: #888;
+  color: #666;
   font-size: 13px;
   white-space: nowrap;
 }
@@ -859,11 +871,48 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   }
   .club-detail-label { min-width: 0; }
   .club-action { width: 100%; }
+  .club-directory-group li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .club-directory-meta { white-space: normal; }
   .club-context-block span,
   .county-directory span,
   .county-province-group span {
     text-align: left;
   }
+}
+
+@media (max-width: 420px) {
+  .site-nav { padding: 0 16px; }
+  .page-content { padding: 36px 18px 72px; }
+  .nav-drawer a,
+  .drawer-close { padding-left: 18px; padding-right: 18px; }
+}
+
+/* Keyboard focus is deliberately distinct from pointer interaction. */
+:where(a, button, input, select, [tabindex]):focus-visible {
+  outline: 3px solid #075fb8 !important;
+  outline-offset: 3px !important;
+}
+
+.site-nav :focus-visible,
+.nav-drawer :focus-visible,
+#topbar :focus-visible,
+#map :focus-visible {
+  outline-color: #fff !important;
+  box-shadow: 0 0 0 5px #075fb8;
+}
+
+body.light #topbar :focus-visible,
+body.light #map :focus-visible {
+  outline-color: #075fb8 !important;
+  box-shadow: none;
+}
+
+.leaflet-control-attribution a {
+  text-decoration: underline !important;
 }
 
 /* ── Blog post navigation ────────────────────────────────────────── */

@@ -88,6 +88,17 @@ class Element {
   setAttribute(name, value) {
     this.attributes[name] = value;
   }
+
+  removeAttribute(name) {
+    delete this.attributes[name];
+  }
+
+  toggleAttribute(name, force) {
+    const enabled = force === undefined ? !(name in this.attributes) : force;
+    if (enabled) this.attributes[name] = '';
+    else this.removeAttribute(name);
+    return enabled;
+  }
 }
 
 function createMapHarness(search, data) {
