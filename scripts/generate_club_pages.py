@@ -12,10 +12,10 @@ import html
 import json
 import math
 import unicodedata
-from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
+from build_metadata import GitBuildMetadata
 from site_build_utils import (
     ALLOWED_SOCIAL_HOSTS,
     ALLOWED_REFERENCE_HOSTS,
@@ -58,6 +58,12 @@ LEGACY_REDIRECTS = {
     "/clubs/singapore-gaelic-lions-signapore.html": "/clubs/singapore-gaelic-lions-singapore.html",
 }
 PROVINCE_ORDER = ["Connacht", "Leinster", "Munster", "Ulster"]
+GENERATED_PAGE_SOURCES = (
+    "gaapitchfinder_data.csv",
+    "scripts/build_metadata.py",
+    "scripts/generate_club_pages.py",
+    "scripts/site_build_utils.py",
+)
 
 
 def esc(value):
@@ -997,19 +1003,23 @@ def render_county_page(county, pages):
 """
 
 
-def lastmod_for_path(path):
+def lastmod_for_path(path, build_metadata):
+    if path == "/clubs/" or path.startswith("/clubs/"):
+        return build_metadata.last_modified_date(*GENERATED_PAGE_SOURCES)
+    if path == "/counties/" or path.startswith("/counties/"):
+        return build_metadata.last_modified_date(*GENERATED_PAGE_SOURCES)
+
     if path == "/":
-        source_path = SITE_DIR / "index.html"
+        source_path = "site/index.html"
+    elif path.endswith("/"):
+        source_path = f"site/{path.lstrip('/')}index.html"
     else:
-        source_path = SITE_DIR / path.lstrip("/")
-    if source_path.exists():
-        timestamp = source_path.stat().st_mtime
-    else:
-        timestamp = max(DATASET_PATH.stat().st_mtime, Path(__file__).stat().st_mtime)
-    return datetime.fromtimestamp(timestamp, timezone.utc).date().isoformat()
+        source_path = f"site/{path.lstrip('/')}"
+    return build_metadata.last_modified_date(source_path)
 
 
 def write_sitemap(pages, counties):
+    build_metadata = GitBuildMetadata(SITE_DIR.parent)
     urls = []
     for path, priority in STATIC_URLS:
         urls.append((path, f"{SITE_BASE_URL}{path}", priority))
@@ -1033,7 +1043,7 @@ def write_sitemap(pages, counties):
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for path, url, priority in urls:
         lines.append(
-            f"  <url><loc>{html.escape(url)}</loc><lastmod>{lastmod_for_path(path)}</lastmod><priority>{priority:.1f}</priority></url>"
+            f"  <url><loc>{html.escape(url)}</loc><lastmod>{lastmod_for_path(path, build_metadata)}</lastmod><priority>{priority:.1f}</priority></url>"
         )
     lines.append("</urlset>")
     (SITE_DIR / "sitemap.xml").write_text("\n".join(lines) + "\n")
