@@ -2,7 +2,9 @@
 
 GAA Pitch Finder is a static website and open dataset for GAA pitches in Ireland and around the world. It includes an interactive Leaflet map, Google Maps directions, blog/content pages, and analysis scripts for rainfall, elevation, and OpenStreetMap coverage.
 
-As of July 2026, the main dataset contains 1,988 pitch records with coordinates, elevation, rainfall data, club details, and directions links.
+<!-- dataset-summary:start -->
+As of 6 August 2026, the main dataset contains 1,989 pitch records with coordinates, elevation, rainfall data, club details, and directions links.
+<!-- dataset-summary:end -->
 
 `gaapitchfinder_data.csv` is the canonical base dataset. Scripts should treat it as read-only input and write durable enrichments to `data/derived/`, with reports and charts going to `output/` and site assets going to `site/`.
 
@@ -27,6 +29,7 @@ gaapitchfinder/
 │   ├── site_build_utils.py       # Shared helpers for generators and tests
 │   ├── enrich_club_wikipedia.py  # Review-first Wikipedia/Wikidata suggestions
 │   ├── generate_map_data.py      # Builds site/data.json
+│   ├── generate_public_metadata.py # Syncs public dataset counts and dates
 │   └── generate_club_pages.py    # Builds club/county pages and sitemap
 ├── tests/                        # Unit tests for site build helpers
 ├── .github/workflows/deploy.yml  # PR validation and GitHub Pages deployment
@@ -57,6 +60,7 @@ The Leaflet pages and Pitch of the Day load a generated `site/data.json` file. S
 
 ```bash
 python3 scripts/generate_map_data.py
+python3 scripts/generate_public_metadata.py
 python3 scripts/generate_club_pages.py
 ```
 
@@ -66,6 +70,7 @@ For local static testing over plain HTTP, generate the data file and serve the s
 
 ```bash
 python3 scripts/generate_map_data.py
+python3 scripts/generate_public_metadata.py
 python3 scripts/generate_club_pages.py
 python3 scripts/audit_site.py
 python3 -m http.server 8000 --directory site
@@ -101,6 +106,14 @@ python3 scripts/generate_club_pages.py
 
 Creates static SEO-focused club pages in `site/clubs/`, county pages in `site/counties/`, and regenerates `site/sitemap.xml`.
 Sitemap modification dates come from Git history, so run this command from a Git checkout with the relevant history available.
+
+### Generate Public Dataset Metadata
+
+```bash
+python3 scripts/generate_public_metadata.py
+```
+
+Synchronizes the exact CSV record count and Git-derived dataset date in this README and the public dataset page. Run it after committing dataset changes so the published date reflects the source commit.
 
 ### Audit Generated Site
 
@@ -178,6 +191,7 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 ## Script Roles
 
 - `generate_map_data.py`: builds the compact JSON payload used by the public site
+- `generate_public_metadata.py`: synchronizes public dataset counts and last-updated dates
 - `generate_club_pages.py`: builds static club pages, county pages, directories, and sitemap entries
 - `audit_site.py`: checks generated site output for link safety and SEO regressions
 - `site_build_utils.py`: shared parsing, URL-safety, slug, and grouping helpers used by site generators
