@@ -57,30 +57,38 @@
 
 <main class="page-content">
   <h1>Privacy Policy</h1>
-  <p>Last updated: 12 July 2026</p>
+  <p>Last updated: <time datetime="2026-08-09">9 August 2026</time></p>
 
-  <p>GAA Pitch Finder is a free map and open dataset for GAA pitches. This page explains what information may be collected when you use the website.</p>
+  <p>GAA Pitch Finder is a free map and open dataset for GAA pitches. This page explains which site features use information from your browser and when your browser connects to other services.</p>
 
   <h2>Analytics</h2>
-  <p>GAA Pitch Finder uses Google Analytics to understand broad usage patterns, such as page views, referral sources, device types, and popular pages. This helps keep the site useful and improve the map and dataset.</p>
+  <p>On pages that include it, the Google Analytics tag loads automatically when the page opens. It is used to understand broad usage patterns such as page views, referral sources, device types, and popular pages. Google may receive technical and usage information such as your IP address, browser and device details, page URL, and referrer, and may use cookies or similar identifiers under its own policies.</p>
+  <p>GAA Pitch Finder does not currently provide its own analytics consent control. You can restrict analytics requests with browser privacy settings or content-blocking tools. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a> for details about Google's processing and controls.</p>
 
   <h2>Location Features</h2>
-  <p>The "Near me" feature asks your browser for your location so the site can find nearby pitches. Your location is used in your browser for that search and is not stored by GAA Pitch Finder.</p>
+  <p>The "Near me" feature asks your browser for permission to access your location. The returned coordinates are used in the open page to find nearby pitches and are not written to site storage or added to the GAA Pitch Finder dataset. Recentring the map also causes map tiles for the area being viewed to be requested from the map provider described below.</p>
 
-  <h2>Map And Direction Services</h2>
-  <p>The site uses Leaflet and OpenStreetMap map tiles to display maps. Direction links open Google Maps in a new tab or app. These third-party services may receive information such as your IP address, browser details, or the map/location request needed to provide their services.</p>
+  <h2>Maps And Directions</h2>
+  <p>Leaflet runs in your browser to display maps. The map content comes from different providers depending on the page:</p>
+  <ul>
+    <li>The main pitch map loads raster map tiles from <a href="https://carto.com/privacy/" target="_blank" rel="noopener noreferrer">CARTO</a>. Those tiles use map data from OpenStreetMap.</li>
+    <li>Generated club pages load Standard map tiles directly from the <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">OpenStreetMap Foundation</a>.</li>
+    <li>The Daily Pitch page inserts a Google Maps iframe when the selected pitch is displayed. The iframe is marked for lazy loading, so the browser may connect to Google when it approaches the visible part of the page.</li>
+  </ul>
+  <p>Loading map tiles or an embedded map sends a request from your browser to the relevant provider. The request can include your IP address, browser details, referring site, and the map area or coordinates needed to return the map. Embedded Google Maps is covered by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</p>
+  <p>Directions links open Google Maps only when you select them. The destination coordinates are included in the link and Google then handles your visit.</p>
 
   <h2>Contact</h2>
-  <p>If you email GAA Pitch Finder, your email address and message are used only to reply to you or follow up on your request.</p>
+  <p>If you email GAA Pitch Finder, your email address and message are used to review, reply to, and follow up on your request. Email is handled by the email providers used by you and GAA Pitch Finder.</p>
 
   <h2>Donations</h2>
-  <p>Donation links open PayPal. Any payment information is handled by PayPal, not by GAA Pitch Finder.</p>
+  <p>The donation page contains a link to PayPal. GAA Pitch Finder does not embed PayPal or receive your payment details. PayPal loads only after you select the donation link, and then handles information under the <a href="https://www.paypal.com/ie/legalhub/paypal/privacy-full" target="_blank" rel="noopener noreferrer">PayPal Privacy Statement</a>.</p>
 
   <h2>Hosting</h2>
-  <p>The site is hosted with GitHub Pages. GitHub may process standard technical information needed to serve the website.</p>
+  <p>The site is hosted with GitHub Pages. When GitHub serves a page or file, it may receive standard network and request information needed to operate and secure the service. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub General Privacy Statement</a>.</p>
 
-  <h2>Your Rights</h2>
-  <p>If you have questions about privacy or want to ask about any personal information connected with an email you sent, contact <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>.</p>
+  <h2>Questions And Requests</h2>
+  <p>If you have a privacy question or want to ask about personal information connected with an email you sent, contact <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>. Requests about information held by a third-party service should be directed to that provider.</p>
 
   <h2>Changes</h2>
   <p>This policy may be updated from time to time. Any changes will be reflected on this page.</p>
@@ -91,7 +99,5 @@
 </footer>
 
 <script src="/js/navigation.js"></script>
-<script>
-</script>
 </body>
 </html>

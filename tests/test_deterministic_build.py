@@ -13,10 +13,12 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 BUILD_SOURCES = (
+    "README.md",
     "gaapitchfinder_data.csv",
     "scripts/build_metadata.py",
     "scripts/generate_club_pages.py",
     "scripts/generate_map_data.py",
+    "scripts/generate_public_metadata.py",
     "scripts/site_build_utils.py",
 )
 COMMIT_IDENTITY = {
@@ -28,14 +30,18 @@ COMMIT_IDENTITY = {
 
 
 def run(command, cwd, env=None):
-    subprocess.run(
+    result = subprocess.run(
         command,
         cwd=cwd,
         env=env,
-        check=True,
         capture_output=True,
         text=True,
     )
+    if result.returncode != 0:
+        command_text = " ".join(str(part) for part in command)
+        raise AssertionError(
+            f"Command failed ({command_text}):\n{result.stdout}{result.stderr}"
+        )
 
 
 def commit(repository, message, timestamp):
@@ -106,6 +112,7 @@ class DeterministicBuildTests(unittest.TestCase):
 
             build_commands = (
                 [sys.executable, "scripts/generate_map_data.py"],
+                [sys.executable, "scripts/generate_public_metadata.py"],
                 [sys.executable, "scripts/generate_club_pages.py"],
             )
             for command in build_commands:

@@ -9,13 +9,22 @@ Run from repo root:
 from __future__ import annotations
 
 import json
+import re
 import sys
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 
-from site_build_utils import SITE_DIR
+from build_metadata import GitBuildMetadata
+from generate_public_metadata import (
+    build_dataset_metadata,
+    format_iso_date,
+    render_dataset_head,
+    render_dataset_summary,
+    render_readme_summary,
+)
+from site_build_utils import ROOT_DIR, SITE_DIR, load_rows
 
 
 SAFE_SCHEMES = {"", "http", "https", "mailto"}
@@ -27,6 +36,14 @@ REQUIRED_META_PAGES = {
     "directions.html",
     "pitch-of-the-day.html",
 }
+PRIVACY_SERVICES = (
+    "Google Analytics",
+    "CARTO",
+    "OpenStreetMap Foundation",
+    "Google Maps",
+    "GitHub Pages",
+    "PayPal",
+)
 
 
 class PageParser(HTMLParser):
@@ -69,8 +86,8 @@ def is_safe_href(href):
     return parsed.scheme.lower() in SAFE_SCHEMES
 
 
-def audit_html_file(path):
-    rel_path = path.relative_to(SITE_DIR)
+def audit_html_file(path, site_dir=SITE_DIR):
+    rel_path = path.relative_to(site_dir)
     parser = PageParser()
     page_html = path.read_text(errors="replace")
     parser.feed(page_html)
@@ -87,6 +104,8 @@ def audit_html_file(path):
         errors.append("homepage missing JSON-LD")
     if "search_term_string" in page_html:
         errors.append("declares URL-based SearchAction without a search results page")
+    if re.search(r"\bGAA\s+GAA\b", page_html, re.IGNORECASE):
+        errors.append('contains duplicate "GAA GAA" wording')
 
     for attrs in parser.links:
         href = attrs.get("href", "")
@@ -151,6 +170,52 @@ def audit_sitemap():
     return errors
 
 
+def public_metadata_errors(metadata, dataset_html, readme):
+    errors = []
+    expected_outputs = (
+        ("dataset metadata", render_dataset_head(metadata), dataset_html),
+        ("dataset summary", render_dataset_summary(metadata), dataset_html),
+        ("README dataset summary", render_readme_summary(metadata), readme),
+    )
+    for label, expected, content in expected_outputs:
+        if expected not in content:
+            errors.append(
+                f"stale {label}; run scripts/generate_public_metadata.py"
+            )
+    return errors
+
+
+def audit_public_metadata():
+    metadata = build_dataset_metadata(load_rows(), GitBuildMetadata(ROOT_DIR))
+    dataset_html = (SITE_DIR / "dataset.html").read_text()
+    readme = (ROOT_DIR / "README.md").read_text()
+    return public_metadata_errors(metadata, dataset_html, readme)
+
+
+def audit_privacy_page():
+    privacy_html = (SITE_DIR / "privacy.html").read_text()
+    errors = []
+    for service in PRIVACY_SERVICES:
+        if service not in privacy_html:
+            errors.append(f"privacy page is missing service inventory item: {service}")
+
+    privacy_last_modified = GitBuildMetadata(ROOT_DIR).last_modified_date(
+        "site/privacy.html"
+    )
+    expected_date = (
+        f'<time datetime="{privacy_last_modified}">'
+        f"{format_iso_date(privacy_last_modified)}</time>"
+    )
+    if expected_date not in privacy_html:
+        errors.append("privacy page last-updated date does not match Git history")
+    if (
+        "does not currently provide its own analytics consent control"
+        not in privacy_html
+    ):
+        errors.append("privacy page does not state the current analytics consent behavior")
+    return errors
+
+
 def sitemap_local_path(url_path):
     if url_path == "/":
         return SITE_DIR / "index.html"
@@ -166,6 +231,8 @@ def main():
             failures.append(f"{html_path.relative_to(SITE_DIR)}: {error}")
     failures.extend(audit_data_json())
     failures.extend(audit_sitemap())
+    failures.extend(audit_public_metadata())
+    failures.extend(audit_privacy_page())
 
     if failures:
         for failure in failures:

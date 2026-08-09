@@ -46,6 +46,12 @@ jobs:
       - name: Generate map data from CSV
         run: python3 scripts/generate_map_data.py
 
+      - name: Generate public dataset metadata
+        run: python3 scripts/generate_public_metadata.py
+
+      - name: Verify public metadata is committed
+        run: git diff --exit-code -- README.md site/dataset.html
+
       - name: Generate club pages and sitemap
         run: python3 scripts/generate_club_pages.py
 

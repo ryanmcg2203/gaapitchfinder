@@ -701,7 +701,7 @@ def render_club_page(page, pages):
   <p class="clubs-breadcrumb">{breadcrumb}</p>
   <h1>{esc(page["club"])}</h1>
   <p class="clubs-subtitle">{esc(page["location_label"])} · {esc(row_region(page["rows"][0]))}</p>
-  <p>Find {esc(page["club"])} GAA pitch information, location details, coordinates, and Google Maps directions from the open GAA Pitch Finder dataset.</p>
+  <p>Find pitch information for {esc(page["club"])}, including location details, coordinates, and Google Maps directions from the open GAA Pitch Finder dataset.</p>
   {body}
   {context_html}
   <a href="/directions.html" class="back-link">Browse all directions</a>

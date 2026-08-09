@@ -30,7 +30,8 @@ for (const [name, url] of [
   ['county', () => firstGeneratedPath('counties')],
   ['generated club', () => firstGeneratedPath('clubs')],
   ['directions', '/directions.html'],
-  ['dataset', '/dataset.html']
+  ['dataset', '/dataset.html'],
+  ['privacy', '/privacy.html']
 ]) {
   test(`${name} has no serious or critical axe violations`, async ({ page }) => {
     await page.goto(typeof url === 'function' ? url() : url);

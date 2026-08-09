@@ -154,6 +154,21 @@ class SiteBuildUtilsTests(unittest.TestCase):
         self.assertIn('class="club-action club-action-reference"', html)
         self.assertNotIn(">Wikipedia</a>", html)
 
+    def test_generated_club_page_does_not_repeat_gaa_in_intro(self):
+        row = pitch_row(Club="Shrule-Glencorrib GAA")
+        page = {
+            "club": row["Club"],
+            "location_label": "Mayo",
+            "slug": "shrule-glencorrib-gaa-mayo",
+            "rel_url": "clubs/shrule-glencorrib-gaa-mayo.html",
+            "rows": [row],
+        }
+
+        html = render_club_page(page, [page])
+
+        self.assertIn("Find pitch information for Shrule-Glencorrib GAA", html)
+        self.assertNotIn("GAA GAA", html)
+
 
 if __name__ == "__main__":
     unittest.main()
