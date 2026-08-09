@@ -26,7 +26,7 @@ class SiteAuditTests(unittest.TestCase):
         self.assertIn('contains duplicate "GAA GAA" wording', errors)
 
     def test_public_metadata_audit_rejects_stale_outputs(self):
-        metadata = DatasetMetadata(1989, "2026-08-06")
+        metadata = DatasetMetadata(1989, "2026-08-06", "a" * 40)
 
         errors = public_metadata_errors(
             metadata,
@@ -34,7 +34,7 @@ class SiteAuditTests(unittest.TestCase):
             "As of July 2026, there are 1,988 records.",
         )
 
-        self.assertEqual(len(errors), 3)
+        self.assertEqual(len(errors), 4)
         self.assertTrue(all("stale" in error for error in errors))
 
 

@@ -46,6 +46,9 @@ jobs:
       - name: Generate map data from CSV
         run: python3 scripts/generate_map_data.py
 
+      - name: Generate public dataset downloads
+        run: python3 scripts/generate_dataset_downloads.py
+
       - name: Generate public dataset metadata
         run: python3 scripts/generate_public_metadata.py
 

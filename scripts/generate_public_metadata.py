@@ -5,13 +5,24 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
 from datetime import date
+from html import escape
 from pathlib import Path
-from typing import Iterable, Mapping
 
 from build_metadata import GitBuildMetadata
-from site_build_utils import DATASET_PATH, ROOT_DIR, SITE_DIR, load_rows
+from dataset_contract import (
+    ATTRIBUTION,
+    CSV_DOWNLOAD_PATH,
+    FIELD_DEFINITIONS,
+    GEOJSON_DOWNLOAD_PATH,
+    LICENSE_NAME,
+    LICENSE_URL,
+    SCHEMA_DOWNLOAD_PATH,
+    SCHEMA_VERSION,
+    DatasetMetadata,
+    build_dataset_metadata,
+)
+from site_build_utils import ROOT_DIR, SITE_BASE_URL, SITE_DIR, load_rows
 
 
 README_PATH = ROOT_DIR / "README.md"
@@ -22,34 +33,13 @@ DATASET_HEAD_START = "<!-- dataset-metadata:start -->"
 DATASET_HEAD_END = "<!-- dataset-metadata:end -->"
 DATASET_SUMMARY_START = "<!-- dataset-summary:start -->"
 DATASET_SUMMARY_END = "<!-- dataset-summary:end -->"
-
-
-@dataclass(frozen=True)
-class DatasetMetadata:
-    record_count: int
-    last_modified: str
-
-    @property
-    def formatted_count(self) -> str:
-        return f"{self.record_count:,}"
-
-    @property
-    def formatted_date(self) -> str:
-        return format_iso_date(self.last_modified)
+DATASET_CONTRACT_START = "<!-- dataset-contract:start -->"
+DATASET_CONTRACT_END = "<!-- dataset-contract:end -->"
 
 
 def format_iso_date(value: str) -> str:
     parsed = date.fromisoformat(value)
     return f"{parsed.day} {parsed.strftime('%B %Y')}"
-
-
-def build_dataset_metadata(
-    rows: Iterable[Mapping[str, str]], build_metadata: GitBuildMetadata
-) -> DatasetMetadata:
-    return DatasetMetadata(
-        record_count=sum(1 for _row in rows),
-        last_modified=build_metadata.last_modified_date(DATASET_PATH),
-    )
 
 
 def replace_generated_block(content: str, start: str, end: str, body: str) -> str:
@@ -66,15 +56,15 @@ def replace_generated_block(content: str, start: str, end: str, body: str) -> st
 
 def render_readme_summary(metadata: DatasetMetadata) -> str:
     return (
-        f"As of {metadata.formatted_date}, the main dataset contains "
-        f"{metadata.formatted_count} pitch records with coordinates, elevation, "
+        f"As of {format_iso_date(metadata.last_modified)}, the main dataset contains "
+        f"{metadata.record_count:,} pitch records with coordinates, elevation, "
         "rainfall data, club details, and directions links."
     )
 
 
 def dataset_schema(metadata: DatasetMetadata) -> dict:
     description = (
-        f"Open dataset of {metadata.formatted_count} GAA club and pitch locations "
+        f"Open dataset of {metadata.record_count:,} GAA club and pitch locations "
         "worldwide, including club names, pitch names, coordinates, region, county, "
         "country, elevation, rainfall data, Google Maps directions links, and "
         "reviewed Wikipedia links where available."
@@ -122,11 +112,25 @@ def dataset_schema(metadata: DatasetMetadata) -> dict:
                 "isAccessibleForFree": True,
                 "inLanguage": "en",
                 "dateModified": metadata.last_modified,
-                "additionalProperty": {
-                    "@type": "PropertyValue",
-                    "name": "Record count",
-                    "value": metadata.record_count,
-                },
+                "version": metadata.version,
+                "identifier": metadata.revision,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "Record count",
+                        "value": metadata.record_count,
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "Schema version",
+                        "value": SCHEMA_VERSION,
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "Coordinate reference system",
+                        "value": "EPSG:4326",
+                    },
+                ],
                 "keywords": [
                     "GAA pitch finder",
                     "GAA club finder",
@@ -148,22 +152,7 @@ def dataset_schema(metadata: DatasetMetadata) -> dict:
                     {"@type": "Place", "name": "South America"},
                 ],
                 "temporalCoverage": "2017/..",
-                "variableMeasured": [
-                    "Club",
-                    "Pitch",
-                    "Latitude",
-                    "Longitude",
-                    "Province",
-                    "Country",
-                    "Division",
-                    "County",
-                    "Directions",
-                    "Twitter",
-                    "Wikipedia",
-                    "Elevation",
-                    "annual_rainfall",
-                    "rain_days",
-                ],
+                "variableMeasured": [field.name for field in FIELD_DEFINITIONS],
                 "measurementTechnique": [
                     "Manual verification",
                     "Satellite imagery cross-reference",
@@ -176,13 +165,19 @@ def dataset_schema(metadata: DatasetMetadata) -> dict:
                         "@type": "DataDownload",
                         "name": "GAA Pitch Finder CSV dataset",
                         "encodingFormat": "text/csv",
-                        "contentUrl": "https://raw.githubusercontent.com/ryanmcg2203/gaapitchfinder/main/gaapitchfinder_data.csv",
+                        "contentUrl": f"{SITE_BASE_URL}{CSV_DOWNLOAD_PATH}",
                     },
                     {
                         "@type": "DataDownload",
-                        "name": "GAA Pitch Finder GitHub repository",
-                        "encodingFormat": "text/html",
-                        "contentUrl": "https://github.com/ryanmcg2203/gaapitchfinder",
+                        "name": "GAA Pitch Finder GeoJSON dataset",
+                        "encodingFormat": "application/geo+json",
+                        "contentUrl": f"{SITE_BASE_URL}{GEOJSON_DOWNLOAD_PATH}",
+                    },
+                    {
+                        "@type": "DataDownload",
+                        "name": "GAA Pitch Finder dataset schema",
+                        "encodingFormat": "application/json",
+                        "contentUrl": f"{SITE_BASE_URL}{SCHEMA_DOWNLOAD_PATH}",
                     },
                 ],
             },
@@ -192,7 +187,7 @@ def dataset_schema(metadata: DatasetMetadata) -> dict:
 
 def render_dataset_head(metadata: DatasetMetadata) -> str:
     description = (
-        f"Open GAA club and pitch locations dataset with {metadata.formatted_count} "
+        f"Open GAA club and pitch locations dataset with {metadata.record_count:,} "
         "records worldwide, including coordinates, directions, elevation, rainfall "
         "data and reviewed Wikipedia links."
     )
@@ -205,12 +200,86 @@ def render_dataset_head(metadata: DatasetMetadata) -> str:
 <meta name="description" content="{description}">
 <meta name="gaa-dataset-record-count" content="{metadata.record_count}">
 <meta name="gaa-dataset-last-modified" content="{metadata.last_modified}">
+<meta name="gaa-dataset-version" content="{metadata.version}">
+<meta name="gaa-dataset-revision" content="{metadata.revision}">
 <script type="application/ld+json">{schema}</script>"""
 
 
 def render_dataset_summary(metadata: DatasetMetadata) -> str:
-    return f"""  <p>GAA Pitch Finder publishes an open GAA club and pitch locations dataset maintained by Ryan McGuinness. It contains <strong>{metadata.formatted_count} GAA pitch records</strong> worldwide, including club names, pitch names, coordinates, directions, elevation, rainfall data, and regional groupings.</p>
-  <p>Dataset last updated: <time datetime="{metadata.last_modified}">{metadata.formatted_date}</time>.</p>"""
+    return f"""  <p>GAA Pitch Finder publishes an open GAA club and pitch locations dataset maintained by Ryan McGuinness. It contains <strong>{metadata.record_count:,} GAA pitch records</strong> worldwide, including club names, pitch names, coordinates, directions, elevation, rainfall data, and regional groupings.</p>
+  <p>Dataset generated from the canonical data revision dated <time datetime="{metadata.last_modified}">{format_iso_date(metadata.last_modified)}</time>.</p>"""
+
+
+def _field_details(field) -> str:
+    details = []
+    if field.value_format:
+        details.append(field.value_format.upper())
+    if field.units:
+        details.append(field.units)
+    if field.controlled_values:
+        values = ", ".join(escape(value) for value in field.controlled_values)
+        details.append(f"Values: {values}")
+    if field.minimum is not None or field.maximum is not None:
+        details.append(f"Range: {field.minimum:g} to {field.maximum:g}")
+    return "<br>".join(details) or "&mdash;"
+
+
+def render_dataset_contract(metadata: DatasetMetadata) -> str:
+    field_rows = "\n".join(
+        f"""      <tr>
+        <th scope="row"><code>{escape(field.name)}</code></th>
+        <td data-label="Type">{escape(field.data_type)}</td>
+        <td data-label="Nullability">{"Optional" if field.nullable else "Required"}</td>
+        <td data-label="Units or values">{_field_details(field)}</td>
+        <td data-label="Description">{escape(field.description)}</td>
+      </tr>"""
+        for field in FIELD_DEFINITIONS
+    )
+    return f"""  <section class="dataset-download-section" aria-labelledby="dataset-downloads-heading">
+    <h2 id="dataset-downloads-heading">Downloads</h2>
+    <p>These stable URLs always serve the latest published dataset version.</p>
+    <div class="dataset-download-actions">
+      <a class="dataset-download dataset-download-primary" href="{CSV_DOWNLOAD_PATH}" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 18v3h14v-3"/></svg>
+        <span><strong>Download CSV</strong><small>Canonical table</small></span>
+      </a>
+      <a class="dataset-download" href="{GEOJSON_DOWNLOAD_PATH}" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-18c2.2 2.5 3.3 5.5 3.3 9S14.2 18.5 12 21M12 3C9.8 5.5 8.7 8.5 8.7 12s1.1 6.5 3.3 9M3 12h18"/></svg>
+        <span><strong>Download GeoJSON</strong><small>WGS 84 points</small></span>
+      </a>
+      <a class="dataset-download" href="{SCHEMA_DOWNLOAD_PATH}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4m8-8 4 4-4 4m-2-11-4 14"/></svg>
+        <span><strong>View schema</strong><small>JSON data dictionary</small></span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="dataset-details-heading">
+    <h2 id="dataset-details-heading">Dataset details</h2>
+    <dl class="dataset-facts">
+      <div><dt>Records</dt><dd>{metadata.record_count:,}</dd></div>
+      <div><dt>Dataset version</dt><dd>{metadata.version}</dd></div>
+      <div><dt>Schema version</dt><dd>{SCHEMA_VERSION}</dd></div>
+      <div><dt>Generation date</dt><dd><time datetime="{metadata.last_modified}">{format_iso_date(metadata.last_modified)}</time></dd></div>
+      <div><dt>Revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/{metadata.revision}"><code>{metadata.revision}</code></a></dd></div>
+      <div><dt>Coordinates</dt><dd>WGS 84 (EPSG:4326)</dd></div>
+      <div><dt>License</dt><dd><a href="{LICENSE_URL}">{LICENSE_NAME}</a></dd></div>
+      <div><dt>Attribution</dt><dd>{escape(ATTRIBUTION)}</dd></div>
+    </dl>
+  </section>
+
+  <section aria-labelledby="dataset-fields-heading">
+    <h2 id="dataset-fields-heading">Field reference</h2>
+    <p>The CSV stores blank optional values as empty strings. GeoJSON uses JSON numbers for numeric fields and <code>null</code> for blank optional values; every feature is a Point with coordinates ordered longitude, latitude.</p>
+    <div class="dataset-table-wrap" tabindex="0" role="region" aria-label="Dataset field reference table">
+      <table class="dataset-table" aria-label="Dataset field reference table">
+        <thead><tr><th scope="col">Field</th><th scope="col">Type</th><th scope="col">Nullability</th><th scope="col">Units or values</th><th scope="col">Description</th></tr></thead>
+        <tbody>
+{field_rows}
+        </tbody>
+      </table>
+    </div>
+  </section>"""
 
 
 def update_readme(content: str, metadata: DatasetMetadata) -> str:
@@ -223,11 +292,17 @@ def update_dataset_page(content: str, metadata: DatasetMetadata) -> str:
     content = replace_generated_block(
         content, DATASET_HEAD_START, DATASET_HEAD_END, render_dataset_head(metadata)
     )
-    return replace_generated_block(
+    content = replace_generated_block(
         content,
         DATASET_SUMMARY_START,
         DATASET_SUMMARY_END,
         render_dataset_summary(metadata),
+    )
+    return replace_generated_block(
+        content,
+        DATASET_CONTRACT_START,
+        DATASET_CONTRACT_END,
+        render_dataset_contract(metadata),
     )
 
 
@@ -255,7 +330,7 @@ def main() -> int:
 
     outputs = ", ".join(changed) if changed else "no files (already current)"
     print(
-        f"Generated public metadata for {metadata.formatted_count} records "
+        f"Generated public metadata for {metadata.record_count:,} records "
         f"updated {metadata.last_modified}: {outputs}"
     )
     return 0

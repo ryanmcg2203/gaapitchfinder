@@ -18,6 +18,7 @@ gaapitchfinder/
 │   ├── directions.html           # Browseable directions page
 │   ├── clubs/                    # Generated club pages
 │   ├── counties/                 # Generated county pages
+│   ├── downloads/                # Generated CSV, GeoJSON, and schema downloads
 │   ├── blog/                     # Static blog posts
 │   ├── css/                      # Shared site styles
 │   ├── img/                      # Logo and image assets
@@ -29,6 +30,8 @@ gaapitchfinder/
 │   ├── site_build_utils.py       # Shared helpers for generators and tests
 │   ├── enrich_club_wikipedia.py  # Review-first Wikipedia/Wikidata suggestions
 │   ├── generate_map_data.py      # Builds site/data.json
+│   ├── generate_dataset_downloads.py # Builds stable public data downloads
+│   ├── dataset_contract.py       # Shared fields, schema, and GeoJSON contract
 │   ├── generate_public_metadata.py # Syncs public dataset counts and dates
 │   └── generate_club_pages.py    # Builds club/county pages and sitemap
 ├── tests/                        # Unit tests for site build helpers
@@ -48,6 +51,7 @@ gaapitchfinder/
 gaapitchfinder_data.csv
   -> data/derived/               # durable enriched datasets and coverage outputs
   -> site/data.json              # generated site payload
+  -> site/downloads/             # canonical CSV, GeoJSON, and JSON schema
   -> output/reports/             # markdown analysis output
   -> output/visualizations/      # charts and HTML maps
 ```
@@ -60,6 +64,7 @@ The Leaflet pages and Pitch of the Day load a generated `site/data.json` file. S
 
 ```bash
 python3 scripts/generate_map_data.py
+python3 scripts/generate_dataset_downloads.py
 python3 scripts/generate_public_metadata.py
 python3 scripts/generate_club_pages.py
 ```
@@ -70,6 +75,7 @@ For local static testing over plain HTTP, generate the data file and serve the s
 
 ```bash
 python3 scripts/generate_map_data.py
+python3 scripts/generate_dataset_downloads.py
 python3 scripts/generate_public_metadata.py
 python3 scripts/generate_club_pages.py
 python3 scripts/audit_site.py
@@ -107,6 +113,14 @@ python3 scripts/generate_club_pages.py
 Creates static SEO-focused club pages in `site/clubs/`, county pages in `site/counties/`, and regenerates `site/sitemap.xml`.
 Sitemap modification dates come from Git history, so run this command from a Git checkout with the relevant history available.
 
+### Generate Dataset Downloads
+
+```bash
+python3 scripts/generate_dataset_downloads.py
+```
+
+Copies the canonical CSV to its stable public URL and generates the GeoJSON and versioned JSON data dictionary in `site/downloads/`. Release dates and revisions come from the latest Git commit that changed the canonical CSV, keeping repeated builds reproducible.
+
 ### Generate Public Dataset Metadata
 
 ```bash
@@ -121,7 +135,7 @@ Synchronizes the exact CSV record count and Git-derived dataset date in this REA
 python3 scripts/audit_site.py
 ```
 
-Checks generated HTML links, required SEO tags, sitemap freshness metadata, and unsafe directions URLs in `site/data.json`.
+Checks generated HTML links, required SEO tags, sitemap freshness metadata, unsafe directions URLs in `site/data.json`, and the structure, feature count, and freshness of all dataset downloads.
 
 ### Run Tests
 
@@ -191,6 +205,8 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 ## Script Roles
 
 - `generate_map_data.py`: builds the compact JSON payload used by the public site
+- `generate_dataset_downloads.py`: publishes the stable CSV, GeoJSON, and schema downloads
+- `dataset_contract.py`: defines field metadata, release versioning, and GeoJSON conversion
 - `generate_public_metadata.py`: synchronizes public dataset counts and last-updated dates
 - `generate_club_pages.py`: builds static club pages, county pages, directories, and sitemap entries
 - `audit_site.py`: checks generated site output for link safety and SEO regressions
@@ -221,6 +237,12 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 - `Elevation`: Elevation in meters
 - `annual_rainfall`: Annual rainfall in millimeters
 - `rain_days`: Number of days with precipitation
+
+The public [dataset page](https://gaapitchfinder.com/dataset.html) and machine-readable `site/downloads/schema.json` define logical types, units, nullability, controlled values, WGS 84 axis order, and compatibility expectations. Stable latest-version URLs are:
+
+- `https://gaapitchfinder.com/downloads/gaapitchfinder.csv`
+- `https://gaapitchfinder.com/downloads/gaapitchfinder.geojson`
+- `https://gaapitchfinder.com/downloads/schema.json`
 
 ## Data Sources
 

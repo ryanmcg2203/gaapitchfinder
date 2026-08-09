@@ -78,6 +78,33 @@ test('keyboard focus remains visible and the club list is reachable without the 
   await expect(page.locator('.leaflet-popup')).toBeVisible();
 });
 
+test('dataset page exposes stable direct downloads and schema metadata', async ({ page }) => {
+  await page.goto('/dataset.html');
+
+  const csv = page.getByRole('link', { name: /Download CSV/ });
+  const geojson = page.getByRole('link', { name: /Download GeoJSON/ });
+  const schema = page.getByRole('link', { name: /View schema/ });
+  await expect(csv).toHaveAttribute('href', '/downloads/gaapitchfinder.csv');
+  await expect(csv).toHaveAttribute('download', '');
+  await expect(geojson).toHaveAttribute('href', '/downloads/gaapitchfinder.geojson');
+  await expect(geojson).toHaveAttribute('download', '');
+  await expect(schema).toHaveAttribute('href', '/downloads/schema.json');
+  await expect(page.locator('.dataset-facts dt', { hasText: 'Records' })).toBeVisible();
+  await expect(page.getByRole('table', { name: 'Dataset field reference table' })).toBeVisible();
+
+  const geojsonResponse = await page.request.get('/downloads/gaapitchfinder.geojson');
+  expect(geojsonResponse.ok()).toBe(true);
+  const geojsonBody = await geojsonResponse.json();
+  expect(geojsonBody.type).toBe('FeatureCollection');
+  expect(geojsonBody.features).toHaveLength(1989);
+
+  await page.setViewportSize({ width: 320, height: 800 });
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  await expect(csv).toBeVisible();
+  await expect(geojson).toBeVisible();
+  await expect(schema).toBeVisible();
+});
+
 test('zoom-equivalent and narrow layouts do not overflow or clip controls', async ({ page }) => {
   for (const width of [640, 320]) {
     await page.setViewportSize({ width, height: 800 });
