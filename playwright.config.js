@@ -19,7 +19,7 @@ module.exports = defineConfig({
   projects: [
     {
       name: 'desktop-chromium',
-      testMatch: /map\.spec\.js/,
+      testMatch: /(map|accessibility)\.spec\.js/,
       use: {
         browserName: 'chromium',
         ...devices['Desktop Chrome'],

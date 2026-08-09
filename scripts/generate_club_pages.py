@@ -146,11 +146,11 @@ def nav_html(prefix="../"):
     <li><a href="/about.html">About</a></li>
   </ul>
   <a href="/donate.html" class="nav-donate">Donate</a>
-  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+  <button class="nav-hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
     <span></span><span></span><span></span>
   </button>
 </nav>
-<div class="nav-drawer" id="nav-drawer">
+<div class="nav-drawer" id="nav-drawer" aria-hidden="true" inert>
   <button class="drawer-close" id="drawer-close" aria-label="Close menu">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
@@ -169,16 +169,7 @@ def nav_html(prefix="../"):
 
 
 def drawer_script():
-    return """
-<script>
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('nav-drawer').classList.toggle('open');
-});
-document.getElementById('drawer-close').addEventListener('click', () => {
-  document.getElementById('nav-drawer').classList.remove('open');
-});
-</script>
-""".strip()
+    return '<script src="/js/navigation.js"></script>'
 
 
 def directory_search_html(input_id, placeholder, label="Search"):
@@ -798,11 +789,11 @@ def render_index_page(pages):
     <li><a href="/about.html">About</a></li>
   </ul>
   <a href="/donate.html" class="nav-donate">Donate</a>
-  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+  <button class="nav-hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
     <span></span><span></span><span></span>
   </button>
 </nav>
-<div class="nav-drawer" id="nav-drawer">
+<div class="nav-drawer" id="nav-drawer" aria-hidden="true" inert>
   <button class="drawer-close" id="drawer-close" aria-label="Close menu">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
@@ -832,14 +823,7 @@ def render_index_page(pages):
   &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
 
-<script>
-document.getElementById('hamburger').addEventListener('click', () => {{
-  document.getElementById('nav-drawer').classList.toggle('open');
-}});
-document.getElementById('drawer-close').addEventListener('click', () => {{
-  document.getElementById('nav-drawer').classList.remove('open');
-}});
-</script>
+{drawer_script()}
 {directory_search_script("club-directory-search", ".club-directory-group li", "club-directory-empty")}
 </body>
 </html>
