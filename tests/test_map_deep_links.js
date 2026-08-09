@@ -55,6 +55,7 @@ class Element {
     this.hidden = false;
     this.disabled = false;
     this.dataset = {};
+    this.style = {};
   }
 
   set innerHTML(value) {
@@ -154,6 +155,11 @@ function createMapHarness(search, data) {
   function marker(latLng) {
     return {
       latLng,
+      listeners: {},
+      on(type, listener) {
+        this.listeners[type] = listener;
+        return this;
+      },
       bindPopup() {
         return this;
       },

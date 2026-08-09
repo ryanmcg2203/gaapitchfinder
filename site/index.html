@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
 <style>
 body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
+.site-nav { flex-shrink: 0; }
 
 /* ── Map filter bar ── */
 #topbar {
@@ -138,8 +139,144 @@ select:disabled { opacity: 0.4; cursor: default; }
 .browse-results-link { flex-shrink: 0; color: #f0f0f0; font-size: 12px; font-weight: 700; padding: 7px 8px; white-space: nowrap; }
 .browse-results-link:hover { color: #fff; }
 
-/* ── Map ── */
-#map { flex: 1 1 auto; min-height: 0; position: relative; z-index: 0; background: #111; }
+/* ── Map and synchronized results ── */
+#map-workspace {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  background: #111;
+}
+
+#map { flex: 1 1 auto; min-width: 0; min-height: 0; position: relative; z-index: 0; background: #111; }
+
+#results-panel {
+  display: flex;
+  flex: 0 0 350px;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  color: #ddd;
+  background: #1b1b1b;
+  border-right: 1px solid #353535;
+  z-index: 2;
+}
+
+.results-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 66px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #353535;
+}
+.results-heading { min-width: 0; }
+#results-title { font-size: 15px; font-weight: 700; line-height: 1.25; color: #fff; }
+#results-summary { margin-top: 3px; overflow: hidden; color: #aaa; font-size: 12px; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+#results-toggle {
+  display: none;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: #ddd;
+  background: transparent;
+  border: 1px solid #484848;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#results-toggle:hover { color: #fff; background: rgba(255,255,255,0.08); }
+#results-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; transition: transform 0.18s ease; }
+#results-panel.results-expanded #results-toggle svg { transform: rotate(180deg); }
+
+#results-body { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }
+#results-notice {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  color: #d7e6f9;
+  background: #263344;
+  border-bottom: 1px solid #3a4d65;
+  font-size: 12px;
+  line-height: 1.45;
+}
+#results-notice[data-tone="error"] { color: #ffd6d6; background: #3a2525; border-bottom-color: #623838; }
+#results-notice[hidden] { display: none; }
+.results-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+#results-list { list-style: none; }
+.result-item { border-bottom: 1px solid #303030; }
+.result-row {
+  display: block;
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 16px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+.result-row:hover { background: #242424; }
+.result-row[aria-current="true"] { background: #303025; border-left-color: #ffffcc; }
+.result-primary { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.result-club { min-width: 0; overflow-wrap: anywhere; color: #f4f4f4; font-size: 14px; font-weight: 700; line-height: 1.3; }
+.result-distance { flex: 0 0 auto; color: #d8e9ad; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.result-meta { display: flex; flex-wrap: wrap; gap: 2px 6px; margin-top: 5px; color: #aaa; font-size: 12px; line-height: 1.35; }
+.result-meta-separator { color: #666; }
+
+#results-state { padding: 30px 20px; color: #aaa; font-size: 13px; line-height: 1.55; text-align: center; }
+#results-state[hidden] { display: none; }
+#results-retry {
+  display: block;
+  min-height: 38px;
+  margin: 14px auto 0;
+  padding: 7px 14px;
+  color: #eee;
+  background: transparent;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+}
+#results-retry:hover { color: #fff; background: #292929; border-color: #777; }
+#results-retry[hidden] { display: none; }
+
+#results-pagination {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 5px 10px;
+  border-top: 1px solid #353535;
+}
+#results-pagination[hidden] { display: none; }
+.results-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: #ddd;
+  background: transparent;
+  border: 1px solid #484848;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.results-page-btn:hover:not(:disabled) { color: #fff; background: #292929; }
+.results-page-btn:disabled { opacity: 0.35; cursor: default; }
+.results-page-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+#results-range { color: #999; font-size: 11px; text-align: center; }
 
 #loading {
   position: absolute;
@@ -218,8 +355,31 @@ body.light .mobile-filter-toggle[aria-expanded="true"] { border-color: #777; col
 body.light #count-badge { color: #595959; }
 body.light .browse-results-link { color: #333; }
 body.light #theme-btn:hover { background: rgba(0,0,0,0.06); }
+body.light #map-workspace { background: #e7ecef; }
 body.light #loading { background: rgba(245,245,245,0.92); color: #555; }
 body.light #map { background: #e7ecef; }
+body.light #results-panel { color: #333; background: #fff; border-color: #d8d8d8; }
+body.light .results-header,
+body.light #results-pagination { border-color: #ddd; }
+body.light #results-title { color: #111; }
+body.light #results-summary,
+body.light #results-state,
+body.light #results-range,
+body.light .result-meta { color: #595959; }
+body.light #results-toggle,
+body.light .results-page-btn { color: #444; border-color: #ccc; }
+body.light #results-toggle:hover,
+body.light .results-page-btn:hover:not(:disabled) { color: #111; background: #f0f0f0; }
+body.light #results-notice { color: #29455f; background: #edf5fc; border-color: #c7dbea; }
+body.light #results-notice[data-tone="error"] { color: #7f2020; background: #fff0f0; border-color: #e5baba; }
+body.light .result-item { border-color: #e5e5e5; }
+body.light .result-row:hover { background: #f4f4f4; }
+body.light .result-row[aria-current="true"] { background: #f4f4dc; border-left-color: #666600; }
+body.light .result-club { color: #111; }
+body.light .result-distance { color: #49651a; }
+body.light .result-meta-separator { color: #aaa; }
+body.light #results-retry { color: #333; border-color: #aaa; }
+body.light #results-retry:hover { color: #111; background: #eee; border-color: #777; }
 body.light .leaflet-popup-content-wrapper { background: #fff; border-color: #ddd; }
 body.light .leaflet-popup-tip { background: #fff; }
 body.light .pop-club { color: #111; }
@@ -294,18 +454,7 @@ body.light .pop-correction:hover { background: #f1f1f1; border-color: #555; colo
     border-color: #ddd;
     color: #595959;
   }
-  .browse-results-link {
-    display: inline-flex;
-    grid-column: 1 / -1;
-    order: 5;
-    align-items: center;
-    justify-content: center;
-    min-height: 42px;
-    border: 1px solid #484848;
-    border-radius: 4px;
-    text-decoration: none;
-  }
-  body.light .browse-results-link { border-color: #ccc; }
+  .browse-results-link { display: none; }
   .search-wrap {
     grid-column: 1 / -1;
     order: 1;
@@ -351,6 +500,25 @@ body.light .pop-correction:hover { background: #f1f1f1; border-color: #555; colo
   body.light #theme-btn {
     border-color: #ddd;
   }
+  #map-workspace { flex-direction: column; }
+  #map { order: 1; }
+  #results-panel {
+    order: 2;
+    width: 100%;
+    flex: 0 0 70px;
+    border-top: 1px solid #484848;
+    border-right: 0;
+    transition: flex-basis 0.18s ease;
+  }
+  #results-panel.results-expanded { flex-basis: min(42dvh, 48%, 360px); }
+  .results-header { min-height: 69px; padding: 11px 12px 10px 16px; }
+  #results-toggle { display: inline-flex; }
+  #results-body { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #results-panel,
+  #results-toggle svg { transition: none; }
 }
 </style>
 </head>
@@ -417,15 +585,48 @@ body.light .pop-correction:hover { background: #f1f1f1; border-color: #555; colo
   <button id="theme-btn" aria-label="Toggle day/night mode" title="Toggle day/night">🌙</button>
 </div>
 
-<div id="map">
-  <div id="loading">Loading pitches…</div>
-  <button id="info-btn" aria-label="About this map" aria-expanded="false" aria-controls="info-panel" title="About"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
-  <div id="info-panel" aria-hidden="true" inert>
-    <p>Search or use the dropdowns to filter by region, county, club or pitch. Click any marker to see details and get Google Maps Directions.</p>
-    <p class="info-browse-links"><a href="pitch-of-the-day.html">Pitch of the day</a><a href="clubs/">Browse clubs</a><a href="counties/">Browse counties</a></p>
-    <p>The underlying GAA pitch locations dataset is freely available on <a href="/dataset.html">the dataset page</a> and <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
-    <p>Enquiries or issues? <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a></p>
-    <a href="/donate.html" class="donate-link">Donate</a>
+<div id="map-workspace">
+  <aside id="results-panel" aria-labelledby="results-title">
+    <div class="results-header">
+      <div class="results-heading">
+        <h2 id="results-title">Pitch results</h2>
+        <p id="results-summary">Loading pitches…</p>
+      </div>
+      <button id="results-toggle" type="button" aria-label="Show pitch results" aria-expanded="false" aria-controls="results-body" title="Show pitch results">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+      </button>
+    </div>
+    <div id="results-body">
+      <div id="results-notice" role="status" hidden></div>
+      <div class="results-scroll" id="results-scroll">
+        <div id="results-state" role="status">
+          <span id="results-state-message">Loading pitches…</span>
+          <button id="results-retry" type="button" hidden>Try again</button>
+        </div>
+        <ol id="results-list" aria-label="Filtered pitches"></ol>
+      </div>
+      <nav id="results-pagination" aria-label="Pitch result pages" hidden>
+        <button class="results-page-btn" id="results-prev" type="button" aria-label="Previous results" title="Previous results">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <span id="results-range"></span>
+        <button class="results-page-btn" id="results-next" type="button" aria-label="Next results" title="Next results">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </nav>
+    </div>
+  </aside>
+
+  <div id="map">
+    <div id="loading">Loading pitches…</div>
+    <button id="info-btn" aria-label="About this map" aria-expanded="false" aria-controls="info-panel" title="About"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
+    <div id="info-panel" aria-hidden="true" inert>
+      <p>Search or use the dropdowns to filter by region, county, club or pitch. Select a result or marker to see details and get Google Maps Directions.</p>
+      <p class="info-browse-links"><a href="pitch-of-the-day.html">Pitch of the day</a><a href="clubs/">Browse clubs</a><a href="counties/">Browse counties</a></p>
+      <p>The underlying GAA pitch locations dataset is freely available on <a href="/dataset.html">the dataset page</a> and <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+      <p>Enquiries or issues? <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a></p>
+      <a href="/donate.html" class="donate-link">Donate</a>
+    </div>
   </div>
 </div>
 
@@ -461,6 +662,9 @@ const lightTiles = L.tileLayer(
 
 const map = L.map('map', { center: [53.5, -8], zoom: 7, layers: [darkTiles], preferCanvas: true });
 const mapElement = document.getElementById('map');
+if ('ResizeObserver' in window) {
+  new ResizeObserver(() => map.invalidateSize({ pan: false })).observe(mapElement);
+}
 
 let isDark = true;
 
@@ -487,16 +691,36 @@ const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
 const topbar = document.getElementById('topbar');
 const mobileFilterMedia = window.matchMedia('(max-width: 700px)');
 const filterSelects = [selRegion, selCounty, selClub, selPitch];
+const resultsPanel = document.getElementById('results-panel');
+const resultsBody = document.getElementById('results-body');
+const resultsToggle = document.getElementById('results-toggle');
+const resultsSummary = document.getElementById('results-summary');
+const resultsNotice = document.getElementById('results-notice');
+const resultsScroll = document.getElementById('results-scroll');
+const resultsState = document.getElementById('results-state');
+const resultsStateMessage = document.getElementById('results-state-message');
+const resultsRetry = document.getElementById('results-retry');
+const resultsList = document.getElementById('results-list');
+const resultsPagination = document.getElementById('results-pagination');
+const resultsPrev = document.getElementById('results-prev');
+const resultsNext = document.getElementById('results-next');
+const resultsRange = document.getElementById('results-range');
+const mobileResultsMedia = window.matchMedia('(max-width: 700px)');
 
 let allClubs = [];
 let clustered = true;
 let regionIsExplicit = false;
 let focusedPitchKey = '';
+let nearbyPitches = null;
+let userLocation = null;
+let resultPage = 0;
 let markerCreationCount = 0;
 let completedRenderCount = 0;
 let searchRenderTimer = null;
 let searchRenderRequest = 0;
 const SEARCH_RENDER_DELAY_MS = 140;
+const RESULT_PAGE_SIZE = 60;
+const NEARBY_RESULT_COUNT = 5;
 const usesTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const pitchDotIcon = L.divIcon({
   className: 'pitch-dot-marker',
@@ -523,6 +747,7 @@ function makePitchMarker(c) {
     marker = L.circleMarker(latLng, { radius: 5, fillColor: '#ffffcc', color: '#cccc88', weight: 0.5, opacity: 0.9, fillOpacity: 0.85 });
   }
   markerCreationCount += 1;
+  marker.on('click', () => selectPitch(c));
   return marker.bindPopup(() => pitchPopup(c), { maxWidth: 280, keepInView: true });
 }
 
@@ -569,6 +794,21 @@ function setMobileFiltersExpanded(expanded, returnFocus = false) {
 setMobileFiltersExpanded(false);
 mobileFilterMedia.addEventListener?.('change', () => setMobileFiltersExpanded(false));
 
+function setResultsExpanded(expanded, returnFocus = false) {
+  const mobile = mobileResultsMedia.matches;
+  expanded = mobile && expanded;
+  resultsPanel.classList.toggle('results-expanded', expanded);
+  resultsToggle.setAttribute('aria-expanded', String(expanded));
+  resultsToggle.setAttribute('aria-label', expanded ? 'Hide pitch results' : 'Show pitch results');
+  resultsToggle.setAttribute('title', expanded ? 'Hide pitch results' : 'Show pitch results');
+  resultsBody.toggleAttribute('inert', mobile && !expanded);
+  if (expanded) setInfoPanelOpen(false);
+  if (!expanded && returnFocus) resultsToggle.focus();
+}
+
+setResultsExpanded(false);
+mobileResultsMedia.addEventListener?.('change', () => setResultsExpanded(false));
+
 function matchesSearch(c, query) {
   if (!query) return true;
   const terms = normalizeSearch(query).split(/\s+/).filter(Boolean);
@@ -604,9 +844,20 @@ function currentVisible() {
   return getFiltered(filters.region, filters.county, filters.club, filters.pitch, filters.query);
 }
 
+function currentResults() {
+  return nearbyPitches || currentVisible();
+}
+
 function hasUserFilters() {
   const filters = currentFilters();
-  return filters.region !== 'Ireland' || filters.county || filters.club || filters.pitch || filters.query;
+  return regionIsExplicit || filters.region !== 'Ireland' || filters.county || filters.club || filters.pitch || filters.query;
+}
+
+function clearNearbyMode() {
+  nearbyPitches = null;
+  userLocation = null;
+  resultPage = 0;
+  setResultsNotice();
 }
 
 function cascadeFilters() {
@@ -724,9 +975,12 @@ function addVisibleMarkers(markers) {
 function renderMarkers(options = {}) {
   const startedAt = performance.now();
   markerLayer.clearLayers();
-  const visible = currentVisible();
-  countBadge.textContent = `${visible.length.toLocaleString()} pitch${visible.length !== 1 ? 'es' : ''}`;
+  const visible = currentResults();
+  countBadge.textContent = nearbyPitches
+    ? `${visible.length.toLocaleString()} nearby`
+    : `${visible.length.toLocaleString()} pitch${visible.length !== 1 ? 'es' : ''}`;
   addVisibleMarkers(visible.map(pitch => pitch._marker));
+  renderResults(visible);
 
   if (options.fit !== false && visible.length > 0 && visible.length < allClubs.length) {
     map.fitBounds(visible.map(c => [c.la, c.lo]), { padding: [40, 40], maxZoom: 14, animate: false });
@@ -779,29 +1033,16 @@ function focusPitch(pitch) {
   map.stop();
   requestAnimationFrame(() => {
     if (!markerLayer.hasLayer(pitch._marker)) return;
-    const open = () => pitch._marker.openPopup();
+    const open = () => {
+      pitch._marker.openPopup();
+      map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14), { animate: false });
+    };
     if (markerLayer.zoomToShowLayer) {
       markerLayer.zoomToShowLayer(pitch._marker, open);
     } else {
-      map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14));
       open();
     }
   });
-}
-
-function showPitchLocation(pitch) {
-  if (!pitch) return;
-  focusedPitchKey = '';
-  selectIfAvailable(selRegion, pitch.r);
-  selCounty.value = '';
-  selClub.value = '';
-  selPitch.value = '';
-  cascadeFilters();
-  selectIfAvailable(selCounty, pitch.k);
-  cascadeFilters();
-  updateShareUrl();
-  renderMarkersNow();
-  focusPitch(pitch);
 }
 
 function distanceKm(aLat, aLng, bLat, bLng) {
@@ -813,6 +1054,111 @@ function distanceKm(aLat, aLng, bLat, bLng) {
   const lat2 = toRad(bLat);
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
   return 2 * earthKm * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+function setResultsNotice(message = '', tone = '') {
+  resultsNotice.hidden = !message;
+  resultsNotice.textContent = message;
+  if (tone) resultsNotice.dataset.tone = tone;
+  else delete resultsNotice.dataset.tone;
+}
+
+function setResultsState(state, message, retry = false) {
+  resultsState.dataset.state = state;
+  resultsStateMessage.textContent = message;
+  resultsState.hidden = false;
+  resultsRetry.hidden = !retry;
+  resultsList.innerHTML = '';
+  resultsPagination.hidden = true;
+}
+
+function formatDistance(distance) {
+  if (distance < 1) return `${Math.max(0.1, distance).toFixed(1)} km`;
+  if (distance < 10) return `${distance.toFixed(1)} km`;
+  return `${Math.round(distance).toLocaleString()} km`;
+}
+
+function resultLocation(pitch) {
+  return [pitch.k, pitch.r && pitch.r !== 'Ireland' ? pitch.r : ''].filter(Boolean).join(', ') || 'Location not listed';
+}
+
+function updateResultSelection(scroll = false) {
+  const rows = resultsList.querySelectorAll?.('.result-row') || [];
+  let selectedRow = null;
+  rows.forEach(row => {
+    const pitch = allClubs[Number(row.dataset.pitchIndex)];
+    const selected = Boolean(pitch && pitchKey(pitch) === focusedPitchKey);
+    if (selected) {
+      row.setAttribute('aria-current', 'true');
+      selectedRow = row;
+    } else {
+      row.removeAttribute('aria-current');
+    }
+  });
+  if (scroll && selectedRow?.scrollIntoView) selectedRow.scrollIntoView({ block: 'nearest' });
+}
+
+function renderResults(visible, options = {}) {
+  const count = visible.length;
+  resultsSummary.textContent = nearbyPitches
+    ? `${count} nearest pitch${count === 1 ? '' : 'es'}`
+    : `${count.toLocaleString()} matching pitch${count === 1 ? '' : 'es'}`;
+
+  if (!count) {
+    resultPage = 0;
+    setResultsState('empty', 'No pitches match these filters. Try a broader search or reset the filters.');
+    return;
+  }
+
+  const selectedIndex = focusedPitchKey
+    ? visible.findIndex(pitch => pitchKey(pitch) === focusedPitchKey)
+    : -1;
+  if (selectedIndex >= 0 && options.followSelection !== false) {
+    resultPage = Math.floor(selectedIndex / RESULT_PAGE_SIZE);
+  }
+
+  const pageCount = Math.ceil(count / RESULT_PAGE_SIZE);
+  resultPage = Math.min(Math.max(resultPage, 0), pageCount - 1);
+  const start = resultPage * RESULT_PAGE_SIZE;
+  const end = Math.min(start + RESULT_PAGE_SIZE, count);
+  const pagePitches = visible.slice(start, end);
+
+  resultsState.hidden = true;
+  resultsRetry.hidden = true;
+  resultsList.innerHTML = pagePitches.map(pitch => {
+    const club = escHtml(pitch.c || 'Club not listed');
+    const name = escHtml(pitch.p || 'Pitch');
+    const location = escHtml(resultLocation(pitch));
+    const distance = userLocation && nearbyPitches
+      ? distanceKm(userLocation.latitude, userLocation.longitude, Number(pitch.la), Number(pitch.lo))
+      : null;
+    const distanceText = distance === null ? '' : formatDistance(distance);
+    const selected = pitchKey(pitch) === focusedPitchKey;
+    const label = escHtml(`${pitch.c || 'Club not listed'}, ${pitch.p || 'Pitch'}, ${resultLocation(pitch)}${distanceText ? `, ${distanceText} away` : ''}`);
+    return `<li class="result-item"><button class="result-row" type="button" data-pitch-index="${pitch._index}" aria-label="${label}"${selected ? ' aria-current="true"' : ''}><span class="result-primary"><span class="result-club">${club}</span>${distanceText ? `<span class="result-distance">${distanceText}</span>` : ''}</span><span class="result-meta"><span>${name}</span><span class="result-meta-separator" aria-hidden="true">·</span><span>${location}</span></span></button></li>`;
+  }).join('');
+  resultsScroll.scrollTop = 0;
+
+  resultsPagination.hidden = pageCount <= 1;
+  resultsPrev.disabled = resultPage === 0;
+  resultsNext.disabled = resultPage === pageCount - 1;
+  resultsRange.textContent = `${(start + 1).toLocaleString()}–${end.toLocaleString()} of ${count.toLocaleString()}`;
+}
+
+function selectPitch(pitch, options = {}) {
+  if (!pitch) return;
+  focusedPitchKey = pitchKey(pitch);
+  const visible = currentResults();
+  const selectedIndex = visible.findIndex(candidate => candidate === pitch);
+  const selectedPage = selectedIndex < 0 ? resultPage : Math.floor(selectedIndex / RESULT_PAGE_SIZE);
+  if (selectedPage !== resultPage) {
+    resultPage = selectedPage;
+    renderResults(visible);
+  } else {
+    updateResultSelection(!mobileResultsMedia.matches || resultsPanel.classList.contains('results-expanded'));
+  }
+  updateShareUrl();
+  if (options.focus) focusPitch(pitch);
 }
 
 // ── Cluster / dots toggle ─────────────────────────────────────────────────────
@@ -831,6 +1177,7 @@ clusterBtn.addEventListener('click', () => {
 
 // ── Reset ─────────────────────────────────────────────────────────────────────
 resetBtn.addEventListener('click', () => {
+  clearNearbyMode();
   regionIsExplicit = false;
   focusedPitchKey = '';
   selRegion.value = 'Ireland'; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; searchInput.value = '';
@@ -841,61 +1188,96 @@ resetBtn.addEventListener('click', () => {
 // ── Discovery tools ───────────────────────────────────────────────────────────
 randomBtn.addEventListener('click', () => {
   flushScheduledSearchRender({ fit: false });
-  const visible = currentVisible();
+  const visible = currentResults();
   if (!visible.length) return;
-  focusPitch(visible[Math.floor(Math.random() * visible.length)]);
+  selectPitch(visible[Math.floor(Math.random() * visible.length)], { focus: true });
 });
 
 nearbyBtn.addEventListener('click', () => {
   if (!navigator.geolocation) {
-    alert('Location is not available in this browser.');
+    setResultsNotice('Location is not available in this browser. Search or filter to browse pitches instead.', 'error');
+    setResultsExpanded(true);
     return;
   }
 
   nearbyBtn.disabled = true;
   nearbyBtn.textContent = 'Finding...';
+  setResultsNotice('Finding the five nearest pitches…');
+  setResultsExpanded(true);
   navigator.geolocation.getCurrentPosition(
     position => {
       nearbyBtn.disabled = false;
       nearbyBtn.textContent = 'Near me';
       flushScheduledSearchRender({ fit: false });
-      const visible = hasUserFilters() ? currentVisible() : allClubs;
-      if (!visible.length) return;
-      const { latitude, longitude } = position.coords;
-      const nearest = visible.reduce((best, pitch) => {
-        const distance = distanceKm(latitude, longitude, Number(pitch.la), Number(pitch.lo));
-        return !best || distance < best.distance ? { pitch, distance } : best;
-      }, null);
-      if (hasUserFilters()) {
-        focusPitch(nearest.pitch);
-      } else {
-        showPitchLocation(nearest.pitch);
+      const candidates = hasUserFilters() ? currentVisible() : allClubs;
+      if (!candidates.length) {
+        setResultsNotice('No pitches match the current filters. Reset them and try Near me again.', 'error');
+        return;
       }
+      const { latitude, longitude } = position.coords;
+      userLocation = { latitude, longitude };
+      nearbyPitches = candidates
+        .map(pitch => ({ pitch, distance: distanceKm(latitude, longitude, Number(pitch.la), Number(pitch.lo)) }))
+        .sort((left, right) => left.distance - right.distance)
+        .slice(0, NEARBY_RESULT_COUNT)
+        .map(result => result.pitch);
+      focusedPitchKey = '';
+      resultPage = 0;
+      setResultsNotice('Sorted by distance from your location.');
+      updateShareUrl();
+      renderMarkersNow();
     },
-    () => {
+    error => {
       nearbyBtn.disabled = false;
       nearbyBtn.textContent = 'Near me';
-      alert('Could not get your location.');
+      const denied = error && error.code === 1;
+      setResultsNotice(
+        denied
+          ? 'Location access was denied. Enable it in your browser or search for a place instead.'
+          : 'Your location could not be found. Try again or search for a place instead.',
+        'error'
+      );
+      setResultsExpanded(true);
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
   );
 });
 
 // ── Event wiring ──────────────────────────────────────────────────────────────
-selRegion.addEventListener('change', () => { regionIsExplicit = true; focusedPitchKey = ''; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
-selCounty.addEventListener('change', () => { focusedPitchKey = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
-selClub.addEventListener('change',   () => { focusedPitchKey = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
-selPitch.addEventListener('change', () => { focusedPitchKey = ''; updateShareUrl(); renderMarkersNow(); });
-searchInput.addEventListener('input', () => { focusedPitchKey = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); scheduleSearchRender(); });
-searchClear.addEventListener('click', () => { focusedPitchKey = ''; searchInput.value = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkersNow(); searchInput.focus(); });
+selRegion.addEventListener('change', () => { clearNearbyMode(); regionIsExplicit = true; focusedPitchKey = ''; selCounty.value = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
+selCounty.addEventListener('change', () => { clearNearbyMode(); focusedPitchKey = ''; selClub.value = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
+selClub.addEventListener('change',   () => { clearNearbyMode(); focusedPitchKey = ''; selPitch.value = ''; cascadeFilters(); updateShareUrl(); renderMarkersNow(); });
+selPitch.addEventListener('change', () => { clearNearbyMode(); focusedPitchKey = ''; updateShareUrl(); renderMarkersNow(); });
+searchInput.addEventListener('input', () => { clearNearbyMode(); focusedPitchKey = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); scheduleSearchRender(); });
+searchClear.addEventListener('click', () => { clearNearbyMode(); focusedPitchKey = ''; searchInput.value = ''; syncImplicitSearchRegion(); updateSearchClear(); updateShareUrl(); renderMarkersNow(); searchInput.focus(); });
 mobileFilterToggle.addEventListener('click', () => {
   setMobileFiltersExpanded(!topbar.classList.contains('filters-open'));
 });
+resultsToggle.addEventListener('click', () => {
+  setResultsExpanded(!resultsPanel.classList.contains('results-expanded'));
+});
+resultsList.addEventListener('click', event => {
+  const row = event.target.closest('.result-row');
+  if (!row) return;
+  selectPitch(allClubs[Number(row.dataset.pitchIndex)], { focus: true });
+});
+resultsPrev.addEventListener('click', () => {
+  resultPage -= 1;
+  renderResults(currentResults(), { followSelection: false });
+});
+resultsNext.addEventListener('click', () => {
+  resultPage += 1;
+  renderResults(currentResults(), { followSelection: false });
+});
+resultsRetry.addEventListener('click', loadPitchData);
 document.addEventListener('keydown', event => {
   if (event.key !== 'Escape') return;
   if (topbar.classList.contains('filters-open')) {
     event.preventDefault();
     setMobileFiltersExpanded(false, true);
+  } else if (resultsPanel.classList.contains('results-expanded')) {
+    event.preventDefault();
+    setResultsExpanded(false, true);
   } else if (infoPanel.classList.contains('open')) {
     event.preventDefault();
     setInfoPanelOpen(false, true);
@@ -903,28 +1285,48 @@ document.addEventListener('keydown', event => {
 });
 
 // ── Load data ─────────────────────────────────────────────────────────────────
-fetch('data.json')
-  .then(r => r.json())
-  .then(data => {
-    allClubs = data.map(c => {
-      const pitch = { ...c, s: normalizeSearch(`${c.c} ${c.p} ${c.k} ${c.r}`) };
-      pitch._marker = makePitchMarker(pitch);
-      return pitch;
+function loadPitchData() {
+  const loading = document.getElementById('loading');
+  if (loading) {
+    loading.textContent = 'Loading pitches…';
+    loading.style.color = '';
+  }
+  resultsSummary.textContent = 'Loading pitches…';
+  setResultsState('loading', 'Loading pitches…');
+
+  fetch('data.json')
+    .then(response => {
+      if (response.ok === false) throw new Error(`Pitch data request failed: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (!Array.isArray(data)) throw new Error('Pitch data is not an array');
+      allClubs = data.map((c, index) => {
+        const pitch = { ...c, _index: index, s: normalizeSearch(`${c.c} ${c.p} ${c.k} ${c.r}`) };
+        pitch._marker = makePitchMarker(pitch);
+        return pitch;
+      });
+      setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
+      applyUrlFilters();
+      scheduleInitialRender(() => {
+        renderMarkersNow();
+        const focusedPitch = allClubs.find(pitch => pitchKey(pitch) === focusedPitchKey);
+        focusPitch(focusedPitch);
+        document.getElementById('loading')?.remove();
+      });
+    })
+    .catch(() => {
+      const loadingError = document.getElementById('loading');
+      if (loadingError) {
+        loadingError.textContent = 'Failed to load pitch data';
+        loadingError.style.color = '#f87171';
+      }
+      resultsSummary.textContent = 'Results unavailable';
+      setResultsState('error', 'Pitch results could not be loaded. Check your connection and try again.', true);
     });
-    setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
-    applyUrlFilters();
-    scheduleInitialRender(() => {
-      renderMarkersNow();
-      const focusedPitch = allClubs.find(pitch => pitchKey(pitch) === focusedPitchKey);
-      focusPitch(focusedPitch);
-      document.getElementById('loading').remove();
-    });
-  })
-  .catch(() => {
-    const el = document.getElementById('loading');
-    el.textContent = 'Failed to load pitch data';
-    el.style.color = '#f87171';
-  });
+}
+
+loadPitchData();
 </script>
 </body>
 </html>

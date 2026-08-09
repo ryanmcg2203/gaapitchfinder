@@ -68,6 +68,14 @@ test('keyboard focus remains visible and the club list is reachable without the 
   await clubList.focus();
   await expect(clubList).toBeFocused();
   await expect(clubList).toHaveCSS('outline-style', 'solid');
+
+  const firstResult = page.locator('.result-row').first();
+  await firstResult.focus();
+  await expect(firstResult).toBeFocused();
+  await expect(firstResult).toHaveCSS('outline-style', 'solid');
+  await page.keyboard.press('Enter');
+  await expect(firstResult).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('.leaflet-popup')).toBeVisible();
 });
 
 test('zoom-equivalent and narrow layouts do not overflow or clip controls', async ({ page }) => {
@@ -76,7 +84,7 @@ test('zoom-equivalent and narrow layouts do not overflow or clip controls', asyn
     await page.goto('/');
     await expect(page.locator('#loading')).toHaveCount(0);
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
-    const selectors = ['#search-input', '#reset-btn', '#mobile-filter-toggle', '#count-badge', '.browse-results-link', '#theme-btn'];
+    const selectors = ['#search-input', '#reset-btn', '#mobile-filter-toggle', '#count-badge', '#theme-btn', '#results-toggle'];
     const boxes = [];
     for (const selector of selectors) {
       const locator = page.locator(selector);
