@@ -9,6 +9,7 @@ Run from repo root:
 from __future__ import annotations
 
 import json
+import math
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -20,11 +21,14 @@ from build_metadata import GitBuildMetadata
 from generate_public_metadata import (
     build_dataset_metadata,
     format_iso_date,
+    render_dataset_contract,
     render_dataset_head,
     render_dataset_summary,
     render_readme_summary,
 )
-from site_build_utils import ROOT_DIR, SITE_DIR, load_rows
+from dataset_contract import FIELD_DEFINITIONS, build_geojson, build_schema
+from generate_dataset_downloads import DOWNLOADS_DIR
+from site_build_utils import DATASET_PATH, ROOT_DIR, SITE_DIR, load_rows
 
 
 SAFE_SCHEMES = {"", "http", "https", "mailto"}
@@ -175,6 +179,7 @@ def public_metadata_errors(metadata, dataset_html, readme):
     expected_outputs = (
         ("dataset metadata", render_dataset_head(metadata), dataset_html),
         ("dataset summary", render_dataset_summary(metadata), dataset_html),
+        ("dataset contract", render_dataset_contract(metadata), dataset_html),
         ("README dataset summary", render_readme_summary(metadata), readme),
     )
     for label, expected, content in expected_outputs:
@@ -190,6 +195,109 @@ def audit_public_metadata():
     dataset_html = (SITE_DIR / "dataset.html").read_text()
     readme = (ROOT_DIR / "README.md").read_text()
     return public_metadata_errors(metadata, dataset_html, readme)
+
+
+def geojson_structure_errors(geojson, expected_feature_count):
+    errors = []
+    if not isinstance(geojson, dict) or geojson.get("type") != "FeatureCollection":
+        return ["GeoJSON root must be a FeatureCollection object"]
+
+    features = geojson.get("features")
+    if not isinstance(features, list):
+        return ["GeoJSON features must be an array"]
+    if len(features) != expected_feature_count:
+        errors.append(
+            "GeoJSON feature count does not match canonical CSV: "
+            f"{len(features)} != {expected_feature_count}"
+        )
+    if geojson.get("feature_count") != expected_feature_count:
+        errors.append("GeoJSON feature_count metadata does not match canonical CSV")
+
+    expected_properties = {field.name for field in FIELD_DEFINITIONS}
+    for index, feature in enumerate(features):
+        if not isinstance(feature, dict) or feature.get("type") != "Feature":
+            errors.append(f"GeoJSON feature {index} is not a Feature object")
+            continue
+        geometry = feature.get("geometry")
+        if not isinstance(geometry, dict) or geometry.get("type") != "Point":
+            errors.append(f"GeoJSON feature {index} geometry is not a Point")
+            continue
+        coordinates = geometry.get("coordinates")
+        if not isinstance(coordinates, list) or len(coordinates) != 2:
+            errors.append(f"GeoJSON feature {index} coordinates are not [lon, lat]")
+            continue
+        longitude, latitude = coordinates
+        if (
+            not isinstance(longitude, (int, float))
+            or isinstance(longitude, bool)
+            or not math.isfinite(longitude)
+            or not -180 <= longitude <= 180
+            or not isinstance(latitude, (int, float))
+            or isinstance(latitude, bool)
+            or not math.isfinite(latitude)
+            or not -90 <= latitude <= 90
+        ):
+            errors.append(f"GeoJSON feature {index} coordinates are invalid")
+        properties = feature.get("properties")
+        if not isinstance(properties, dict) or set(properties) != expected_properties:
+            errors.append(
+                f"GeoJSON feature {index} properties do not match the dataset schema"
+            )
+            continue
+        if (
+            properties["Longitude"] != longitude
+            or properties["Latitude"] != latitude
+        ):
+            errors.append(
+                f"GeoJSON feature {index} geometry and coordinate properties differ"
+            )
+    return errors
+
+
+def dataset_download_errors(
+    rows,
+    metadata,
+    dataset_path=DATASET_PATH,
+    downloads_dir=DOWNLOADS_DIR,
+):
+    paths = {
+        "CSV": downloads_dir / "gaapitchfinder.csv",
+        "GeoJSON": downloads_dir / "gaapitchfinder.geojson",
+        "schema": downloads_dir / "schema.json",
+    }
+    missing = [
+        f"dataset {label} download does not exist"
+        for label, path in paths.items()
+        if not path.exists()
+    ]
+    if missing:
+        return missing
+
+    errors = []
+    if paths["CSV"].read_bytes() != dataset_path.read_bytes():
+        errors.append("dataset CSV download differs from the canonical CSV")
+
+    parsed = {}
+    for label in ("GeoJSON", "schema"):
+        try:
+            parsed[label] = json.loads(paths[label].read_text())
+        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            errors.append(f"dataset {label} download is not valid JSON: {error}")
+    if "GeoJSON" in parsed:
+        errors.extend(
+            geojson_structure_errors(parsed["GeoJSON"], metadata.record_count)
+        )
+        if parsed["GeoJSON"] != build_geojson(rows, metadata):
+            errors.append("dataset GeoJSON download is stale")
+    if "schema" in parsed and parsed["schema"] != build_schema(metadata):
+        errors.append("dataset schema download is stale")
+    return errors
+
+
+def audit_dataset_downloads():
+    rows = load_rows()
+    metadata = build_dataset_metadata(rows, GitBuildMetadata(ROOT_DIR))
+    return dataset_download_errors(rows, metadata)
 
 
 def audit_privacy_page():
@@ -232,6 +340,7 @@ def main():
     failures.extend(audit_data_json())
     failures.extend(audit_sitemap())
     failures.extend(audit_public_metadata())
+    failures.extend(audit_dataset_downloads())
     failures.extend(audit_privacy_page())
 
     if failures:

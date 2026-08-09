@@ -15,6 +15,7 @@ Thumbs.db
 # Generated build artefacts
 map/data.json
 site/data.json
+site/downloads/
 site/clubs/
 site/counties/
 site/blog/2020update/

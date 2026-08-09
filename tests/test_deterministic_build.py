@@ -16,10 +16,13 @@ BUILD_SOURCES = (
     "README.md",
     "gaapitchfinder_data.csv",
     "scripts/build_metadata.py",
+    "scripts/dataset_contract.py",
     "scripts/generate_club_pages.py",
+    "scripts/generate_dataset_downloads.py",
     "scripts/generate_map_data.py",
     "scripts/generate_public_metadata.py",
     "scripts/site_build_utils.py",
+    "scripts/validate_dataset.py",
 )
 COMMIT_IDENTITY = {
     "GIT_AUTHOR_NAME": "Build Test",
@@ -112,6 +115,7 @@ class DeterministicBuildTests(unittest.TestCase):
 
             build_commands = (
                 [sys.executable, "scripts/generate_map_data.py"],
+                [sys.executable, "scripts/generate_dataset_downloads.py"],
                 [sys.executable, "scripts/generate_public_metadata.py"],
                 [sys.executable, "scripts/generate_club_pages.py"],
             )

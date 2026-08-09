@@ -14,6 +14,8 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 from generate_public_metadata import (  # noqa: E402
     DATASET_HEAD_END,
     DATASET_HEAD_START,
+    DATASET_CONTRACT_END,
+    DATASET_CONTRACT_START,
     DATASET_SUMMARY_END,
     DATASET_SUMMARY_START,
     README_END,
@@ -30,13 +32,15 @@ class PublicMetadataTests(unittest.TestCase):
         self.metadata = DatasetMetadata(
             record_count=1989,
             last_modified="2026-08-06",
+            revision="96262e1e48ed26a7b8286a9bfaabed006548a74d",
         )
 
     def test_generated_metadata_updates_readme_and_dataset_page(self):
         readme = f"Before\n{README_START}\nstale\n{README_END}\nAfter\n"
         dataset_page = (
             f"<head>{DATASET_HEAD_START}\nstale\n{DATASET_HEAD_END}</head>"
-            f"<body>{DATASET_SUMMARY_START}\nstale\n{DATASET_SUMMARY_END}</body>"
+            f"<body>{DATASET_SUMMARY_START}\nstale\n{DATASET_SUMMARY_END}"
+            f"{DATASET_CONTRACT_START}\nstale\n{DATASET_CONTRACT_END}</body>"
         )
 
         updated_readme = update_readme(readme, self.metadata)
@@ -46,6 +50,9 @@ class PublicMetadataTests(unittest.TestCase):
         self.assertIn("As of 6 August 2026", updated_readme)
         self.assertIn('content="1989"', updated_dataset)
         self.assertIn('datetime="2026-08-06"', updated_dataset)
+        self.assertIn('/downloads/gaapitchfinder.csv', updated_dataset)
+        self.assertIn('/downloads/gaapitchfinder.geojson', updated_dataset)
+        self.assertIn('96262e1e48ed26a7b8286a9bfaabed006548a74d', updated_dataset)
 
         schema_match = re.search(
             r'<script type="application/ld\+json">(.*?)</script>', updated_dataset
@@ -54,7 +61,12 @@ class PublicMetadataTests(unittest.TestCase):
         schema = json.loads(schema_match.group(1))
         dataset = schema["@graph"][1]
         self.assertEqual(dataset["dateModified"], "2026-08-06")
-        self.assertEqual(dataset["additionalProperty"]["value"], 1989)
+        self.assertEqual(dataset["version"], "2026.08.06")
+        self.assertEqual(dataset["additionalProperty"][0]["value"], 1989)
+        self.assertEqual(
+            [distribution["encodingFormat"] for distribution in dataset["distribution"]],
+            ["text/csv", "application/geo+json", "application/json"],
+        )
 
     def test_generated_block_requires_exactly_one_marker_pair(self):
         with self.assertRaisesRegex(ValueError, "found 0"):
