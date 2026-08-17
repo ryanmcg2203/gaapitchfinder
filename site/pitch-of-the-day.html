@@ -13,8 +13,7 @@
 <link rel="canonical" href="https://gaapitchfinder.com/pitch-of-the-day.html">
 <meta name="description" content="Discover a different GAA pitch every day from the GAA Pitch Finder map.">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Pitch of the Day – GAA Pitch Finder","description":"Discover a different GAA pitch every day from the GAA Pitch Finder map.","url":"https://gaapitchfinder.com/pitch-of-the-day.html","isPartOf":{"@type":"WebSite","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/"}}</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
-<script src="/js/ga.js"></script>
+<script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -132,7 +131,11 @@
     dateLabel.textContent = `Pitch of the Day · ${displayDate}`;
     card.innerHTML = `
       <div class="potd-map">
-        <iframe src="${mapEmbed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map showing ${club}"></iframe>
+        <div class="potd-map-placeholder">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg>
+          <p>Interactive map provided by Google</p>
+          <button type="button" data-google-map-src="${esc(mapEmbed)}" data-map-title="Map showing ${club}">Load Google map</button>
+        </div>
       </div>
       <div class="potd-body">
         <h2>${club}</h2>
@@ -150,6 +153,17 @@
       </div>
     `;
   }
+
+  card.addEventListener('click', event => {
+    const button = event.target.closest('[data-google-map-src]');
+    if (!button) return;
+    const map = button.closest('.potd-map');
+    const iframe = document.createElement('iframe');
+    iframe.src = button.dataset.googleMapSrc;
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.title = button.dataset.mapTitle;
+    map.replaceChildren(iframe);
+  });
 
   fetch('data.json')
     .then(response => response.json())

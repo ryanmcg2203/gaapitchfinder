@@ -75,8 +75,7 @@ def esc_attr(value):
 
 
 def ga_snippet():
-    return """<script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
-<script src="/js/ga.js"></script>"""
+    return '<script src="/js/ga.js" defer></script>'
 
 
 def absolute_url(path):

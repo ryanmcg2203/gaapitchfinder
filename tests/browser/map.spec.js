@@ -47,7 +47,7 @@ test('loads the generated map with Ireland selected by default', async ({
   await expect(page.locator('#results-range')).toHaveText(`61–120 of ${irelandPitches.length.toLocaleString('en-US')}`);
   await page.getByRole('button', { name: 'Previous results' }).click();
   await expect(page.locator('#results-range')).toHaveText(`1–60 of ${irelandPitches.length.toLocaleString('en-US')}`);
-  expect(blockedThirdPartyRequests.some(url => url.includes('googletagmanager.com'))).toBe(true);
+  expect(blockedThirdPartyRequests.some(url => url.includes('googletagmanager.com'))).toBe(false);
   expect(blockedThirdPartyRequests.some(url => url.includes('basemaps.cartocdn.com'))).toBe(true);
 });
 
@@ -249,7 +249,7 @@ test('an overseas daily pitch opens its intended map marker', async ({
   await page.goto('/pitch-of-the-day.html');
   await expect(page.locator('#potd-card h2')).toHaveText(dailyCase.target.c);
   await expect(page.locator('.potd-meta')).toContainText(dailyCase.target.r);
-  expect(blockedThirdPartyRequests.some(url => url.includes('maps.google.com/maps'))).toBe(true);
+  expect(blockedThirdPartyRequests.some(url => url.includes('maps.google.com/maps'))).toBe(false);
 
   await page.getByRole('link', { name: 'Find on the map' }).click();
   await expect(page.locator('#loading')).toHaveCount(0);
