@@ -110,6 +110,14 @@ def audit_html_file(path, site_dir=SITE_DIR):
         errors.append("declares URL-based SearchAction without a search results page")
     if re.search(r"\bGAA\s+GAA\b", page_html, re.IGNORECASE):
         errors.append('contains duplicate "GAA GAA" wording')
+    if "googletagmanager.com/gtag" in page_html:
+        errors.append("loads Google Analytics before consent")
+    if re.search(
+        r'<link[^>]+rel=["\']preconnect["\'][^>]+googletagmanager\.com',
+        page_html,
+        re.IGNORECASE,
+    ):
+        errors.append("connects to Google Analytics before consent")
 
     for attrs in parser.links:
         href = attrs.get("href", "")
@@ -316,10 +324,7 @@ def audit_privacy_page():
     )
     if expected_date not in privacy_html:
         errors.append("privacy page last-updated date does not match Git history")
-    if (
-        "does not currently provide its own analytics consent control"
-        not in privacy_html
-    ):
+    if "Google Analytics is optional and does not load unless you accept it" not in privacy_html:
         errors.append("privacy page does not state the current analytics consent behavior")
     return errors
 

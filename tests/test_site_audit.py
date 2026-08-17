@@ -25,6 +25,21 @@ class SiteAuditTests(unittest.TestCase):
 
         self.assertIn('contains duplicate "GAA GAA" wording', errors)
 
+    def test_html_audit_rejects_eager_google_analytics_connections(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            site_dir = Path(temporary_directory)
+            page_path = site_dir / "club.html"
+            page_path.write_text(
+                '<link rel="preconnect" href="https://www.googletagmanager.com">'
+                '<script src="https://www.googletagmanager.com/gtag/js?id=G-123">'
+                "</script>"
+            )
+
+            errors = audit_html_file(page_path, site_dir)
+
+        self.assertIn("loads Google Analytics before consent", errors)
+        self.assertIn("connects to Google Analytics before consent", errors)
+
     def test_public_metadata_audit_rejects_stale_outputs(self):
         metadata = DatasetMetadata(1989, "2026-08-06", "a" * 40)
 

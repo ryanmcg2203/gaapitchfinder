@@ -112,6 +112,131 @@ html {
 }
 .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: #fff; }
 
+.analytics-preferences-trigger {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  margin-left: 8px;
+  border: 0;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-preferences-trigger:hover,
+.analytics-preferences-trigger[aria-expanded="true"] {
+  color: #fff;
+}
+
+.analytics-preferences-trigger svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+/* ── Optional analytics consent ───────────────────────────────────── */
+.analytics-consent[hidden] { display: none; }
+
+.analytics-consent {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 1200;
+  width: min(720px, calc(100% - 32px));
+  padding: 20px;
+  padding-right: 54px;
+  transform: translateX(-50%);
+  border: 1px solid #c9c9c9;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2);
+  color: #222;
+}
+
+.analytics-consent h2 {
+  margin: 0 0 7px;
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.analytics-consent p {
+  margin: 0;
+  color: #444;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.analytics-consent a { color: #111; }
+
+.analytics-consent-status {
+  margin-top: 6px !important;
+  color: #666 !important;
+  font-size: 13px !important;
+}
+
+.analytics-consent-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.analytics-consent-actions button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.analytics-consent-actions button:hover,
+.analytics-consent-actions button[aria-pressed="true"] {
+  background: #ededed;
+  border-color: #111;
+}
+
+.analytics-consent-close {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-consent-close[hidden] { display: none; }
+.analytics-consent-close:hover { color: #111; }
+
+.analytics-consent-close svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
 /* ── Info panel (map page) ──────────────────────────────────────────── */
 #info-btn {
   position: absolute;
@@ -227,6 +352,8 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
   .nav-donate { display: none; }
+  .analytics-preferences-trigger { margin-left: auto; }
+  .nav-hamburger { margin-left: 2px; }
 }
 
 /* ── Page layout ───────────────────────────────────────────────────── */
@@ -528,6 +655,50 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   border: 0;
   height: 100%;
   width: 100%;
+}
+
+.potd-map-placeholder {
+  height: 100%;
+  padding: 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.potd-map-placeholder svg {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
+  fill: currentColor;
+}
+
+.page-content .potd-map-placeholder p {
+  margin: 0 0 14px;
+  color: #d0d0d0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.potd-map-placeholder button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.potd-map-placeholder button:hover {
+  border-color: #fff;
+  background: #242424;
 }
 
 .potd-body {
@@ -1099,6 +1270,15 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
   .page-content { padding: 36px 18px 72px; }
   .nav-drawer a,
   .drawer-close { padding-left: 18px; padding-right: 18px; }
+  .analytics-consent {
+    bottom: 8px;
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: 18px;
+    padding-right: 48px;
+  }
+  .analytics-consent-actions { grid-template-columns: 1fr; }
 }
 
 /* Keyboard focus is deliberately distinct from pointer interaction. */

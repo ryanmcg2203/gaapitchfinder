@@ -13,8 +13,7 @@
 <link rel="canonical" href="https://gaapitchfinder.com/privacy.html">
 <meta name="description" content="Privacy policy for GAA Pitch Finder, including analytics, location features, map services, donations, and email contact.">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Privacy Policy - GAA Pitch Finder","description":"Privacy policy for GAA Pitch Finder.","url":"https://gaapitchfinder.com/privacy.html","isPartOf":{"@type":"WebSite","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/"}}</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8R6YMPVNWH"></script>
-<script src="/js/ga.js"></script>
+<script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -57,13 +56,14 @@
 
 <main class="page-content">
   <h1>Privacy Policy</h1>
-  <p>Last updated: <time datetime="2026-08-09">9 August 2026</time></p>
+  <p>Last updated: <time datetime="2026-08-17">17 August 2026</time></p>
 
   <p>GAA Pitch Finder is a free map and open dataset for GAA pitches. This page explains which site features use information from your browser and when your browser connects to other services.</p>
 
-  <h2>Analytics</h2>
-  <p>On pages that include it, the Google Analytics tag loads automatically when the page opens. It is used to understand broad usage patterns such as page views, referral sources, device types, and popular pages. Google may receive technical and usage information such as your IP address, browser and device details, page URL, and referrer, and may use cookies or similar identifiers under its own policies.</p>
-  <p>GAA Pitch Finder does not currently provide its own analytics consent control. You can restrict analytics requests with browser privacy settings or content-blocking tools. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a> for details about Google's processing and controls.</p>
+  <h2 id="analytics">Analytics</h2>
+  <p>Google Analytics is optional and does not load unless you accept it. Ignoring or rejecting the analytics choice keeps it off. If you accept, Google Analytics is used to understand broad usage patterns such as page views, referral sources, device types, and popular pages. Google may then receive technical and usage information such as your IP address, browser and device details, page URL, and referrer, and may use cookies or similar identifiers under its own policies.</p>
+  <p>Your choice and the date it was made are stored only in your browser's local storage for up to six months. This preference is used to remember whether the optional analytics tag may load and is not sent to GAA Pitch Finder. When the preference expires, the site asks again.</p>
+  <p>You can change or withdraw your choice at any time using the sliders button labelled "Analytics preferences" in the site navigation. Withdrawing disables further analytics activity on the page and removes Google Analytics cookies accessible to this site. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a> for details about Google's processing.</p>
 
   <h2>Location Features</h2>
   <p>The "Near me" feature asks your browser for permission to access your location. The returned coordinates are used in the open page to find nearby pitches and are not written to site storage or added to the GAA Pitch Finder dataset. Recentring the map also causes map tiles for the area being viewed to be requested from the map provider described below.</p>
@@ -73,9 +73,9 @@
   <ul>
     <li>The main pitch map loads raster map tiles from <a href="https://carto.com/privacy/" target="_blank" rel="noopener noreferrer">CARTO</a>. Those tiles use map data from OpenStreetMap.</li>
     <li>Generated club pages load Standard map tiles directly from the <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">OpenStreetMap Foundation</a>.</li>
-    <li>The Daily Pitch page inserts a Google Maps iframe when the selected pitch is displayed. The iframe is marked for lazy loading, so the browser may connect to Google when it approaches the visible part of the page.</li>
+    <li>The Daily Pitch page offers an optional Google Maps iframe. It does not connect to Google until you select "Load Google map".</li>
   </ul>
-  <p>Loading map tiles or an embedded map sends a request from your browser to the relevant provider. The request can include your IP address, browser details, referring site, and the map area or coordinates needed to return the map. Embedded Google Maps is covered by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</p>
+  <p>Loading map tiles or choosing to load an embedded map sends a request from your browser to the relevant provider. The request can include your IP address, browser details, referring site, and the map area or coordinates needed to return the map. Your analytics preference does not control these map requests. Embedded Google Maps is covered by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</p>
   <p>Directions links open Google Maps only when you select them. The destination coordinates are included in the link and Google then handles your visit.</p>
 
   <h2>Contact</h2>
