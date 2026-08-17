@@ -35,15 +35,12 @@ class SiteTemplateTests(unittest.TestCase):
         metadata = build_dataset_metadata(load_rows(), GitBuildMetadata(ROOT_DIR))
         self.assertEqual(static_page_output_errors(metadata), [])
 
-    def test_representative_pages_use_shared_chrome(self):
+    def test_tracked_pages_use_shared_chrome_before_generated_pages_exist(self):
         page_paths = (
             SITE_DIR / "index.html",
             SITE_DIR / "about.html",
             SITE_DIR / "data-quality.html",
             SITE_DIR / "blog" / "index.html",
-            SITE_DIR / "clubs" / "index.html",
-            SITE_DIR / "counties" / "index.html",
-            next(path for path in sorted((SITE_DIR / "clubs").glob("*.html")) if path.name != "index.html"),
         )
         for page_path in page_paths:
             with self.subTest(page=page_path.relative_to(SITE_DIR)):
