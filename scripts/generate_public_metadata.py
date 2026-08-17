@@ -207,7 +207,8 @@ def render_dataset_head(metadata: DatasetMetadata) -> str:
 
 def render_dataset_summary(metadata: DatasetMetadata) -> str:
     return f"""  <p>GAA Pitch Finder publishes an open GAA club and pitch locations dataset maintained by Ryan McGuinness. It contains <strong>{metadata.record_count:,} GAA pitch records</strong> worldwide, including club names, pitch names, coordinates, directions, elevation, rainfall data, and regional groupings.</p>
-  <p>Dataset generated from the canonical data revision dated <time datetime="{metadata.last_modified}">{format_iso_date(metadata.last_modified)}</time>.</p>"""
+  <p>Dataset generated from the canonical data revision dated <time datetime="{metadata.last_modified}">{format_iso_date(metadata.last_modified)}</time>.</p>
+  <p><a href="/data-quality.html">View current dataset health, provenance, and known limitations</a>.</p>"""
 
 
 def _field_details(field) -> str:

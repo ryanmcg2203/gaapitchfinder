@@ -39,6 +39,7 @@ STATIC_URLS = [
     ("/pitch-of-the-day.html", 0.8),
     ("/directions.html", 0.9),
     ("/dataset.html", 0.8),
+    ("/data-quality.html", 0.7),
     ("/about.html", 0.7),
     ("/privacy.html", 0.5),
     ("/donate.html", 0.6),
@@ -991,6 +992,11 @@ def lastmod_for_path(path, build_metadata):
         return build_metadata.last_modified_date(*GENERATED_PAGE_SOURCES)
     if path == "/counties/" or path.startswith("/counties/"):
         return build_metadata.last_modified_date(*GENERATED_PAGE_SOURCES)
+    if path == "/data-quality.html":
+        return build_metadata.last_modified_date(
+            "gaapitchfinder_data.csv",
+            "data/derived/osm_coverage_report.csv",
+        )
 
     if path == "/":
         source_path = "site/index.html"

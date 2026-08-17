@@ -18,6 +18,12 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from build_metadata import GitBuildMetadata
+from generate_data_quality import (
+    REPORT_HTML_PATH,
+    REPORT_JSON_PATH,
+    build_current_report,
+    render_data_quality_page,
+)
 from generate_public_metadata import (
     build_dataset_metadata,
     format_iso_date,
@@ -36,6 +42,7 @@ REQUIRED_META_PAGES = {
     "index.html",
     "about.html",
     "dataset.html",
+    "data-quality.html",
     "donate.html",
     "directions.html",
     "pitch-of-the-day.html",
@@ -205,6 +212,40 @@ def audit_public_metadata():
     return public_metadata_errors(metadata, dataset_html, readme)
 
 
+def data_quality_output_errors(expected_report, report_json, page_html):
+    errors = []
+    try:
+        parsed_report = json.loads(report_json)
+    except json.JSONDecodeError as error:
+        errors.append(f"data quality JSON is invalid: {error}")
+    else:
+        if parsed_report != expected_report:
+            errors.append(
+                "data quality JSON is stale; run scripts/generate_data_quality.py"
+            )
+
+    if page_html != render_data_quality_page(expected_report):
+        errors.append(
+            "data quality page is stale; run scripts/generate_data_quality.py"
+        )
+    return errors
+
+
+def audit_data_quality():
+    missing = [
+        f"{path.relative_to(ROOT_DIR)} does not exist; run scripts/generate_data_quality.py"
+        for path in (REPORT_JSON_PATH, REPORT_HTML_PATH)
+        if not path.exists()
+    ]
+    if missing:
+        return missing
+    return data_quality_output_errors(
+        build_current_report(),
+        REPORT_JSON_PATH.read_text(encoding="utf-8"),
+        REPORT_HTML_PATH.read_text(encoding="utf-8"),
+    )
+
+
 def geojson_structure_errors(geojson, expected_feature_count):
     errors = []
     if not isinstance(geojson, dict) or geojson.get("type") != "FeatureCollection":
@@ -345,6 +386,7 @@ def main():
     failures.extend(audit_data_json())
     failures.extend(audit_sitemap())
     failures.extend(audit_public_metadata())
+    failures.extend(audit_data_quality())
     failures.extend(audit_dataset_downloads())
     failures.extend(audit_privacy_page())
 

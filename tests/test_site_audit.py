@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -10,11 +11,19 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = ROOT_DIR / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-from audit_site import audit_html_file, public_metadata_errors  # noqa: E402
+from audit_site import (  # noqa: E402
+    audit_html_file,
+    data_quality_output_errors,
+    public_metadata_errors,
+)
+from generate_data_quality import render_data_quality_page  # noqa: E402
 from generate_public_metadata import DatasetMetadata  # noqa: E402
 
 
 class SiteAuditTests(unittest.TestCase):
+    def data_quality_report(self):
+        return json.loads((ROOT_DIR / "site" / "data-quality.json").read_text())
+
     def test_html_audit_rejects_duplicate_gaa_wording(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             site_dir = Path(temporary_directory)
@@ -51,6 +60,27 @@ class SiteAuditTests(unittest.TestCase):
 
         self.assertEqual(len(errors), 4)
         self.assertTrue(all("stale" in error for error in errors))
+
+    def test_data_quality_audit_rejects_stale_json_and_html(self):
+        report = self.data_quality_report()
+
+        errors = data_quality_output_errors(report, "{}", "<html>stale</html>")
+
+        self.assertEqual(
+            errors,
+            [
+                "data quality JSON is stale; run scripts/generate_data_quality.py",
+                "data quality page is stale; run scripts/generate_data_quality.py",
+            ],
+        )
+
+    def test_data_quality_audit_accepts_current_outputs(self):
+        report = self.data_quality_report()
+        page = render_data_quality_page(report)
+
+        errors = data_quality_output_errors(report, json.dumps(report), page)
+
+        self.assertEqual(errors, [])
 
 
 if __name__ == "__main__":

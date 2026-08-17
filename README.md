@@ -19,6 +19,8 @@ gaapitchfinder/
 │   ├── clubs/                    # Generated club pages
 │   ├── counties/                 # Generated county pages
 │   ├── downloads/                # Generated CSV, GeoJSON, and schema downloads
+│   ├── data-quality.html          # Generated data health and provenance dashboard
+│   ├── data-quality.json          # Machine-readable quality metric contract
 │   ├── blog/                     # Static blog posts
 │   ├── css/                      # Shared site styles
 │   ├── img/                      # Logo and image assets
@@ -33,6 +35,7 @@ gaapitchfinder/
 │   ├── generate_dataset_downloads.py # Builds stable public data downloads
 │   ├── dataset_contract.py       # Shared fields, schema, and GeoJSON contract
 │   ├── generate_public_metadata.py # Syncs public dataset counts and dates
+│   ├── generate_data_quality.py  # Builds the public health report and JSON contract
 │   └── generate_club_pages.py    # Builds club/county pages and sitemap
 ├── tests/                        # Unit tests for site build helpers
 ├── .github/workflows/deploy.yml  # PR validation and GitHub Pages deployment
@@ -66,6 +69,7 @@ The Leaflet pages and Pitch of the Day load a generated `site/data.json` file. S
 python3 scripts/generate_map_data.py
 python3 scripts/generate_dataset_downloads.py
 python3 scripts/generate_public_metadata.py
+python3 scripts/generate_data_quality.py
 python3 scripts/generate_club_pages.py
 ```
 
@@ -77,6 +81,7 @@ For local static testing over plain HTTP, generate the data file and serve the s
 python3 scripts/generate_map_data.py
 python3 scripts/generate_dataset_downloads.py
 python3 scripts/generate_public_metadata.py
+python3 scripts/generate_data_quality.py
 python3 scripts/generate_club_pages.py
 python3 scripts/audit_site.py
 python3 -m http.server 8000 --directory site
@@ -128,6 +133,14 @@ python3 scripts/generate_public_metadata.py
 ```
 
 Synchronizes the exact CSV record count and Git-derived dataset date in this README and the public dataset page. Run it after committing dataset changes so the published date reflects the source commit.
+
+### Generate Dataset Health Report
+
+```bash
+python3 scripts/generate_data_quality.py
+```
+
+Builds the deterministic `site/data-quality.json` metric contract and the public `site/data-quality.html` dashboard from the canonical CSV, Git history, and the optional checked-in OSM coverage snapshot. Missing optional sources are published as unavailable rather than zero.
 
 ### Audit Generated Site
 
@@ -208,6 +221,7 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 - `generate_dataset_downloads.py`: publishes the stable CSV, GeoJSON, and schema downloads
 - `dataset_contract.py`: defines field metadata, release versioning, and GeoJSON conversion
 - `generate_public_metadata.py`: synchronizes public dataset counts and last-updated dates
+- `generate_data_quality.py`: publishes deterministic quality metrics, source lineage, freshness, and known limitations
 - `generate_club_pages.py`: builds static club pages, county pages, directories, and sitemap entries
 - `audit_site.py`: checks generated site output for link safety and SEO regressions
 - `site_build_utils.py`: shared parsing, URL-safety, slug, and grouping helpers used by site generators

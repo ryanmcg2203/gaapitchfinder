@@ -52,6 +52,7 @@ class PublicMetadataTests(unittest.TestCase):
         self.assertIn('datetime="2026-08-06"', updated_dataset)
         self.assertIn('/downloads/gaapitchfinder.csv', updated_dataset)
         self.assertIn('/downloads/gaapitchfinder.geojson', updated_dataset)
+        self.assertIn('/data-quality.html', updated_dataset)
         self.assertIn('96262e1e48ed26a7b8286a9bfaabed006548a74d', updated_dataset)
 
         schema_match = re.search(

@@ -31,6 +31,7 @@ for (const [name, url] of [
   ['generated club', () => firstGeneratedPath('clubs')],
   ['directions', '/directions.html'],
   ['dataset', '/dataset.html'],
+  ['data health', '/data-quality.html'],
   ['privacy', '/privacy.html']
 ]) {
   test(`${name} has no serious or critical axe violations`, async ({ page }) => {
@@ -89,6 +90,7 @@ test('dataset page exposes stable direct downloads and schema metadata', async (
   await expect(geojson).toHaveAttribute('href', '/downloads/gaapitchfinder.geojson');
   await expect(geojson).toHaveAttribute('download', '');
   await expect(schema).toHaveAttribute('href', '/downloads/schema.json');
+  await expect(page.getByRole('link', { name: /View current dataset health/ })).toHaveAttribute('href', '/data-quality.html');
   await expect(page.locator('.dataset-facts dt', { hasText: 'Records' })).toBeVisible();
   await expect(page.getByRole('table', { name: 'Dataset field reference table' })).toBeVisible();
 
@@ -103,6 +105,26 @@ test('dataset page exposes stable direct downloads and schema metadata', async (
   await expect(csv).toBeVisible();
   await expect(geojson).toBeVisible();
   await expect(schema).toBeVisible();
+});
+
+test('data health page exposes provenance and remains usable at narrow widths', async ({ page }) => {
+  await page.goto('/data-quality.html');
+
+  await expect(page.getByRole('heading', { name: 'Dataset health and provenance' })).toBeVisible();
+  await expect(page.locator('[data-metric-id="valid_coordinates"]')).toContainText('100.0%');
+  await expect(page.getByRole('table', { name: 'OSM coverage by county' })).toBeVisible();
+  await expect(page.getByRole('table', { name: 'Data quality source lineage' })).toBeVisible();
+
+  const response = await page.request.get('/data-quality.json');
+  expect(response.ok()).toBe(true);
+  const report = await response.json();
+  expect(report.contract_version).toBe('1.0.0');
+  expect(report.metrics).toHaveLength(11);
+  expect(report.sources.canonical_dataset.path).toBe('gaapitchfinder_data.csv');
+
+  await page.setViewportSize({ width: 320, height: 800 });
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  await expect(page.locator('[data-metric-id="osm_geometry_match_coverage"]')).toBeVisible();
 });
 
 test('zoom-equivalent and narrow layouts do not overflow or clip controls', async ({ page }) => {

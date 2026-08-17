@@ -19,10 +19,12 @@ BUILD_SOURCES = (
     "scripts/dataset_contract.py",
     "scripts/generate_club_pages.py",
     "scripts/generate_dataset_downloads.py",
+    "scripts/generate_data_quality.py",
     "scripts/generate_map_data.py",
     "scripts/generate_public_metadata.py",
     "scripts/site_build_utils.py",
     "scripts/validate_dataset.py",
+    "data/derived/osm_coverage_report.csv",
 )
 COMMIT_IDENTITY = {
     "GIT_AUTHOR_NAME": "Build Test",
@@ -117,6 +119,7 @@ class DeterministicBuildTests(unittest.TestCase):
                 [sys.executable, "scripts/generate_map_data.py"],
                 [sys.executable, "scripts/generate_dataset_downloads.py"],
                 [sys.executable, "scripts/generate_public_metadata.py"],
+                [sys.executable, "scripts/generate_data_quality.py"],
                 [sys.executable, "scripts/generate_club_pages.py"],
             )
             for command in build_commands:
