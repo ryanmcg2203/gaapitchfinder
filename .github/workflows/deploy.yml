@@ -52,8 +52,11 @@ jobs:
       - name: Generate public dataset metadata
         run: python3 scripts/generate_public_metadata.py
 
-      - name: Verify public metadata is committed
-        run: git diff --exit-code -- README.md site/dataset.html
+      - name: Generate data quality report
+        run: python3 scripts/generate_data_quality.py
+
+      - name: Verify public metadata and quality report are committed
+        run: git diff --exit-code -- README.md site/dataset.html site/data-quality.html site/data-quality.json
 
       - name: Generate club pages and sitemap
         run: python3 scripts/generate_club_pages.py

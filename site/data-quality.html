@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dataset Health and Provenance - GAA Pitch Finder</title>
+<link rel="icon" type="image/png" href="img/logo-icon.png">
+<meta property="og:title" content="Dataset Health and Provenance - GAA Pitch Finder">
+<meta property="og:description" content="Public quality metrics, provenance, freshness, and known limitations for the open GAA Pitch Finder dataset.">
+<meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<meta property="og:url" content="https://gaapitchfinder.com/data-quality.html">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://gaapitchfinder.com/data-quality.html">
+<meta name="description" content="Public quality metrics, provenance, freshness, and known limitations for the open GAA Pitch Finder dataset.">
+<meta name="gaa-data-quality-source-revision" content="96262e1e48ed26a7b8286a9bfaabed006548a74d">
+<script src="/js/ga.js" defer></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
+    GAA Pitch Finder
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Map</a></li>
+    <li><a href="clubs/">Clubs</a></li>
+    <li><a href="counties/">Counties</a></li>
+    <li><a href="directions.html">Directions</a></li>
+    <li><a href="pitch-of-the-day.html">Daily Pitch</a></li>
+    <li><a href="blog/">Blog</a></li>
+    <li><a href="dataset.html" class="active">Dataset</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <a href="/donate.html" class="nav-donate">Donate</a>
+  <button class="nav-hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer" aria-hidden="true" inert>
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="/">Map</a>
+  <a href="clubs/">Clubs</a>
+  <a href="counties/">Counties</a>
+  <a href="directions.html">Directions</a>
+  <a href="pitch-of-the-day.html">Daily Pitch</a>
+  <a href="blog/">Blog</a>
+  <a href="dataset.html">Dataset</a>
+  <a href="data-quality.html">Data health</a>
+  <a href="about.html">About</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="donate.html">Donate</a>
+</div>
+
+<main class="page-content data-quality-page">
+  <header class="data-quality-header">
+    <p class="data-quality-eyebrow">Open dataset monitoring</p>
+    <h1>Dataset health and provenance</h1>
+    <p>This report publishes the checks behind GAA Pitch Finder as individual metrics. It deliberately avoids a single quality score so gaps and limitations remain visible.</p>
+    <dl class="data-quality-snapshot">
+      <div><dt>Records</dt><dd>1,989</dd></div>
+      <div><dt>Data as of</dt><dd><time datetime="2026-08-06">2026-08-06</time></dd></div>
+      <div><dt>Dataset version</dt><dd>2026.08.06</dd></div>
+      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/96262e1e48ed26a7b8286a9bfaabed006548a74d"><code>96262e1e48</code></a></dd></div>
+    </dl>
+    <div class="data-quality-actions">
+      <a href="/dataset.html">Open dataset downloads</a>
+      <a href="/data-quality.json">View metric JSON</a>
+      <a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/main/scripts/generate_data_quality.py" target="_blank" rel="noopener noreferrer">Read methodology code</a>
+    </div>
+  </header>
+
+  <section class="data-quality-section" aria-labelledby="integrity-heading">
+    <div class="data-quality-section-heading">
+      <h2 id="integrity-heading">Core integrity</h2>
+      <p>Checks for coordinates, identity fields, duplicate candidates, and directions links in the canonical CSV.</p>
+    </div>
+    <div class="data-quality-grid">
+      <article class="data-quality-metric" data-metric-id="record_count">
+        <div class="data-quality-metric-heading">
+          <h3>Pitch records</h3>
+          <span class="data-quality-status data-quality-status-informational">Information</span>
+        </div>
+        <p class="data-quality-value">1,989</p>
+        <p class="data-quality-summary">1,989 pitch records are published in the current dataset.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Count data rows in the canonical CSV, excluding the header.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="valid_coordinates">
+        <div class="data-quality-metric-heading">
+          <h3>Valid coordinates</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">100.0%</p>
+        <p class="data-quality-summary">1,989 of 1,989 records have valid coordinate pairs.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Parse finite WGS 84 latitude and longitude values and enforce world bounds.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="missing_coordinates">
+        <div class="data-quality-metric-heading">
+          <h3>Missing coordinates</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">0</p>
+        <p class="data-quality-summary">0 records have a blank latitude or longitude.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Count rows where latitude or longitude is blank.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Malformed nonblank coordinates are reported under valid coordinates rather than this metric.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="missing_required_identity_location">
+        <div class="data-quality-metric-heading">
+          <h3>Missing required identity or location</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">0</p>
+        <p class="data-quality-summary">0 records are missing a required identity or location field.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Count rows missing any required identity or location field: File, Club, Province, Country, Division, or County.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Pitch name is intentionally optional and is not included in this metric.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="shared_coordinate_groups">
+        <div class="data-quality-metric-heading">
+          <h3>Shared coordinate groups</h3>
+          <span class="data-quality-status data-quality-status-review">Review</span>
+        </div>
+        <p class="data-quality-value">21</p>
+        <p class="data-quality-summary">21 coordinate groups are shared by more than one record.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Group records that have exactly equal numeric latitude and longitude values.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Shared coordinates are review prompts, not errors; multiple clubs can legitimately use one ground.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="likely_duplicate_groups">
+        <div class="data-quality-metric-heading">
+          <h3>Likely duplicate groups</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">0</p>
+        <p class="data-quality-summary">0 groups match the duplicate-candidate rule.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Group normalized club, pitch, county, and country names at coordinates rounded to five decimal places.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Candidates require human review because a club can have multiple records at one complex.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="valid_directions_links">
+        <div class="data-quality-metric-heading">
+          <h3>Valid directions links</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">100.0%</p>
+        <p class="data-quality-summary">1,989 of 1,989 directions links are valid and coordinate-aligned.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+        </details>
+      </article>
+    </div>
+  </section>
+
+  <section class="data-quality-section" aria-labelledby="enrichment-heading">
+    <div class="data-quality-section-heading">
+      <h2 id="enrichment-heading">Enrichment coverage</h2>
+      <p>Completeness of optional context fields and the separately dated OpenStreetMap geometry snapshot.</p>
+    </div>
+    <div class="data-quality-grid">
+      <article class="data-quality-metric" data-metric-id="elevation_coverage">
+        <div class="data-quality-metric-heading">
+          <h3>Elevation coverage</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">99.8%</p>
+        <p class="data-quality-summary">1,985 of 1,989 records include a valid elevation value.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Count nonblank finite elevation values between -500 and 9,000 metres.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Elevation values are enrichment estimates and are not surveyed ground heights.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="rainfall_coverage">
+        <div class="data-quality-metric-heading">
+          <h3>Rainfall coverage</h3>
+          <span class="data-quality-status data-quality-status-pass">Pass</span>
+        </div>
+        <p class="data-quality-value">99.8%</p>
+        <p class="data-quality-summary">1,985 of 1,989 records include both rainfall fields.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Count rows with valid annual rainfall and rain-days values within the published schema ranges.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Rainfall fields are modelled annual estimates rather than observations at each pitch.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="wikipedia_link_coverage">
+        <div class="data-quality-metric-heading">
+          <h3>Reviewed Wikipedia links</h3>
+          <span class="data-quality-status data-quality-status-informational">Information</span>
+        </div>
+        <p class="data-quality-value">56.6%</p>
+        <p class="data-quality-summary">1,126 of 1,989 records include a reviewed Wikipedia link.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.</p>
+          <p><strong>Source:</strong> <code>canonical_dataset</code></p>
+          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Known limitation:</strong> Not every club has a suitable Wikipedia article, so no completeness target is applied.</p>
+        </details>
+      </article>
+      <article class="data-quality-metric" data-metric-id="osm_geometry_match_coverage">
+        <div class="data-quality-metric-heading">
+          <h3>OSM geometry-match coverage</h3>
+          <span class="data-quality-status data-quality-status-informational">Information</span>
+        </div>
+        <p class="data-quality-value">96.3%</p>
+        <p class="data-quality-summary">1,621 of 1,683 evaluated snapshot rows have a nearby OSM pitch match.</p>
+        <details>
+          <summary>Method and provenance</summary>
+          <p><strong>Method:</strong> Treat matched_gaa and matched_generic as matches, no_match as evaluated nonmatches, and exclude unavailable statuses from the denominator.</p>
+          <p><strong>Source:</strong> <code>osm_coverage_snapshot</code></p>
+          <p><strong>Data as of:</strong> 2026-07-05</p>
+          <p><strong>Known limitation:</strong> This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,686 Ireland records.</p>
+        </details>
+      </article>
+    </div>
+  </section>
+
+  <section class="data-quality-section" aria-labelledby="osm-heading">
+    <div class="data-quality-section-heading">
+      <h2 id="osm-heading">OSM coverage by county</h2>
+      <p>The denominator contains only evaluated snapshot rows. API errors and unavailable checks are shown separately rather than counted as misses.</p>
+    </div>
+    <div class="dataset-table-wrap" tabindex="0" role="region" aria-label="OSM coverage by county">
+        <table class="dataset-table data-quality-table" aria-label="OSM coverage by county">
+          <thead><tr><th scope="col">County</th><th scope="col">Matched</th><th scope="col">Evaluated</th><th scope="col">Coverage</th><th scope="col">Unavailable</th></tr></thead>
+          <tbody>
+          <tr>
+            <th scope="row">Antrim</th>
+            <td data-label="Matched">45</td>
+            <td data-label="Evaluated">48</td>
+            <td data-label="Coverage">93.8%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Armagh</th>
+            <td data-label="Matched">44</td>
+            <td data-label="Evaluated">50</td>
+            <td data-label="Coverage">88.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Carlow</th>
+            <td data-label="Matched">28</td>
+            <td data-label="Evaluated">28</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Cavan</th>
+            <td data-label="Matched">43</td>
+            <td data-label="Evaluated">43</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Clare</th>
+            <td data-label="Matched">47</td>
+            <td data-label="Evaluated">53</td>
+            <td data-label="Coverage">88.7%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Cork</th>
+            <td data-label="Matched">157</td>
+            <td data-label="Evaluated">167</td>
+            <td data-label="Coverage">94.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Derry</th>
+            <td data-label="Matched">37</td>
+            <td data-label="Evaluated">40</td>
+            <td data-label="Coverage">92.5%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Donegal</th>
+            <td data-label="Matched">43</td>
+            <td data-label="Evaluated">44</td>
+            <td data-label="Coverage">97.7%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Down</th>
+            <td data-label="Matched">51</td>
+            <td data-label="Evaluated">51</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Dublin</th>
+            <td data-label="Matched">104</td>
+            <td data-label="Evaluated">106</td>
+            <td data-label="Coverage">98.1%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Fermanagh</th>
+            <td data-label="Matched">22</td>
+            <td data-label="Evaluated">23</td>
+            <td data-label="Coverage">95.7%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Galway</th>
+            <td data-label="Matched">83</td>
+            <td data-label="Evaluated">84</td>
+            <td data-label="Coverage">98.8%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Kerry</th>
+            <td data-label="Matched">68</td>
+            <td data-label="Evaluated">70</td>
+            <td data-label="Coverage">97.1%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Kildare</th>
+            <td data-label="Matched">49</td>
+            <td data-label="Evaluated">49</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Kilkenny</th>
+            <td data-label="Matched">42</td>
+            <td data-label="Evaluated">43</td>
+            <td data-label="Coverage">97.7%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Laois</th>
+            <td data-label="Matched">45</td>
+            <td data-label="Evaluated">45</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Leitrim</th>
+            <td data-label="Matched">23</td>
+            <td data-label="Evaluated">25</td>
+            <td data-label="Coverage">92.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Limerick</th>
+            <td data-label="Matched">59</td>
+            <td data-label="Evaluated">68</td>
+            <td data-label="Coverage">86.8%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Longford</th>
+            <td data-label="Matched">25</td>
+            <td data-label="Evaluated">25</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Louth</th>
+            <td data-label="Matched">40</td>
+            <td data-label="Evaluated">40</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Mayo</th>
+            <td data-label="Matched">58</td>
+            <td data-label="Evaluated">58</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Meath</th>
+            <td data-label="Matched">67</td>
+            <td data-label="Evaluated">68</td>
+            <td data-label="Coverage">98.5%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Monaghan</th>
+            <td data-label="Matched">30</td>
+            <td data-label="Evaluated">31</td>
+            <td data-label="Coverage">96.8%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Offaly</th>
+            <td data-label="Matched">45</td>
+            <td data-label="Evaluated">46</td>
+            <td data-label="Coverage">97.8%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Roscommon</th>
+            <td data-label="Matched">34</td>
+            <td data-label="Evaluated">34</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Sligo</th>
+            <td data-label="Matched">25</td>
+            <td data-label="Evaluated">26</td>
+            <td data-label="Coverage">96.2%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Tipperary</th>
+            <td data-label="Matched">76</td>
+            <td data-label="Evaluated">76</td>
+            <td data-label="Coverage">100.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Tyrone</th>
+            <td data-label="Matched">52</td>
+            <td data-label="Evaluated">55</td>
+            <td data-label="Coverage">94.5%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Waterford</th>
+            <td data-label="Matched">49</td>
+            <td data-label="Evaluated">50</td>
+            <td data-label="Coverage">98.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Westmeath</th>
+            <td data-label="Matched">41</td>
+            <td data-label="Evaluated">45</td>
+            <td data-label="Coverage">91.1%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Wexford</th>
+            <td data-label="Matched">50</td>
+            <td data-label="Evaluated">51</td>
+            <td data-label="Coverage">98.0%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Wicklow</th>
+            <td data-label="Matched">39</td>
+            <td data-label="Evaluated">41</td>
+            <td data-label="Coverage">95.1%</td>
+            <td data-label="Unavailable">0</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+  </section>
+
+  <section class="data-quality-section" aria-labelledby="sources-heading">
+    <div class="data-quality-section-heading">
+      <h2 id="sources-heading">Source lineage</h2>
+      <p>Each metric references one of these versioned repository sources.</p>
+    </div>
+    <div class="dataset-table-wrap" tabindex="0" role="region" aria-label="Data quality source lineage">
+      <table class="dataset-table data-quality-table" aria-label="Data quality source lineage">
+        <thead><tr><th scope="col">Source ID</th><th scope="col">Type</th><th scope="col">Source</th><th scope="col">Data as of</th><th scope="col">Available</th></tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row">canonical_dataset</th>
+            <td data-label="Type">canonical_csv</td>
+            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/96262e1e48ed26a7b8286a9bfaabed006548a74d/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
+            <td data-label="Data as of">2026-08-06</td>
+            <td data-label="Available">Yes</td>
+          </tr>
+          <tr>
+            <th scope="row">osm_coverage_snapshot</th>
+            <td data-label="Type">derived_csv</td>
+            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/26268d1155e795149a1b69ea9be432d69b087463/data/derived/osm_coverage_report.csv" target="_blank" rel="noopener noreferrer"><code>data/derived/osm_coverage_report.csv</code></a></td>
+            <td data-label="Data as of">2026-07-05</td>
+            <td data-label="Available">Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
+</footer>
+
+<script src="/js/navigation.js"></script>
+</body>
+</html>
