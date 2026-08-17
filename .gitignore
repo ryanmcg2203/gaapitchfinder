@@ -13,7 +13,6 @@ __pycache__/
 Thumbs.db
 
 # Generated build artefacts
-map/data.json
 site/data.json
 site/downloads/
 site/clubs/

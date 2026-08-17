@@ -37,6 +37,9 @@ jobs:
       - name: Validate canonical dataset
         run: python3 scripts/validate_dataset.py
 
+      - name: Generate static pages from templates
+        run: python3 scripts/generate_static_pages.py
+
       - name: Run unit tests
         run: python3 -m unittest discover -s tests
 
@@ -55,8 +58,8 @@ jobs:
       - name: Generate data quality report
         run: python3 scripts/generate_data_quality.py
 
-      - name: Verify public metadata and quality report are committed
-        run: git diff --exit-code -- README.md site/dataset.html site/data-quality.html site/data-quality.json
+      - name: Verify tracked site outputs are committed
+        run: git diff --exit-code -- README.md site/*.html site/blog/*.html site/data-quality.json
 
       - name: Generate club pages and sitemap
         run: python3 scripts/generate_club_pages.py

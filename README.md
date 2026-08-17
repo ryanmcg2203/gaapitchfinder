@@ -21,11 +21,12 @@ gaapitchfinder/
 │   ├── downloads/                # Generated CSV, GeoJSON, and schema downloads
 │   ├── data-quality.html          # Generated data health and provenance dashboard
 │   ├── data-quality.json          # Machine-readable quality metric contract
-│   ├── blog/                     # Static blog posts
+│   ├── blog/                     # Generated static blog posts
 │   ├── css/                      # Shared site styles
 │   ├── img/                      # Logo and image assets
 │   └── vendor/                   # Vendored Leaflet assets
-├── map/                          # Standalone/legacy Leaflet map
+├── templates/
+│   └── static/                   # Hand-authored page content and metadata
 ├── data/
 │   └── derived/                  # Durable generated datasets and coverage reports
 ├── scripts/                      # Data generation and analysis scripts
@@ -36,6 +37,8 @@ gaapitchfinder/
 │   ├── dataset_contract.py       # Shared fields, schema, and GeoJSON contract
 │   ├── generate_public_metadata.py # Syncs public dataset counts and dates
 │   ├── generate_data_quality.py  # Builds the public health report and JSON contract
+│   ├── generate_static_pages.py  # Renders shared chrome into hand-authored pages
+│   ├── site_builder/              # Shared templates and generated-page build modules
 │   └── generate_club_pages.py    # Builds club/county pages and sitemap
 ├── tests/                        # Unit tests for site build helpers
 ├── .github/workflows/deploy.yml  # PR validation and GitHub Pages deployment
@@ -63,11 +66,12 @@ gaapitchfinder_data.csv
 
 The public site lives in `site/` and is deployed to GitHub Pages.
 
-The Leaflet pages and Pitch of the Day load a generated `site/data.json` file. Static club and county pages are generated into `site/clubs/` and `site/counties/`. These generated outputs are intentionally ignored by git and are created from the main CSV:
+The Leaflet pages and Pitch of the Day load a generated `site/data.json` file. Hand-authored pages live in `templates/static/` and are rendered with the shared navigation, footer, analytics hook, and drawer behavior. Static club and county pages are generated into `site/clubs/` and `site/counties/`. The data-backed outputs are intentionally ignored by git and are created from the main CSV:
 
 ```bash
 python3 scripts/generate_map_data.py
 python3 scripts/generate_dataset_downloads.py
+python3 scripts/generate_static_pages.py
 python3 scripts/generate_public_metadata.py
 python3 scripts/generate_data_quality.py
 python3 scripts/generate_club_pages.py
@@ -80,6 +84,7 @@ For local static testing over plain HTTP, generate the data file and serve the s
 ```bash
 python3 scripts/generate_map_data.py
 python3 scripts/generate_dataset_downloads.py
+python3 scripts/generate_static_pages.py
 python3 scripts/generate_public_metadata.py
 python3 scripts/generate_data_quality.py
 python3 scripts/generate_club_pages.py
@@ -108,6 +113,14 @@ python3 scripts/generate_map_data.py
 ```
 
 Creates `site/data.json` from `gaapitchfinder_data.csv`.
+
+### Generate Static Pages
+
+```bash
+python3 scripts/generate_static_pages.py
+```
+
+Renders the templates in `templates/static/` into `site/`. Shared page chrome is owned by `scripts/site_builder/shared.py`; generated output should not be edited directly.
 
 ### Generate Club And County Pages
 
@@ -148,7 +161,7 @@ Builds the deterministic `site/data-quality.json` metric contract and the public
 python3 scripts/audit_site.py
 ```
 
-Checks generated HTML links, required SEO tags, sitemap freshness metadata, unsafe directions URLs in `site/data.json`, and the structure, feature count, and freshness of all dataset downloads.
+Checks generated HTML links, shared template consistency, required SEO tags, sitemap freshness metadata, unsafe directions URLs in `site/data.json`, and the structure, feature count, and freshness of all dataset downloads.
 
 ### Run Tests
 
@@ -222,7 +235,9 @@ This script uses the Overpass API, includes request delays, and supports checkpo
 - `dataset_contract.py`: defines field metadata, release versioning, and GeoJSON conversion
 - `generate_public_metadata.py`: synchronizes public dataset counts and last-updated dates
 - `generate_data_quality.py`: publishes deterministic quality metrics, source lineage, freshness, and known limitations
+- `generate_static_pages.py`: renders hand-authored templates with the shared site chrome
 - `generate_club_pages.py`: builds static club pages, county pages, directories, and sitemap entries
+- `site_builder/`: owns shared HTML, page templates, build orchestration, and sitemap behavior
 - `audit_site.py`: checks generated site output for link safety and SEO regressions
 - `site_build_utils.py`: shared parsing, URL-safety, slug, and grouping helpers used by site generators
 - `enrich_club_wikipedia.py`: creates review-first Wikipedia/Wikidata link suggestions in `data/derived/`

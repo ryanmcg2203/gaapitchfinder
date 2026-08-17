@@ -17,7 +17,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 
-from build_metadata import GitBuildMetadata
+from build_metadata import BuildMetadataError, GitBuildMetadata
 from generate_data_quality import (
     REPORT_HTML_PATH,
     REPORT_JSON_PATH,
@@ -31,9 +31,19 @@ from generate_public_metadata import (
     render_dataset_head,
     render_dataset_summary,
     render_readme_summary,
+    update_dataset_page,
 )
+from generate_static_pages import TEMPLATE_DIR
 from dataset_contract import FIELD_DEFINITIONS, build_geojson, build_schema
 from generate_dataset_downloads import DOWNLOADS_DIR
+from site_builder.shared import (
+    active_navigation_for_path,
+    analytics_html,
+    footer_html,
+    navigation_html,
+    navigation_script_html,
+    render_static_template,
+)
 from site_build_utils import DATASET_PATH, ROOT_DIR, SITE_DIR, load_rows
 
 
@@ -54,6 +64,13 @@ PRIVACY_SERVICES = (
     "Google Maps",
     "GitHub Pages",
     "PayPal",
+)
+SHARED_NAV_PATTERN = re.compile(
+    r'<nav class="site-nav">.*?</nav>\s*<div class="nav-drawer"[^>]*>.*?</div>',
+    re.DOTALL,
+)
+SHARED_FOOTER_PATTERN = re.compile(
+    r'<footer class="site-footer">.*?</footer>', re.DOTALL
 )
 
 
@@ -134,6 +151,56 @@ def audit_html_file(path, site_dir=SITE_DIR):
             rel = set((attrs.get("rel") or "").split())
             if not {"noopener", "noreferrer"}.issubset(rel):
                 errors.append(f'target="_blank" missing noopener noreferrer: {href}')
+    return errors
+
+
+def shared_chrome_errors(path, site_dir=SITE_DIR):
+    rel_path = path.relative_to(site_dir)
+    page_html = path.read_text(errors="replace")
+    parser = PageParser()
+    parser.feed(page_html)
+    if parser.noindex:
+        return []
+
+    errors = []
+    nav_matches = SHARED_NAV_PATTERN.findall(page_html)
+    expected_nav = navigation_html(active_navigation_for_path(rel_path))
+    if nav_matches != [expected_nav]:
+        errors.append("navigation differs from the shared template")
+
+    footer_matches = SHARED_FOOTER_PATTERN.findall(page_html)
+    expected_footers = [] if rel_path.as_posix() == "index.html" else [footer_html()]
+    if footer_matches != expected_footers:
+        errors.append("footer differs from the shared template")
+
+    expected_analytics_count = 0 if rel_path.as_posix() == "404.html" else 1
+    if page_html.count(analytics_html()) != expected_analytics_count:
+        errors.append("analytics hook differs from the shared template")
+    if page_html.count(navigation_script_html()) != 1:
+        errors.append("navigation behavior differs from the shared template")
+    return errors
+
+
+def static_page_output_errors(
+    metadata,
+    template_dir=TEMPLATE_DIR,
+    site_dir=SITE_DIR,
+):
+    errors = []
+    for template_path in sorted(template_dir.rglob("*.html")):
+        relative_path = template_path.relative_to(template_dir)
+        output_path = site_dir / relative_path
+        if not output_path.exists():
+            errors.append(f"missing generated static page: {relative_path}")
+            continue
+        expected = render_static_template(template_path.read_text(), relative_path)
+        if relative_path.as_posix() == "dataset.html":
+            expected = update_dataset_page(expected, metadata)
+        if output_path.read_text() != expected:
+            errors.append(
+                f"stale generated static page: {relative_path}; "
+                "run scripts/generate_static_pages.py"
+            )
     return errors
 
 
@@ -356,9 +423,14 @@ def audit_privacy_page():
         if service not in privacy_html:
             errors.append(f"privacy page is missing service inventory item: {service}")
 
-    privacy_last_modified = GitBuildMetadata(ROOT_DIR).last_modified_date(
-        "site/privacy.html"
-    )
+    build_metadata = GitBuildMetadata(ROOT_DIR)
+    try:
+        privacy_last_modified = build_metadata.last_modified_date(
+            "templates/static/privacy.html"
+        )
+    except BuildMetadataError:
+        # The template path has no Git history until the consolidation commit exists.
+        privacy_last_modified = build_metadata.last_modified_date("site/privacy.html")
     expected_date = (
         f'<time datetime="{privacy_last_modified}">'
         f"{format_iso_date(privacy_last_modified)}</time>"
@@ -383,6 +455,10 @@ def main():
     for html_path in sorted(SITE_DIR.rglob("*.html")):
         for error in audit_html_file(html_path):
             failures.append(f"{html_path.relative_to(SITE_DIR)}: {error}")
+        for error in shared_chrome_errors(html_path):
+            failures.append(f"{html_path.relative_to(SITE_DIR)}: {error}")
+    metadata = build_dataset_metadata(load_rows(), GitBuildMetadata(ROOT_DIR))
+    failures.extend(static_page_output_errors(metadata))
     failures.extend(audit_data_json())
     failures.extend(audit_sitemap())
     failures.extend(audit_public_metadata())

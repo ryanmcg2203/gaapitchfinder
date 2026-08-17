@@ -79,6 +79,19 @@ test('keyboard focus remains visible and the club list is reachable without the 
   await expect(page.locator('.leaflet-popup')).toBeVisible();
 });
 
+test('shared generated-page scripts initialize directory search and club maps', async ({ page }) => {
+  await page.goto('/counties/');
+  const countySearch = page.getByRole('searchbox', { name: 'Search' });
+  await countySearch.fill('Mayo');
+  await expect(page.locator('.county-province-group li:not([hidden])')).toHaveCount(1);
+  await expect(page.locator('.county-province-group li:not([hidden])')).toContainText('Mayo');
+  await countySearch.fill('No matching county');
+  await expect(page.locator('#county-index-empty')).toBeVisible();
+
+  await page.goto(firstGeneratedPath('clubs'));
+  await expect(page.locator('.club-map').first()).toHaveClass(/leaflet-container/);
+});
+
 test('dataset page exposes stable direct downloads and schema metadata', async ({ page }) => {
   await page.goto('/dataset.html');
 
