@@ -14,6 +14,13 @@ from typing import Iterable, Mapping
 
 from build_metadata import GitBuildMetadata
 from dataset_contract import DatasetMetadata, build_dataset_metadata
+from site_builder.shared import (
+    REPOSITORY_URL,
+    analytics_html,
+    footer_html,
+    navigation_html,
+    navigation_script_html,
+)
 from site_build_utils import DATASET_PATH, ROOT_DIR, SITE_DIR, load_rows
 from validate_dataset import (
     ALLOWED_DIRECTIONS_HOSTS,
@@ -31,7 +38,6 @@ METHOD_VERSION = "1.0.0"
 OSM_COVERAGE_PATH = ROOT_DIR / "data" / "derived" / "osm_coverage_report.csv"
 REPORT_JSON_PATH = SITE_DIR / "data-quality.json"
 REPORT_HTML_PATH = SITE_DIR / "data-quality.html"
-REPOSITORY_URL = "https://github.com/ryanmcg2203/gaapitchfinder"
 REQUIRED_IDENTITY_LOCATION_FIELDS = (
     "File",
     "Club",
@@ -674,47 +680,12 @@ def render_data_quality_page(report: dict) -> str:
 <link rel="canonical" href="https://gaapitchfinder.com/data-quality.html">
 <meta name="description" content="{description}">
 <meta name="gaa-data-quality-source-revision" content="{html.escape(report['build']['source_revision'])}">
-<script src="/js/ga.js" defer></script>
+{analytics_html()}
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="/" class="nav-logo">
-    <img src="img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
-    GAA Pitch Finder
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html">Map</a></li>
-    <li><a href="clubs/">Clubs</a></li>
-    <li><a href="counties/">Counties</a></li>
-    <li><a href="directions.html">Directions</a></li>
-    <li><a href="pitch-of-the-day.html">Daily Pitch</a></li>
-    <li><a href="blog/">Blog</a></li>
-    <li><a href="dataset.html" class="active">Dataset</a></li>
-    <li><a href="about.html">About</a></li>
-  </ul>
-  <a href="/donate.html" class="nav-donate">Donate</a>
-  <button class="nav-hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-<div class="nav-drawer" id="nav-drawer" aria-hidden="true" inert>
-  <button class="drawer-close" id="drawer-close" aria-label="Close menu">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <a href="/">Map</a>
-  <a href="clubs/">Clubs</a>
-  <a href="counties/">Counties</a>
-  <a href="directions.html">Directions</a>
-  <a href="pitch-of-the-day.html">Daily Pitch</a>
-  <a href="blog/">Blog</a>
-  <a href="dataset.html">Dataset</a>
-  <a href="data-quality.html">Data health</a>
-  <a href="about.html">About</a>
-  <a href="privacy.html">Privacy</a>
-  <a href="donate.html">Donate</a>
-</div>
+{navigation_html("dataset")}
 
 <main class="page-content data-quality-page">
   <header class="data-quality-header">
@@ -778,11 +749,9 @@ def render_data_quality_page(report: dict) -> str:
   </section>
 </main>
 
-<footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;·&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;·&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;·&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a>
-</footer>
+{footer_html()}
 
-<script src="/js/navigation.js"></script>
+{navigation_script_html()}
 </body>
 </html>
 """

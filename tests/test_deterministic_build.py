@@ -12,6 +12,10 @@ from pathlib import Path
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+STATIC_TEMPLATE_SOURCES = tuple(
+    path.relative_to(ROOT_DIR).as_posix()
+    for path in sorted((ROOT_DIR / "templates" / "static").rglob("*.html"))
+)
 BUILD_SOURCES = (
     "README.md",
     "gaapitchfinder_data.csv",
@@ -22,10 +26,17 @@ BUILD_SOURCES = (
     "scripts/generate_data_quality.py",
     "scripts/generate_map_data.py",
     "scripts/generate_public_metadata.py",
+    "scripts/generate_static_pages.py",
     "scripts/site_build_utils.py",
+    "scripts/site_builder/__init__.py",
+    "scripts/site_builder/build.py",
+    "scripts/site_builder/page_data.py",
+    "scripts/site_builder/pages.py",
+    "scripts/site_builder/shared.py",
+    "scripts/site_builder/sitemap.py",
     "scripts/validate_dataset.py",
     "data/derived/osm_coverage_report.csv",
-)
+) + STATIC_TEMPLATE_SOURCES
 COMMIT_IDENTITY = {
     "GIT_AUTHOR_NAME": "Build Test",
     "GIT_AUTHOR_EMAIL": "build-test@example.com",
@@ -104,11 +115,11 @@ class DeterministicBuildTests(unittest.TestCase):
             run(["git", "init", "-q"], repository)
             commit(repository, "Initial sources", "2024-01-02T12:00:00+0000")
 
-            with (repository / "site/about.html").open("a") as output:
+            with (repository / "templates/static/about.html").open("a") as output:
                 output.write("\n")
             commit(repository, "Update about page", "2024-02-03T12:00:00+0000")
 
-            with (repository / "scripts/generate_club_pages.py").open("a") as output:
+            with (repository / "scripts/site_builder/pages.py").open("a") as output:
                 output.write("\n")
             commit(repository, "Update page generator", "2024-03-04T12:00:00+0000")
 
@@ -116,6 +127,7 @@ class DeterministicBuildTests(unittest.TestCase):
             commit(repository, "Unrelated change", "2024-04-05T12:00:00+0000")
 
             build_commands = (
+                [sys.executable, "scripts/generate_static_pages.py"],
                 [sys.executable, "scripts/generate_map_data.py"],
                 [sys.executable, "scripts/generate_dataset_downloads.py"],
                 [sys.executable, "scripts/generate_public_metadata.py"],

@@ -19,46 +19,12 @@
 <meta name="gaa-dataset-revision" content="96262e1e48ed26a7b8286a9bfaabed006548a74d">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://gaapitchfinder.com/dataset.html#webpage","url":"https://gaapitchfinder.com/dataset.html","name":"Open GAA Pitch Dataset - GAA Pitch Finder","description":"Open dataset of 1,989 GAA club and pitch locations worldwide, including club names, pitch names, coordinates, region, county, country, elevation, rainfall data, Google Maps directions links, and reviewed Wikipedia links where available.","isPartOf":{"@id":"https://gaapitchfinder.com/#website"},"about":{"@id":"https://gaapitchfinder.com/dataset.html#dataset"}},{"@type":"Dataset","@id":"https://gaapitchfinder.com/dataset.html#dataset","name":"GAA Pitch Finder Dataset","alternateName":["GAA pitch dataset","GAA club locations dataset","GAA pitch locations"],"description":"Open dataset of 1,989 GAA club and pitch locations worldwide, including club names, pitch names, coordinates, region, county, country, elevation, rainfall data, Google Maps directions links, and reviewed Wikipedia links where available.","url":"https://gaapitchfinder.com/dataset.html","sameAs":["https://github.com/ryanmcg2203/gaapitchfinder","https://github.com/ryanmcg2203/gaapitchfinder/blob/main/gaapitchfinder_data.csv"],"creator":{"@type":"Person","name":"Ryan McGuinness","url":"https://gaapitchfinder.com/about.html"},"publisher":{"@type":"Organization","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","logo":"https://gaapitchfinder.com/img/logo-black.png","email":"gaapitchfinder@gmail.com"},"license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"inLanguage":"en","dateModified":"2026-08-06","version":"2026.08.06","identifier":"96262e1e48ed26a7b8286a9bfaabed006548a74d","additionalProperty":[{"@type":"PropertyValue","name":"Record count","value":1989},{"@type":"PropertyValue","name":"Schema version","value":"1.0.0"},{"@type":"PropertyValue","name":"Coordinate reference system","value":"EPSG:4326"}],"keywords":["GAA pitch finder","GAA club finder","GAA pitch dataset","GAA club locations","Gaelic games","GAA directions","open sports data","Ireland sports data"],"spatialCoverage":[{"@type":"Country","name":"Ireland"},{"@type":"Place","name":"Great Britain"},{"@type":"Place","name":"North America"},{"@type":"Place","name":"Europe"},{"@type":"Place","name":"Australasia"},{"@type":"Place","name":"Asia"},{"@type":"Place","name":"Middle East"},{"@type":"Place","name":"South America"}],"temporalCoverage":"2017/..","variableMeasured":["File","Club","Pitch","Code","Latitude","Longitude","Province","Country","Division","County","Directions","Twitter","Elevation","annual_rainfall","rain_days","Wikipedia"],"measurementTechnique":["Manual verification","Satellite imagery cross-reference","Club website cross-reference","Open-Meteo rainfall data","Elevation data"],"distribution":[{"@type":"DataDownload","name":"GAA Pitch Finder CSV dataset","encodingFormat":"text/csv","contentUrl":"https://gaapitchfinder.com/downloads/gaapitchfinder.csv"},{"@type":"DataDownload","name":"GAA Pitch Finder GeoJSON dataset","encodingFormat":"application/geo+json","contentUrl":"https://gaapitchfinder.com/downloads/gaapitchfinder.geojson"},{"@type":"DataDownload","name":"GAA Pitch Finder dataset schema","encodingFormat":"application/json","contentUrl":"https://gaapitchfinder.com/downloads/schema.json"}]}]}</script>
 <!-- dataset-metadata:end -->
-<script src="/js/ga.js" defer></script>
+{{ analytics }}
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="/" class="nav-logo">
-    <img src="/img/logo-icon.png" alt="GAA Pitch Finder logo" width="36" height="36" style="border-radius:50%;">
-    GAA Pitch Finder
-  </a>
-  <ul class="nav-links">
-    <li><a href="/">Map</a></li>
-    <li><a href="/clubs/">Clubs</a></li>
-    <li><a href="/counties/">Counties</a></li>
-    <li><a href="/directions.html">Directions</a></li>
-    <li><a href="/pitch-of-the-day.html">Daily Pitch</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/dataset.html" class="active">Dataset</a></li>
-    <li><a href="/about.html">About</a></li>
-  </ul>
-  <a href="/donate.html" class="nav-donate">Donate</a>
-  <button class="nav-hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-<div class="nav-drawer" id="nav-drawer" aria-hidden="true" inert>
-  <button class="drawer-close" id="drawer-close" type="button" aria-label="Close menu">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <a href="/">Map</a>
-  <a href="/clubs/">Clubs</a>
-  <a href="/counties/">Counties</a>
-  <a href="/directions.html">Directions</a>
-  <a href="/pitch-of-the-day.html">Daily Pitch</a>
-  <a href="/blog/">Blog</a>
-  <a href="/dataset.html">Dataset</a>
-  <a href="/about.html">About</a>
-  <a href="/privacy.html">Privacy</a>
-  <a href="/donate.html">Donate</a>
-</div>
+{{ navigation }}
 
 <div class="page-content dataset-page">
   <h1>Open GAA Pitch Dataset</h1>
@@ -249,10 +215,8 @@
   <p>For corrections, missing pitches, attribution questions, or data enquiries, contact <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a>.</p>
 </div>
 
-<footer class="site-footer">
-  &copy; GAA Pitch Finder &nbsp;&middot;&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;&middot;&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;&middot;&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy</a>
-</footer>
+{{ footer }}
 
-<script src="/js/navigation.js" defer></script>
+{{ navigation_script }}
 </body>
 </html>
