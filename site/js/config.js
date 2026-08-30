@@ -1,0 +1,1 @@
+window.GAA_PITCH_FINDER_CONFIG = {};
