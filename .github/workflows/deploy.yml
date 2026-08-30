@@ -73,6 +73,25 @@ jobs:
       - name: Run browser regression tests
         run: npm run test:browser
 
+      - name: Write CARTO basemap config
+        if: github.ref == 'refs/heads/main'
+        env:
+          CARTO_BASEMAP_KEY: ${{ secrets.CARTO_BASEMAP_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          key = os.environ.get("CARTO_BASEMAP_KEY", "").strip()
+          if not key:
+              raise SystemExit("CARTO_BASEMAP_KEY secret is not set")
+          Path("site/js/config.js").write_text(
+              "window.GAA_PITCH_FINDER_CONFIG = "
+              f"{{ cartoBasemapKey: {json.dumps(key)} }};\n"
+          )
+          PY
+
       - uses: actions/configure-pages@v5
         if: github.ref == 'refs/heads/main'
 
