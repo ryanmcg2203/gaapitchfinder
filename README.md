@@ -94,6 +94,19 @@ python3 -m http.server 8000 --directory site
 
 Then open `http://localhost:8000`. HTTPS is provided by the production host, not the local Python server.
 
+### CARTO Basemap Key
+
+The homepage map uses CARTO raster basemaps when `site/js/config.js` defines a
+`cartoBasemapKey`. The committed config file is intentionally empty, so local
+development falls back to standard OpenStreetMap tiles without secrets.
+
+For local CARTO testing, temporarily set `cartoBasemapKey` in `site/js/config.js`
+and do not commit that key.
+
+For production, add the key as a GitHub Actions repository secret named
+`CARTO_BASEMAP_KEY`. The deploy workflow writes `site/js/config.js` from that
+secret immediately before uploading the GitHub Pages artifact.
+
 ## Setup
 
 ```bash
