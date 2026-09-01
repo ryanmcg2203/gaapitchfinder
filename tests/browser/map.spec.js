@@ -48,7 +48,25 @@ test('loads the generated map with Ireland selected by default', async ({
   await page.getByRole('button', { name: 'Previous results' }).click();
   await expect(page.locator('#results-range')).toHaveText(`1–60 of ${irelandPitches.length.toLocaleString('en-US')}`);
   expect(blockedThirdPartyRequests.some(url => url.includes('googletagmanager.com'))).toBe(false);
-  expect(blockedThirdPartyRequests.some(url => url.includes('basemaps.cartocdn.com'))).toBe(true);
+  expect(blockedThirdPartyRequests.some(url => url.includes('tile.openstreetmap.org'))).toBe(true);
+  expect(blockedThirdPartyRequests.some(url => url.includes('basemaps.cartocdn.com'))).toBe(false);
+});
+
+test('uses CARTO basemaps when a key is configured', async ({
+  blockedThirdPartyRequests,
+  page
+}) => {
+  await page.route('**/js/config.js', route => route.fulfill({
+    contentType: 'application/javascript',
+    body: "window.GAA_PITCH_FINDER_CONFIG = { cartoBasemapKey: 'test-carto-key' };"
+  }));
+
+  await openMap(page);
+
+  const cartoTileRequests = blockedThirdPartyRequests.filter(url => url.includes('basemaps.cartocdn.com'));
+  expect(cartoTileRequests.length).toBeGreaterThan(0);
+  expect(cartoTileRequests.every(url => url.includes('key=test-carto-key'))).toBe(true);
+  expect(blockedThirdPartyRequests.some(url => url.includes('tile.openstreetmap.org'))).toBe(false);
 });
 
 test('result rows and markers keep selection, details, and result pages synchronized', async ({ page }) => {
