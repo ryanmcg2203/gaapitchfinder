@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/data-quality.html">
 <meta name="description" content="Public quality metrics, provenance, freshness, and known limitations for the open GAA Pitch Finder dataset.">
-<meta name="gaa-data-quality-source-revision" content="96262e1e48ed26a7b8286a9bfaabed006548a74d">
+<meta name="gaa-data-quality-source-revision" content="f536feeac84c7850558279145983944e2de457ff">
 <script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -60,10 +60,10 @@
     <h1>Dataset health and provenance</h1>
     <p>This report publishes the checks behind GAA Pitch Finder as individual metrics. It deliberately avoids a single quality score so gaps and limitations remain visible.</p>
     <dl class="data-quality-snapshot">
-      <div><dt>Records</dt><dd>1,989</dd></div>
-      <div><dt>Data as of</dt><dd><time datetime="2026-08-06">2026-08-06</time></dd></div>
-      <div><dt>Dataset version</dt><dd>2026.08.06</dd></div>
-      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/96262e1e48ed26a7b8286a9bfaabed006548a74d"><code>96262e1e48</code></a></dd></div>
+      <div><dt>Records</dt><dd>1,990</dd></div>
+      <div><dt>Data as of</dt><dd><time datetime="2026-09-19">2026-09-19</time></dd></div>
+      <div><dt>Dataset version</dt><dd>2026.09.19</dd></div>
+      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/f536feeac84c7850558279145983944e2de457ff"><code>f536feeac8</code></a></dd></div>
     </dl>
     <div class="data-quality-actions">
       <a href="/dataset.html">Open dataset downloads</a>
@@ -83,13 +83,13 @@
           <h3>Pitch records</h3>
           <span class="data-quality-status data-quality-status-informational">Information</span>
         </div>
-        <p class="data-quality-value">1,989</p>
-        <p class="data-quality-summary">1,989 pitch records are published in the current dataset.</p>
+        <p class="data-quality-value">1,990</p>
+        <p class="data-quality-summary">1,990 pitch records are published in the current dataset.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count data rows in the canonical CSV, excluding the header.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
         </details>
       </article>
       <article class="data-quality-metric" data-metric-id="valid_coordinates">
@@ -98,12 +98,12 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">100.0%</p>
-        <p class="data-quality-summary">1,989 of 1,989 records have valid coordinate pairs.</p>
+        <p class="data-quality-summary">1,990 of 1,990 records have valid coordinate pairs.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Parse finite WGS 84 latitude and longitude values and enforce world bounds.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
         </details>
       </article>
       <article class="data-quality-metric" data-metric-id="missing_coordinates">
@@ -117,7 +117,7 @@
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count rows where latitude or longitude is blank.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Malformed nonblank coordinates are reported under valid coordinates rather than this metric.</p>
         </details>
       </article>
@@ -132,7 +132,7 @@
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count rows missing any required identity or location field: File, Club, Province, Country, Division, or County.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Pitch name is intentionally optional and is not included in this metric.</p>
         </details>
       </article>
@@ -147,7 +147,7 @@
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Group records that have exactly equal numeric latitude and longitude values.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Shared coordinates are review prompts, not errors; multiple clubs can legitimately use one ground.</p>
         </details>
       </article>
@@ -162,7 +162,7 @@
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Group normalized club, pitch, county, and country names at coordinates rounded to five decimal places.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Candidates require human review because a club can have multiple records at one complex.</p>
         </details>
       </article>
@@ -172,12 +172,12 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">100.0%</p>
-        <p class="data-quality-summary">1,989 of 1,989 directions links are valid and coordinate-aligned.</p>
+        <p class="data-quality-summary">1,990 of 1,990 directions links are valid and coordinate-aligned.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
         </details>
       </article>
     </div>
@@ -195,12 +195,12 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">99.8%</p>
-        <p class="data-quality-summary">1,985 of 1,989 records include a valid elevation value.</p>
+        <p class="data-quality-summary">1,986 of 1,990 records include a valid elevation value.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count nonblank finite elevation values between -500 and 9,000 metres.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Elevation values are enrichment estimates and are not surveyed ground heights.</p>
         </details>
       </article>
@@ -210,12 +210,12 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">99.8%</p>
-        <p class="data-quality-summary">1,985 of 1,989 records include both rainfall fields.</p>
+        <p class="data-quality-summary">1,986 of 1,990 records include both rainfall fields.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count rows with valid annual rainfall and rain-days values within the published schema ranges.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Rainfall fields are modelled annual estimates rather than observations at each pitch.</p>
         </details>
       </article>
@@ -225,12 +225,12 @@
           <span class="data-quality-status data-quality-status-informational">Information</span>
         </div>
         <p class="data-quality-value">56.6%</p>
-        <p class="data-quality-summary">1,126 of 1,989 records include a reviewed Wikipedia link.</p>
+        <p class="data-quality-summary">1,126 of 1,990 records include a reviewed Wikipedia link.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.</p>
           <p><strong>Source:</strong> <code>canonical_dataset</code></p>
-          <p><strong>Data as of:</strong> 2026-08-06</p>
+          <p><strong>Data as of:</strong> 2026-09-19</p>
           <p><strong>Known limitation:</strong> Not every club has a suitable Wikipedia article, so no completeness target is applied.</p>
         </details>
       </article>
@@ -246,7 +246,7 @@
           <p><strong>Method:</strong> Treat matched_gaa and matched_generic as matches, no_match as evaluated nonmatches, and exclude unavailable statuses from the denominator.</p>
           <p><strong>Source:</strong> <code>osm_coverage_snapshot</code></p>
           <p><strong>Data as of:</strong> 2026-07-05</p>
-          <p><strong>Known limitation:</strong> This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,686 Ireland records.</p>
+          <p><strong>Known limitation:</strong> This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,687 Ireland records.</p>
         </details>
       </article>
     </div>
@@ -502,8 +502,8 @@
           <tr>
             <th scope="row">canonical_dataset</th>
             <td data-label="Type">canonical_csv</td>
-            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/96262e1e48ed26a7b8286a9bfaabed006548a74d/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
-            <td data-label="Data as of">2026-08-06</td>
+            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/f536feeac84c7850558279145983944e2de457ff/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
+            <td data-label="Data as of">2026-09-19</td>
             <td data-label="Available">Yes</td>
           </tr>
           <tr>
