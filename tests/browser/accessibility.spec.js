@@ -111,7 +111,8 @@ test('dataset page exposes stable direct downloads and schema metadata', async (
   expect(geojsonResponse.ok()).toBe(true);
   const geojsonBody = await geojsonResponse.json();
   expect(geojsonBody.type).toBe('FeatureCollection');
-  expect(geojsonBody.features).toHaveLength(1989);
+  const recordCount = Number(await page.locator('meta[name="gaa-dataset-record-count"]').getAttribute('content'));
+  expect(geojsonBody.features).toHaveLength(recordCount);
 
   await page.setViewportSize({ width: 320, height: 800 });
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);

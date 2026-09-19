@@ -3,7 +3,7 @@
 GAA Pitch Finder is a static website and open dataset for GAA pitches in Ireland and around the world. It includes an interactive Leaflet map, Google Maps directions, blog/content pages, and analysis scripts for rainfall, elevation, and OpenStreetMap coverage.
 
 <!-- dataset-summary:start -->
-As of 6 August 2026, the main dataset contains 1,989 pitch records with coordinates, elevation, rainfall data, club details, and directions links.
+As of 19 September 2026, the main dataset contains 1,990 pitch records with coordinates, elevation, rainfall data, club details, and directions links.
 <!-- dataset-summary:end -->
 
 `gaapitchfinder_data.csv` is the canonical base dataset. Scripts should treat it as read-only input and write durable enrichments to `data/derived/`, with reports and charts going to `output/` and site assets going to `site/`.
