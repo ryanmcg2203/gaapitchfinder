@@ -241,6 +241,14 @@ Attempts to match each pitch to OSM geometry and write pitch dimensions, orienta
 
 This script uses the Overpass API, includes request delays, and supports checkpoint/resume with `data/derived/.pitch_geometry_checkpoint.json`.
 
+Resume requires unchanged source CSV bytes and enrichment implementation. Results
+and completion markers are committed together in an atomic snapshot; the CSV is
+an export that is recovered from that snapshot if an export is interrupted.
+Changed inputs, legacy checkpoints, or a CSV without a snapshot are rejected
+before API requests. Archive both generated files before starting a fresh run.
+See [geometry resume guidance](data/derived/README.md#geometry-enrichment-resume)
+for recovery details and tests.
+
 ## Script Roles
 
 - `generate_map_data.py`: builds the compact JSON payload used by the public site

@@ -7,16 +7,18 @@ and calculates pitch dimensions and orientation. Supports checkpoint/resume
 so it can be re-run without re-querying already-processed rows.
 """
 
-import csv
-import json
+import io
 import math
 import os
+from pathlib import Path
 import sys
 import time
 
 import numpy as np
 import pandas as pd
 import requests
+
+from geometry_checkpoint import GeometryCheckpoint, ResumeError, digest
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -306,21 +308,17 @@ def extract_geometry(way, node_lookup):
 
 
 # ---------------------------------------------------------------------------
-# Checkpoint logic
+# Checkpoint configuration
 # ---------------------------------------------------------------------------
-def load_checkpoint():
-    """Load set of already-processed row indices."""
-    if os.path.exists(CHECKPOINT_FILE):
-        with open(CHECKPOINT_FILE, "r") as f:
-            data = json.load(f)
-            return set(data.get("processed_indices", []))
-    return set()
-
-
-def save_checkpoint(processed_indices):
-    """Persist processed row indices."""
-    with open(CHECKPOINT_FILE, "w") as f:
-        json.dump({"processed_indices": sorted(processed_indices)}, f)
+def checkpoint_for(source_bytes):
+    return GeometryCheckpoint(
+        CHECKPOINT_FILE, OUTPUT_CSV, source_bytes,
+        {
+            "implementation_sha256": digest(Path(__file__).read_bytes()),
+            "search_radius_m": SEARCH_RADIUS_M,
+            "overpass_url": OVERPASS_URL,
+        },
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -335,24 +333,26 @@ def main():
 
     print("Loading input data …")
     os.makedirs(os.path.dirname(OUTPUT_CSV), exist_ok=True)
-    df = pd.read_csv(INPUT_CSV)
+    # Parse the same bytes that are fingerprinted, preserving source values in exports.
+    source_bytes = Path(INPUT_CSV).read_bytes()
+    df = pd.read_csv(io.BytesIO(source_bytes), dtype=str, keep_default_na=False)
     total = len(df)
     print(f"  {total} pitches loaded.")
 
-    # If output file already exists, load it to preserve previous results
-    if os.path.exists(OUTPUT_CSV):
-        df_out = pd.read_csv(OUTPUT_CSV)
-        # Ensure all new columns exist
-        for col in NEW_COLUMNS:
-            if col not in df_out.columns:
-                df_out[col] = ""
-        print(f"  Resuming from existing output file ({len(df_out)} rows).")
+    checkpoint = checkpoint_for(source_bytes)
+    try:
+        saved_csv, processed = checkpoint.load()
+    except ResumeError as error:
+        raise SystemExit(str(error)) from error
+    if saved_csv is not None:
+        df_out = pd.read_csv(io.StringIO(saved_csv), dtype=str, keep_default_na=False)
+        print(f"  Resuming from verified snapshot ({len(df_out)} rows).")
     else:
         df_out = df.copy()
         for col in NEW_COLUMNS:
             df_out[col] = ""
+        checkpoint.save(df_out.to_csv(index=False), set())
 
-    processed = load_checkpoint()
     remaining = [i for i in range(total) if i not in processed]
     print(f"  {len(processed)} already processed, {len(remaining)} remaining.\n")
 
@@ -378,15 +378,14 @@ def main():
         print(f"[{count}/{len(remaining)}] {club} ({county}) …", end=" ", flush=True)
 
         # Skip rows without coordinates
-        if pd.isna(lat) or pd.isna(lon):
+        if not lat or not lon:
             print("SKIP (no coordinates)")
             df_out.at[idx, "geometry_source"] = "not_found"
             df_out.at[idx, "geometry_verified"] = False
             processed.add(idx)
             not_found += 1
             if count % 10 == 0:
-                save_checkpoint(processed)
-                df_out.to_csv(OUTPUT_CSV, index=False)
+                checkpoint.save(df_out.to_csv(index=False), processed)
             continue
 
         lat, lon = float(lat), float(lon)
@@ -437,15 +436,13 @@ def main():
 
         # Periodic save
         if count % 10 == 0:
-            save_checkpoint(processed)
-            df_out.to_csv(OUTPUT_CSV, index=False)
+            checkpoint.save(df_out.to_csv(index=False), processed)
 
         # Polite delay
         time.sleep(REQUEST_DELAY_S)
 
     # Final save
-    save_checkpoint(processed)
-    df_out.to_csv(OUTPUT_CSV, index=False)
+    checkpoint.save(df_out.to_csv(index=False), processed)
 
     # ---------------------------------------------------------------------------
     # Summary
