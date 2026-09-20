@@ -231,6 +231,13 @@ You can limit the check to one or more counties:
 python3 scripts/analyze_osm_coverage.py Monaghan Down
 ```
 
+County-only runs require an existing report and replace only those counties'
+rows, preserving all other results and their check dates. Unknown county names
+are rejected before requests. Reports are written atomically; API failures remain
+explicit `api_error` results, excluded from evaluated coverage percentages.
+See [OSM refresh guidance](data/derived/README.md#osm-coverage-refreshes) for report
+format and freshness details.
+
 ### OpenStreetMap Geometry Enrichment
 
 ```bash
