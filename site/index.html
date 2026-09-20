@@ -1042,19 +1042,32 @@ function scheduleInitialRender(callback) {
 
 function focusPitch(pitch) {
   if (!pitch || !pitch._marker) return;
-  map.stop();
-  requestAnimationFrame(() => {
-    if (!markerLayer.hasLayer(pitch._marker)) return;
-    const open = () => {
-      pitch._marker.openPopup();
-      map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14), { animate: false });
-    };
-    if (markerLayer.zoomToShowLayer) {
-      markerLayer.zoomToShowLayer(pitch._marker, open);
-    } else {
-      open();
+  const layer = markerLayer;
+  const selectedKey = pitchKey(pitch);
+  const whenSettled = callback => {
+    if (markerLayer !== layer || focusedPitchKey !== selectedKey || !layer.hasLayer(pitch._marker)) return;
+    // MarkerCluster can still be moving markers after Leaflet's moveend.
+    // Its animation counter includes both zoom and spiderfy transitions.
+    if (layer._inZoomAnimation > 0) {
+      layer.once('animationend', () => requestAnimationFrame(() => whenSettled(callback)));
+      return;
     }
-  });
+    callback();
+  };
+  map.stop();
+  requestAnimationFrame(() => whenSettled(() => {
+    // Position the map before revealing the marker: changing zoom afterwards
+    // can detach clustered markers while their popup is being opened.
+    map.setView([pitch.la, pitch.lo], Math.max(map.getZoom(), 14), { animate: false });
+    whenSettled(() => {
+      const open = () => whenSettled(() => pitch._marker.openPopup());
+      if (layer.zoomToShowLayer) {
+        layer.zoomToShowLayer(pitch._marker, open);
+      } else {
+        open();
+      }
+    });
+  }));
 }
 
 function distanceKm(aLat, aLng, bLat, bLng) {

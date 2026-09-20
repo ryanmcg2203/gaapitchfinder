@@ -105,47 +105,59 @@ test('mobile Near me reports denied location access in the results sheet', async
   await expect(page.locator('.result-row')).toHaveCount(60);
 });
 
-test('rapid mobile search keeps cached markers interactive through view changes', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.locator('#loading')).toHaveCount(0);
+for (const target of [
+  { club: 'CLG Cárna-Caiseal', pitch: '' },
+  { club: 'Father Griffins/Éire Óg', pitch: 'South Park, The Claddagh' },
+  { club: 'Father Griffins/Éire Óg', pitch: 'Crestwood GAA Pitch' }
+]) {
+  test(`rapid mobile search keeps cached markers interactive through view changes: ${target.club} ${target.pitch}`, async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#loading')).toHaveCount(0);
 
-  const map = page.locator('#map');
-  const markerCount = String(pitches.length);
-  await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
-  const initialRenderCount = Number(await map.getAttribute('data-render-count'));
+    const map = page.locator('#map');
+    const markerCount = String(pitches.length);
+    await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
+    const initialRenderCount = Number(await map.getAttribute('data-render-count'));
 
-  const settledQuery = 'galway';
-  const settledMatches = filteredPitches(pitches, { query: settledQuery });
-  await page.locator('#search-input').fill(settledQuery);
-  await expect(page.locator('#count-badge')).toHaveText(countLabel(settledMatches.length));
-  await expect(map).toHaveAttribute('data-render-count', String(initialRenderCount + 1));
-  await page.getByRole('button', { name: 'Show a random visible pitch' }).click();
-  await expect(page.locator('.leaflet-popup')).toBeVisible();
-  await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
+    const settledQuery = 'galway';
+    const settledMatches = filteredPitches(pitches, { query: settledQuery });
+    await page.locator('#search-input').fill(settledQuery);
+    await expect(page.locator('#count-badge')).toHaveText(countLabel(settledMatches.length));
+    await expect(map).toHaveAttribute('data-render-count', String(initialRenderCount + 1));
+    // Cover both the previously failing zoom transition and a shared-coordinate
+    // marker that needs spiderfying, rather than relying on a random CI sample.
+    const targetIndex = settledMatches.findIndex(pitch => pitch.c === target.club && pitch.p === target.pitch);
+    expect(targetIndex).toBeGreaterThanOrEqual(0);
+    await page.evaluate(value => { Math.random = () => value; }, (targetIndex + 0.5) / settledMatches.length);
+    await page.getByRole('button', { name: 'Show a random visible pitch' }).click();
+    await expect(page.locator('.leaflet-popup')).toBeVisible();
+    await expect(page.locator('.leaflet-popup .pop-club')).toHaveText(target.club);
+    await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
 
-  const viewToggle = page.locator('#cluster-btn');
-  await viewToggle.click();
-  await expect(viewToggle).toHaveText('Cluster');
-  await expect(page.locator('.leaflet-popup')).toHaveCount(0);
-  await viewToggle.click();
-  await expect(viewToggle).toHaveText('Dots');
-  await expect(map).toHaveAttribute('data-render-count', String(initialRenderCount + 3));
-  await expect(map).toHaveAttribute('data-rendered-pitch-count', String(settledMatches.length));
-  await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
+    const viewToggle = page.locator('#cluster-btn');
+    await viewToggle.click();
+    await expect(viewToggle).toHaveText('Cluster');
+    await expect(page.locator('.leaflet-popup')).toHaveCount(0);
+    await viewToggle.click();
+    await expect(viewToggle).toHaveText('Dots');
+    await expect(map).toHaveAttribute('data-render-count', String(initialRenderCount + 3));
+    await expect(map).toHaveAttribute('data-rendered-pitch-count', String(settledMatches.length));
+    await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
 
-  const query = 'st brigids';
-  const matches = filteredPitches(pitches, { query });
-  await page.locator('#search-input').evaluate((input, values) => {
-    values.forEach(value => {
-      input.value = value;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-  }, ['s', 'st', 'st b', 'st bri', query]);
-  await page.getByRole('button', { name: 'Show a random visible pitch' }).click();
+    const query = 'st brigids';
+    const matches = filteredPitches(pitches, { query });
+    await page.locator('#search-input').evaluate((input, values) => {
+      values.forEach(value => {
+        input.value = value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }, ['s', 'st', 'st b', 'st bri', query]);
+    await page.getByRole('button', { name: 'Show a random visible pitch' }).click();
 
-  await expect(page.locator('#count-badge')).toHaveText(countLabel(matches.length));
-  await expect(page.locator('.leaflet-popup')).toBeVisible();
-  await expect(map).toHaveAttribute('data-render-count', String(initialRenderCount + 4));
-  await expect(map).toHaveAttribute('data-rendered-pitch-count', String(matches.length));
-  await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
-});
+    await expect(page.locator('#count-badge')).toHaveText(countLabel(matches.length));
+    await expect(page.locator('.leaflet-popup')).toBeVisible();
+    await expect(map).toHaveAttribute('data-render-count', String(initialRenderCount + 4));
+    await expect(map).toHaveAttribute('data-rendered-pitch-count', String(matches.length));
+    await expect(map).toHaveAttribute('data-marker-creation-count', markerCount);
+  });
+}
