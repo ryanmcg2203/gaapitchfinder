@@ -5,6 +5,7 @@
   const CONSENT_KEY = 'gaa-analytics-consent';
   const CONSENT_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
   const SCRIPT_ID = 'gaa-google-analytics';
+  const RIALTO_SCRIPT_ID = 'gaa-rialto-analytics';
   const DIALOG_ID = 'analytics-consent-dialog';
   const VALID_CHOICES = new Set(['accepted', 'rejected']);
   const disableKey = `ga-disable-${MEASUREMENT_ID}`;
@@ -70,26 +71,40 @@
   function stopAnalytics() {
     window[disableKey] = true;
     document.getElementById(SCRIPT_ID)?.remove();
+    document.getElementById(RIALTO_SCRIPT_ID)?.remove();
     clearAnalyticsCookies();
   }
 
   function loadAnalytics() {
-    if (currentChoice !== 'accepted' || document.getElementById(SCRIPT_ID)) return;
+    if (currentChoice !== 'accepted') return;
 
     window[disableKey] = false;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function () {
-      window.dataLayer.push(arguments);
-    };
-    window.gtag('js', new Date());
-    window.gtag('config', MEASUREMENT_ID);
 
-    const script = document.createElement('script');
-    script.id = SCRIPT_ID;
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MEASUREMENT_ID)}`;
-    script.addEventListener('error', () => script.remove(), { once: true });
-    document.head.appendChild(script);
+    if (!document.getElementById(SCRIPT_ID)) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', MEASUREMENT_ID);
+
+      const script = document.createElement('script');
+      script.id = SCRIPT_ID;
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MEASUREMENT_ID)}`;
+      script.addEventListener('error', () => script.remove(), { once: true });
+      document.head.appendChild(script);
+    }
+
+    if (!document.getElementById(RIALTO_SCRIPT_ID)) {
+      const script = document.createElement('script');
+      script.id = RIALTO_SCRIPT_ID;
+      script.defer = true;
+      script.src = 'https://t.rialtodata.com/sl.js';
+      script.dataset.site = 'gaapitchfinder';
+      script.addEventListener('error', () => script.remove(), { once: true });
+      document.head.appendChild(script);
+    }
   }
 
   function choiceStatus() {
