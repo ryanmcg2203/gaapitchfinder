@@ -30,6 +30,27 @@
 body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
 .site-nav { flex-shrink: 0; }
 
+.map-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 18px;
+  color: #ddd;
+  background: #1b1b1b;
+  border-bottom: 1px solid #383838;
+  flex-shrink: 0;
+}
+.map-intro h2 { color: #fff; font-size: 15px; margin-bottom: 3px; }
+.map-intro p { color: #aaa; font-size: 12px; line-height: 1.45; }
+.map-intro-links { display: flex; flex-wrap: wrap; gap: 8px 16px; flex-shrink: 0; }
+.map-intro-links a { color: #fff; font-size: 12px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.map-intro-links a:hover { color: #ffffcc; }
+body.light .map-intro { color: #333; background: #f4f4f4; border-bottom-color: #ddd; }
+body.light .map-intro h2 { color: #111; }
+body.light .map-intro p { color: #555; }
+body.light .map-intro-links a { color: #222; }
+
 /* ── Map filter bar ── */
 #topbar {
   display: flex;
@@ -393,6 +414,8 @@ body.light .pop-correction:hover { background: #f1f1f1; border-color: #555; colo
 
 /* ── Mobile ── */
 @media (max-width: 700px) {
+  .map-intro { align-items: flex-start; flex-direction: column; gap: 7px; padding: 10px 14px; }
+  .map-intro-links { gap: 6px 12px; }
   body { overflow: hidden; }
   #filters-label { display: none; }
   #topbar {
@@ -560,6 +583,18 @@ body.light .pop-correction:hover { background: #f1f1f1; border-color: #555; colo
   <a href="/privacy.html">Privacy</a>
   <a href="/donate.html">Donate</a>
 </div>
+
+<section class="map-intro" aria-labelledby="map-intro-title">
+  <div>
+    <h2 id="map-intro-title">Find a GAA pitch and get directions</h2>
+    <p>Search by club, pitch, county or place, then select a result or map marker for pitch details and Google Maps directions.</p>
+  </div>
+  <nav class="map-intro-links" aria-label="Browse GAA Pitch Finder">
+    <a href="clubs/">Browse clubs</a>
+    <a href="counties/">Browse counties</a>
+    <a href="directions.html">Directions directory</a>
+  </nav>
+</section>
 
 <div id="topbar">
   <div id="filters-label">FILTERS</div>
