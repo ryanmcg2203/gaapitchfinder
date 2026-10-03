@@ -544,15 +544,15 @@ def render_index_page(pages):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GAA Club Directory – GAA Pitch Finder</title>
+<title>GAA Clubs and Pitches by County | GAA Pitch Finder</title>
 <link rel="icon" type="image/png" href="../img/logo-icon.png">
-<meta property="og:title" content="GAA Club Directory – GAA Pitch Finder">
-<meta property="og:description" content="Browse club and pitch pages for GAA clubs in Ireland and worldwide.">
+<meta property="og:title" content="GAA Clubs and Pitches by County | GAA Pitch Finder">
+<meta property="og:description" content="Search GAA clubs and pitches by county, country, or name. View pitch details and Google Maps directions.">
 <meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
 <meta property="og:url" content="https://gaapitchfinder.com/clubs/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/clubs/">
-<meta name="description" content="Browse club and pitch pages for GAA clubs in Ireland and worldwide.">
+<meta name="description" content="Search GAA clubs and pitches by county, country, or name. View pitch details and Google Maps directions.">
 {structured_data}
 {analytics_html()}
 <link rel="stylesheet" href="../css/style.css">
