@@ -1068,6 +1068,12 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .dir-toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; }
 .dir-toc a { font-size: 14px; color: #555; text-decoration: none; }
 .dir-toc a:hover { color: #111; }
+.directory-quick-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 20px 0 28px; }
+.directory-quick-links a,
+.county-map-link { color: #111; font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.directory-quick-links a:hover,
+.county-map-link:hover { color: #555; }
+.county-map-link-prominent { display: inline-block; margin: 4px 0 8px; }
 
 .dir-province { margin-bottom: 48px; }
 .dir-province h2 { font-size: 22px; font-weight: 600; margin-bottom: 24px; padding-bottom: 8px; border-bottom: 2px solid #111; }

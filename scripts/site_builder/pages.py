@@ -590,9 +590,10 @@ def render_counties_index(counties):
         links = []
         for county, pages in province_groups[province]:
             search_text = f"{county} {province}"
+            map_url = f"/?region=Ireland&county={quote(county)}"
             links.append(
                 f"<li data-search=\"{esc_attr(search_text)}\"><a href=\"/{county_url(county)}\">{esc(county)}</a>"
-                f"<span>{len(pages)} pitches</span></li>"
+                f"<span>{len(pages)} pitches · <a class=\"county-map-link\" href=\"{esc_attr(map_url)}\">View on map</a></span></li>"
             )
         sections.append(
             f"<section class=\"county-province-group\" id=\"{county_slug(province)}\">"
@@ -657,6 +658,7 @@ def render_county_page(county, pages):
         "location details, small maps, and Google Maps directions."
     )
     structured_data = county_page_schema(county, pages, description)
+    map_url = f"/?region=Ireland&county={quote(county)}"
     rows = []
     for page in pages:
         search_text = f"{page['club']} {page_pitch_label(page)} {county} {province}"
@@ -692,6 +694,7 @@ def render_county_page(county, pages):
   <h1>GAA Pitches In {esc(county)}</h1>
   <p class="clubs-subtitle">{esc(province)} · Ireland</p>
   <p>{esc(description)} This county directory is generated from the open GAA Pitch Finder dataset.</p>
+  <p><a class="county-map-link county-map-link-prominent" href="{esc_attr(map_url)}">View all {esc(county)} pitches on the map</a></p>
   {directory_search_html("county-page-search", f"Search clubs or pitches in {county}")}
   <section class="county-directory">
     <ul>{"".join(rows)}</ul>
