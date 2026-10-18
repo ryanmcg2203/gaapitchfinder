@@ -67,9 +67,9 @@
     <div class="post-date">18 October 2026 &middot; 4 min read</div>
   </div>
   <div class="post-body">
-    <p>GAA Pitch Finder is a static website. There are no application servers, no database, and no complicated backend running behind it. GitHub Pages hosts the site, and GitHub is the source of truth for the code and data.</p>
+    <p>GAA Pitch Finder is a static website. No application servers, no underlying database (just a CSV), and no complicated backend running behind it. GitHub Pages hosts the site, and GitHub is the source of truth for the code and data.</p>
 
-    <p>Recently, I added Cloudflare in front of it. That sounds more elaborate than it really is, but it has given the site a useful little edge-caching layer without me having to run any infrastructure myself.</p>
+    <p>Recently, I added Cloudflare in front of it. Why? Well, I renewed my domain via Cloudflare and wanted to see what cool features it has &mdash; to see what the big deal is with this service that occasionally takes down the entire internet (<a href="https://blog.cloudflare.com/cloudflare-outage-february-20-2026/">see its February 2026 outage report</a>). The neat part is that it has given the site a useful little edge-caching layer without me having to run any infrastructure myself.</p>
 
     <h2>The setup</h2>
     <p>The main map loads a generated <code>data.json</code> file containing the pitch dataset. Cloudflare now sits between the visitor and GitHub Pages:</p>
@@ -91,7 +91,7 @@
       <li>On a <strong>cache hit</strong>, Cloudflare returns its cached copy without needing to go back to GitHub Pages.</li>
     </ul>
 
-    <p>The satisfying part was seeing the headers confirm that it was working:</p>
+    <p>When I look at the headers in Chrome's DevTools, I can confirm that it is working:</p>
     <pre><code>CF-Cache-Status: HIT
 Age: 62</code></pre>
 
@@ -112,16 +112,12 @@ Age: 62</code></pre>
     <p>It is easy to talk about “the cache” as though there is only one, but there are really several layers between the code and the user.</p>
 
     <h2>Why this works well for GAA Pitch Finder</h2>
-    <p>The pitch dataset is a good fit for caching because it is read-heavy and the answer is the same for everyone until the data changes. There is no reason to generate a different response for each visitor.</p>
+    <p>The pitch dataset is a good fit for caching because it is read-heavy and the answer is the same for everyone until the data changes. There is no reason to generate a different response for each visitor. Some days I make multiple changes, but it usually stays the same for weeks.</p>
 
-    <p>In simple terms, GitHub Pages remains the authoritative source, Cloudflare becomes the distribution layer, and the browser can keep a local copy for a while.</p>
+    <p>In summary, GitHub Pages remains the authoritative source, Cloudflare becomes the distribution layer, and the browser can keep a local copy for a while.</p>
 
-    <p>This is the same broad pattern used in much larger systems: an authoritative source behind a cache, with many users reading the cached result. The difference is that this version is running in front of a small static side project, using tools I already had available.</p>
-
-    <h2>A small project, a useful lesson</h2>
-    <p>I like this kind of improvement because it is practical rather than flashy. I did not need to introduce a server, a database, Redis, or a separate CDN setup. I just identified the read-heavy part of the site and put an appropriate caching rule in front of it.</p>
-
-    <p>GAA Pitch Finder started as a map. It now has an open dataset, automated builds, generated pages, an R package built by someone else, and a small edge-caching architecture sitting in front of it. Not bad for a side project about GAA pitches.</p>
+    <h2>A useful exercise?</h2>
+    <p>I think so; it's practical and only took 10 minutes. I did not need to introduce a server, a database, or a separate CDN setup. With some help from Claude to set up cache rules, the whole thing just worked.</p>
   </div>
   <nav class="post-nav">
     <div></div>
