@@ -8,7 +8,7 @@
 <meta property="og:title" content="{{ page.title | escape }}">
 <meta property="og:description" content="{{ page.description | escape }}">
 <meta property="og:image" content="{{ site.url }}/img/logo-black.png">
-<meta property="og:url" content="{{ site.url }}/blog/{{ page.url | remove_first: '/' }}">
+<meta property="og:url" content="{{ page.canonical_url | default: site.url | append: '/blog/' | append: page.url | remove_first: '/' }}">
 <meta property="og:type" content="{{ page.og_type | default: 'website' }}">
 <meta name="description" content="{{ page.description | escape }}">
 {% if page.og_type == "article" %}

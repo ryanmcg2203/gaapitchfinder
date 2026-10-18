@@ -101,6 +101,10 @@ The blog is being migrated incrementally to Jekyll so new posts can be written i
 Install the Ruby dependencies and build the Jekyll-owned blog pages with:
 
 ```bash
+# macOS/Homebrew: install Ruby 3.3 once
+brew install ruby@3.3
+export PATH="/opt/homebrew/opt/ruby@3.3/bin:/opt/homebrew/lib/ruby/gems/3.3.0/bin:$PATH"
+
 bundle install
 python3 scripts/generate_static_pages.py
 python3 scripts/build_jekyll_blog.py

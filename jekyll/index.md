@@ -2,6 +2,7 @@
 layout: default
 title: Blog – GAA Pitch Finder
 description: Updates, data analysis and stories from GAA Pitch Finder.
+canonical_url: https://gaapitchfinder.com/blog/
 permalink: /index.html
 ---
 

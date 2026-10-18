@@ -44,10 +44,12 @@ from site_builder.shared import (
     navigation_script_html,
     render_static_template,
 )
+
 from site_build_utils import DATASET_PATH, ROOT_DIR, SITE_DIR, load_rows
 
 
 SAFE_SCHEMES = {"", "http", "https", "mailto"}
+JEKYLL_GENERATED_STATIC_PAGES = {"blog/index.html", "blog/r-package.html"}
 REQUIRED_META_PAGES = {
     "index.html",
     "about.html",
@@ -189,6 +191,8 @@ def static_page_output_errors(
     errors = []
     for template_path in sorted(template_dir.rglob("*.html")):
         relative_path = template_path.relative_to(template_dir)
+        if relative_path.as_posix() in JEKYLL_GENERATED_STATIC_PAGES:
+            continue
         output_path = site_dir / relative_path
         if not output_path.exists():
             errors.append(f"missing generated static page: {relative_path}")

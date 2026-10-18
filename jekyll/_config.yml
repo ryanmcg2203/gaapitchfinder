@@ -1,6 +1,7 @@
 title: GAA Pitch Finder
 url: https://gaapitchfinder.com
 baseurl: /blog
+repository: ryanmcg2203/gaapitchfinder
 markdown: kramdown
 permalink: /:basename.html
 timezone: Europe/Dublin

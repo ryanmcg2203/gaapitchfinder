@@ -3,23 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>From a GAA Map to an R Package – GAA Pitch Finder</title>
+<title>From GAA Map to an R Package</title>
 <link rel="icon" type="image/png" href="../img/logo-icon.png">
-<meta property="og:title" content="From GAA Map to an R Package – GAA Pitch Finder">
+<meta property="og:title" content="From GAA Map to an R Package">
 <meta property="og:description" content="How the open GAA Pitch Finder dataset became the foundation for a new R package for exploring and analysing Gaelic games locations.">
 <meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
-<meta property="og:url" content="https://gaapitchfinder.com/blog/r-package.html">
+<meta property="og:url" content="https:/gaapitchfinder.com/blog/r-package.html/blog//r-package.html">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2026-10-18">
-<meta property="article:modified_time" content="2026-10-18">
-<meta property="article:author" content="Ryan McGuinness">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="From GAA Map to an R Package – GAA Pitch Finder">
-<meta name="twitter:description" content="How the open GAA Pitch Finder dataset became the foundation for a new R package for exploring and analysing Gaelic games locations.">
-<meta name="twitter:image" content="https://gaapitchfinder.com/img/logo-black.png">
-<link rel="canonical" href="https://gaapitchfinder.com/blog/r-package.html">
 <meta name="description" content="How the open GAA Pitch Finder dataset became the foundation for a new R package for exploring and analysing Gaelic games locations.">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"From GAA Map to an R Package","description":"How the open GAA Pitch Finder dataset became the foundation for a new R package for exploring and analysing Gaelic games locations.","image":"https://gaapitchfinder.com/img/logo-black.png","datePublished":"2026-10-18","dateModified":"2026-10-18","author":{"@type":"Person","name":"Ryan McGuinness"},"publisher":{"@type":"Organization","name":"GAA Pitch Finder","logo":{"@type":"ImageObject","url":"https://gaapitchfinder.com/img/logo-black.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gaapitchfinder.com/blog/r-package.html"}}</script>
+
+<meta property="article:published_time" content="2026-10-18T00:00:00+01:00">
+<meta property="article:author" content="Ryan McGuinness">
+
 <script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -61,6 +56,7 @@
   <a href="/donate.html">Donate</a>
 </div>
 
+
 <div class="page-content">
   <div class="post-header">
     <h1>From GAA Map to an R Package</h1>
@@ -69,49 +65,59 @@
   <div class="post-body">
     <p>When I started GAA Pitch Finder, the goal was simple: create a useful map of GAA pitches in Ireland (and later, around the world).</p>
 
-    <p>Over time, the project has developed into an open dataset containing nearly 2,000 pitch locations, with information about clubs, counties, coordinates, elevation, rainfall, directions, and more.</p>
+<p>Over time, the project has developed into an open dataset containing nearly 2,000 pitch locations, with information about clubs, counties, coordinates, elevation, rainfall, directions, and more.</p>
 
-    <p>Recently, <a href="https://github.com/VincentTennanty">Vincent Tennanty</a> shared that he has used the dataset to create <code>gaapitchfinder</code>, an R package for exploring and analysing GAA pitch locations.</p>
+<p>Recently, <a href="https://github.com/VincentTennanty">Vincent Tennanty</a> shared that he has used the dataset to create <code class="language-plaintext highlighter-rouge">gaapitchfinder</code>, an R package for exploring and analysing GAA pitch locations.</p>
 
-    <h2>What the package can do</h2>
-    <p>The package makes it possible to:</p>
-    <ul>
-      <li>Search for pitches by name, club, or county</li>
-      <li>Find the nearest pitches to a location</li>
-      <li>Find pitches within a specified radius</li>
-      <li>Generate county-level summaries</li>
-      <li>Visualise pitch locations using <code>ggplot2</code></li>
-      <li>Work entirely offline after installation</li>
-    </ul>
+<h2 id="what-the-package-can-do">What the package can do</h2>
 
-    <h2>Why I care</h2>
-    <p>This is exactly the kind of use I hoped the dataset might support. The original project was built as a website, but publishing the underlying data openly means that other people can use it in new, novel ways. In fact, anything beyond basic SQL analysis always impresses me.</p>
+<p>The package makes it possible to:</p>
 
-    <p>The R package could be useful for analysts, researchers, journalists, GIS practitioners, county boards, and anyone interested in the geography of Gaelic games. It also shows the value of publishing data in a reusable format rather than keeping it locked inside a single website - which I was guilty of for quite some time.</p>
+<ul>
+  <li>Search for pitches by name, club, or county</li>
+  <li>Find the nearest pitches to a location</li>
+  <li>Find pitches within a specified radius</li>
+  <li>Generate county-level summaries</li>
+  <li>Visualise pitch locations using <code class="language-plaintext highlighter-rouge">ggplot2</code></li>
+  <li>Work entirely offline after installation</li>
+</ul>
 
-    <h2>Open data has a life of its own</h2>
-    <p>A big thank you to Vincent for building the package and for crediting the original GAA Pitch Finder dataset. It is hugely encouraging to see the project being reused and extended by someone else.</p>
+<h2 id="why-i-care">Why I care</h2>
 
-    <p>The package is currently available on GitHub and has been submitted to CRAN:</p>
-    <p><a href="https://github.com/VincentTennanty/gaapitchfinder">View the gaapitchfinder R package on GitHub</a></p>
+<p>This is exactly the kind of use I hoped the dataset might support. The original project was built as a website, but publishing the underlying data openly means that other people can use it in new, novel ways. In fact, anything beyond basic SQL analysis always impresses me.</p>
 
-    <p>This is a great reminder that open data can develop a life of its own! A project may begin small, but it can then become a foundation for analysis, research, and entirely new tools.</p>
+<p>The R package could be useful for analysts, researchers, journalists, GIS practitioners, county boards, and anyone interested in the geography of Gaelic games. It also shows the value of publishing data in a reusable format rather than keeping it locked inside a single website - which I was guilty of for quite some time.</p>
 
-    <p>I'm always excited to see what people build with it next.</p>
+<h2 id="open-data-has-a-life-of-its-own">Open data has a life of its own</h2>
+
+<p>A big thank you to Vincent for building the package and for crediting the original GAA Pitch Finder dataset. It is hugely encouraging to see the project being reused and extended by someone else.</p>
+
+<p>The package is currently available on GitHub and has been submitted to CRAN:</p>
+
+<p><a href="https://github.com/VincentTennanty/gaapitchfinder">View the gaapitchfinder R package on GitHub</a></p>
+
+<p>This is a great reminder that open data can develop a life of its own! A project may begin small, but it can then become a foundation for analysis, research, and entirely new tools.</p>
+
+<p>I’m always excited to see what people build with it next.</p>
+
   </div>
   <nav class="post-nav">
     <div></div>
+    
     <div class="post-nav-next">
       <span class="post-nav-label">Older</span>
       <a href="elevation-analysis.html">The Heights of Gaelic Games</a>
     </div>
+    
   </nav>
   <a class="back-link" href="./">&larr; Back to Blog</a>
 </div>
 
+
 <footer class="site-footer">
   &copy; GAA Pitch Finder &nbsp;&middot;&nbsp; <a href="mailto:gaapitchfinder@gmail.com">gaapitchfinder@gmail.com</a> &nbsp;&middot;&nbsp; <a href="/dataset.html">Dataset</a> &nbsp;&middot;&nbsp; <a href="https://github.com/ryanmcg2203/gaapitchfinder" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy</a>
 </footer>
+
 
 <script src="/js/navigation.js" defer></script>
 </body>
