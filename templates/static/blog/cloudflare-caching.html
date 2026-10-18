@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Gave a Static Side Project a CDN for €0 – GAA Pitch Finder</title>
+<link rel="icon" type="image/png" href="../img/logo-icon.png">
+<meta property="og:title" content="How I Gave a Static Side Project a CDN for €0 – GAA Pitch Finder">
+<meta property="og:description" content="Using Cloudflare in front of GitHub Pages to cache the GAA Pitch Finder dataset at the edge.">
+<meta property="og:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<meta property="og:url" content="https://gaapitchfinder.com/blog/cloudflare-caching.html">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-10-18">
+<meta property="article:modified_time" content="2026-10-18">
+<meta property="article:author" content="Ryan McGuinness">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How I Gave a Static Side Project a CDN for €0 – GAA Pitch Finder">
+<meta name="twitter:description" content="Using Cloudflare in front of GitHub Pages to cache the GAA Pitch Finder dataset at the edge.">
+<meta name="twitter:image" content="https://gaapitchfinder.com/img/logo-black.png">
+<link rel="canonical" href="https://gaapitchfinder.com/blog/cloudflare-caching.html">
+<meta name="description" content="Using Cloudflare in front of GitHub Pages to cache the GAA Pitch Finder dataset at the edge.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How I Gave a Static Side Project a CDN for €0","description":"Using Cloudflare in front of GitHub Pages to cache the GAA Pitch Finder dataset at the edge.","image":"https://gaapitchfinder.com/img/logo-black.png","datePublished":"2026-10-18","dateModified":"2026-10-18","author":{"@type":"Person","name":"Ryan McGuinness"},"publisher":{"@type":"Organization","name":"GAA Pitch Finder","logo":{"@type":"ImageObject","url":"https://gaapitchfinder.com/img/logo-black.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gaapitchfinder.com/blog/cloudflare-caching.html"}}</script>
+{{ analytics }}
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+{{ navigation }}
+
+<div class="page-content">
+  <div class="post-header">
+    <h1>How I Gave a Static Side Project a CDN for €0</h1>
+    <div class="post-date">18 October 2026 &middot; 4 min read</div>
+  </div>
+  <div class="post-body">
+    <p>GAA Pitch Finder is a static website. There are no application servers, no database, and no complicated backend running behind it. GitHub Pages hosts the site, and GitHub is the source of truth for the code and data.</p>
+
+    <p>Recently, I added Cloudflare in front of it. That sounds more elaborate than it really is, but it has given the site a useful little edge-caching layer without me having to run any infrastructure myself.</p>
+
+    <h2>The setup</h2>
+    <p>The main map loads a generated <code>data.json</code> file containing the pitch dataset. Previously, the conceptual request path was straightforward:</p>
+    <pre><code>Browser &rarr; GitHub Pages &rarr; data.json</code></pre>
+
+    <p>Now the path is:</p>
+    <pre><code>Browser &rarr; Cloudflare &rarr; GitHub Pages</code></pre>
+
+    <p>Cloudflare sits between the visitor and GitHub Pages. I created a cache rule specifically for <code>/data.json</code>, with an edge TTL of two hours.</p>
+
+    <h2>Cache misses and cache hits</h2>
+    <p>When a request reaches Cloudflare, it checks whether it already has a fresh copy of the file.</p>
+    <ul>
+      <li>On a <strong>cache miss</strong>, Cloudflare fetches <code>data.json</code> from GitHub Pages and stores a copy.</li>
+      <li>On a <strong>cache hit</strong>, Cloudflare returns its cached copy without needing to go back to GitHub Pages.</li>
+    </ul>
+
+    <p>The satisfying part was seeing the headers confirm that it was working:</p>
+    <pre><code>CF-Cache-Status: HIT
+Age: 62</code></pre>
+
+    <p><code>CF-Cache-Status: HIT</code> means the response came from Cloudflare's cache. The <code>Age</code> header shows how long that cached object had been sitting there when it was requested.</p>
+
+    <p>Cloudflare's cache is distributed across its edge locations, so there is not one single magical global copy. A particular location may have a miss first, followed by hits for later requests there. But the principle is the same: serve repeated reads from a nearby cache instead of repeatedly fetching the same file from the origin.</p>
+
+    <h2>There is another cache too</h2>
+    <p>The browser can cache the file locally as well. In this case, the response includes:</p>
+    <pre><code>Cache-Control: max-age=14400</code></pre>
+
+    <p>That is 14,400 seconds, or four hours. This is separate from the two-hour Cloudflare edge TTL:</p>
+    <ul>
+      <li>The <strong>edge TTL</strong> controls how long Cloudflare considers its copy fresh.</li>
+      <li>The <strong>browser max-age</strong> controls how long a visitor's own browser can reuse its local copy.</li>
+    </ul>
+
+    <p>It is easy to talk about “the cache” as though there is only one, but there are really several layers between the code and the user.</p>
+
+    <h2>Why this works well for GAA Pitch Finder</h2>
+    <p>The pitch dataset is a good fit for caching because it is read-heavy and the answer is the same for everyone until the data changes. There is no reason to generate a different response for each visitor.</p>
+
+    <p>In simple terms, GitHub Pages remains the authoritative source, Cloudflare becomes the distribution layer, and the browser can keep a local copy for a while.</p>
+
+    <p>This is the same broad pattern used in much larger systems: an authoritative source behind a cache, with many users reading the cached result. The difference is that this version is running in front of a small static side project, using tools I already had available.</p>
+
+    <h2>A small project, a useful lesson</h2>
+    <p>I like this kind of improvement because it is practical rather than flashy. I did not need to introduce a server, a database, Redis, or a separate CDN setup. I just identified the read-heavy part of the site and put an appropriate caching rule in front of it.</p>
+
+    <p>GAA Pitch Finder started as a map. It now has an open dataset, automated builds, generated pages, an R package built by someone else, and a small edge-caching architecture sitting in front of it. Not bad for a side project about GAA pitches.</p>
+  </div>
+  <nav class="post-nav">
+    <div></div>
+    <div class="post-nav-next">
+      <span class="post-nav-label">Older</span>
+      <a href="r-package.html">From GAA Map to an R Package</a>
+    </div>
+  </nav>
+  <a class="back-link" href="./">&larr; Back to Blog</a>
+</div>
+
+{{ footer }}
+
+{{ navigation_script }}
+</body>
+</html>
