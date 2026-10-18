@@ -31,6 +31,11 @@ jobs:
           node-version: '20'
           cache: npm
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
       - name: Install JavaScript dependencies
         run: npm ci
 
@@ -39,6 +44,9 @@ jobs:
 
       - name: Generate static pages from templates
         run: python3 scripts/generate_static_pages.py
+
+      - name: Generate Jekyll blog pages
+        run: python3 scripts/build_jekyll_blog.py
 
       - name: Run unit tests
         run: python3 -m unittest discover -s tests
@@ -59,7 +67,7 @@ jobs:
         run: python3 scripts/generate_data_quality.py
 
       - name: Verify tracked site outputs are committed
-        run: git diff --exit-code -- README.md site/*.html site/blog/*.html site/data-quality.json
+        run: git diff --exit-code -- README.md site/*.html site/data-quality.json
 
       - name: Generate club pages and sitemap
         run: python3 scripts/generate_club_pages.py

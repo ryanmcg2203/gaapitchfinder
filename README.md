@@ -94,6 +94,20 @@ python3 -m http.server 8000 --directory site
 
 Then open `http://localhost:8000`. HTTPS is provided by the production host, not the local Python server.
 
+### Blog Authoring
+
+The blog is being migrated incrementally to Jekyll so new posts can be written in Markdown with front matter. The current proof of concept lives in `jekyll/`; the existing Python site generator continues to own the rest of the site.
+
+Install the Ruby dependencies and build the Jekyll-owned blog pages with:
+
+```bash
+bundle install
+python3 scripts/generate_static_pages.py
+python3 scripts/build_jekyll_blog.py
+```
+
+New Markdown posts belong in `jekyll/_posts/`. The build copies the Jekyll-generated blog index and converted posts into `site/blog/`.
+
 ### CARTO Basemap Key
 
 The homepage map uses CARTO raster basemaps when `site/js/config.js` defines a

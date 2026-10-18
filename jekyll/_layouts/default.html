@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title | escape }}</title>
+<link rel="icon" type="image/png" href="../img/logo-icon.png">
+<meta property="og:title" content="{{ page.title | escape }}">
+<meta property="og:description" content="{{ page.description | escape }}">
+<meta property="og:image" content="{{ site.url }}/img/logo-black.png">
+<meta property="og:url" content="{{ site.url }}/blog/{{ page.url | remove_first: '/' }}">
+<meta property="og:type" content="{{ page.og_type | default: 'website' }}">
+<meta name="description" content="{{ page.description | escape }}">
+{% if page.og_type == "article" %}
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+<meta property="article:author" content="{{ page.author | escape }}">
+{% endif %}
+<script src="/js/ga.js" defer></script>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+{% include navigation.html %}
+
+{{ content }}
+
+{% include footer.html %}
+
+<script src="/js/navigation.js" defer></script>
+</body>
+</html>
