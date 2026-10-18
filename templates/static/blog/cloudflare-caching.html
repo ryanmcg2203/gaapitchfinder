@@ -40,12 +40,12 @@
     <h2>The setup</h2>
     <p>The main map loads a generated <code>data.json</code> file containing the pitch dataset. Cloudflare now sits between the visitor and GitHub Pages:</p>
     <div class="cloudflare-flow" aria-label="Browser requests pass through Cloudflare before reaching GitHub Pages">
-      <div class="cloudflare-flow-box"><strong>Browser</strong><span>requests data.json</span></div>
+      <div class="cloudflare-flow-box"><strong>Browser</strong><br><span>requests data.json</span></div>
       <div class="cloudflare-flow-arrow" aria-hidden="true">&darr;</div>
-      <div class="cloudflare-flow-box cloudflare-flow-edge"><strong>Cloudflare</strong><span>edge cache</span></div>
+      <div class="cloudflare-flow-box cloudflare-flow-edge"><strong>Cloudflare</strong><br><span>edge cache</span></div>
       <div class="cloudflare-flow-note">Cache hit: return the cached file<br>Cache miss: fetch it from the origin</div>
       <div class="cloudflare-flow-arrow" aria-hidden="true">&darr;</div>
-      <div class="cloudflare-flow-box"><strong>GitHub Pages</strong><span>origin and source of truth</span></div>
+      <div class="cloudflare-flow-box"><strong>GitHub Pages</strong><br><span>origin and source of truth</span></div>
     </div>
 
     <p>I created a cache rule specifically for <code>/data.json</code>, with an edge TTL of two hours.</p>
