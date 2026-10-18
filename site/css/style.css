@@ -833,6 +833,14 @@ body.light #info-panel .donate-link:hover { background: rgba(0,0,0,0.04); }
 .post-body li { margin-bottom: 6px; }
 .post-body a { color: #111; }
 .post-body a:hover { color: #555; }
+.cloudflare-flow { max-width: 320px; margin: 26px auto 30px; text-align: center; }
+.cloudflare-flow-box { padding: 14px 18px; border: 1px solid #d8d8d8; border-radius: 8px; background: #fafafa; }
+.cloudflare-flow-box strong, .cloudflare-flow-box span { display: block; }
+.cloudflare-flow-box strong { color: #111; }
+.cloudflare-flow-box span { margin-top: 3px; font-size: 13px; color: #666; }
+.cloudflare-flow-edge { border-color: #f38020; background: #fff8f2; }
+.cloudflare-flow-arrow { margin: 5px 0; color: #777; font-size: 22px; line-height: 1; }
+.cloudflare-flow-note { margin: 8px 0; padding: 9px 12px; border-left: 3px solid #f38020; background: #fff8f2; color: #555; font-size: 13px; line-height: 1.5; }
 
 .back-link {
   display: inline-block;
