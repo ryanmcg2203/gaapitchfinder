@@ -2,23 +2,23 @@
   "contract_version": "1.0.0",
   "build": {
     "method_version": "1.0.0",
-    "source_revision": "c426f2e61723f7b9e8ce71581c01f09feba416a1",
+    "source_revision": "50da464ce58cde0d040167f9a121fd9d9e996836",
     "generator": "scripts/generate_data_quality.py"
   },
   "dataset": {
     "record_count": 1990,
     "data_as_of": "2026-11-05",
     "version": "2026.11.05",
-    "revision": "c426f2e61723f7b9e8ce71581c01f09feba416a1"
+    "revision": "50da464ce58cde0d040167f9a121fd9d9e996836"
   },
   "sources": {
     "canonical_dataset": {
       "source_id": "canonical_dataset",
       "type": "canonical_csv",
       "path": "gaapitchfinder_data.csv",
-      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/c426f2e61723f7b9e8ce71581c01f09feba416a1/gaapitchfinder_data.csv",
+      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/50da464ce58cde0d040167f9a121fd9d9e996836/gaapitchfinder_data.csv",
       "data_as_of": "2026-11-05",
-      "revision": "c426f2e61723f7b9e8ce71581c01f09feba416a1",
+      "revision": "50da464ce58cde0d040167f9a121fd9d9e996836",
       "available": true,
       "limitation": null
     },
