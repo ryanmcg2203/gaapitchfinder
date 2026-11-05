@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/data-quality.html">
 <meta name="description" content="Public quality metrics, provenance, freshness, and known limitations for the open GAA Pitch Finder dataset.">
-<meta name="gaa-data-quality-source-revision" content="94ad200ea2b73dca70ca2ed25bce5806f99edd16">
+<meta name="gaa-data-quality-source-revision" content="4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256">
 <script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -60,10 +60,10 @@
     <h1>Dataset health and provenance</h1>
     <p>This report publishes the checks behind GAA Pitch Finder as individual metrics. It deliberately avoids a single quality score so gaps and limitations remain visible.</p>
     <dl class="data-quality-snapshot">
-      <div><dt>Records</dt><dd>1,990</dd></div>
+      <div><dt>Records</dt><dd>1,995</dd></div>
       <div><dt>Data as of</dt><dd><time datetime="2026-11-05">2026-11-05</time></dd></div>
       <div><dt>Dataset version</dt><dd>2026.11.05</dd></div>
-      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/94ad200ea2b73dca70ca2ed25bce5806f99edd16"><code>94ad200ea2</code></a></dd></div>
+      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256"><code>4c8a1ca6f4</code></a></dd></div>
     </dl>
     <div class="data-quality-actions">
       <a href="/dataset.html">Open dataset downloads</a>
@@ -83,8 +83,8 @@
           <h3>Pitch records</h3>
           <span class="data-quality-status data-quality-status-informational">Information</span>
         </div>
-        <p class="data-quality-value">1,990</p>
-        <p class="data-quality-summary">1,990 pitch records are published in the current dataset.</p>
+        <p class="data-quality-value">1,995</p>
+        <p class="data-quality-summary">1,995 pitch records are published in the current dataset.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count data rows in the canonical CSV, excluding the header.</p>
@@ -98,7 +98,7 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">100.0%</p>
-        <p class="data-quality-summary">1,990 of 1,990 records have valid coordinate pairs.</p>
+        <p class="data-quality-summary">1,995 of 1,995 records have valid coordinate pairs.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Parse finite WGS 84 latitude and longitude values and enforce world bounds.</p>
@@ -172,7 +172,7 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">100.0%</p>
-        <p class="data-quality-summary">1,990 of 1,990 directions links are valid and coordinate-aligned.</p>
+        <p class="data-quality-summary">1,995 of 1,995 directions links are valid and coordinate-aligned.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.</p>
@@ -194,8 +194,8 @@
           <h3>Elevation coverage</h3>
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
-        <p class="data-quality-value">99.8%</p>
-        <p class="data-quality-summary">1,986 of 1,990 records include a valid elevation value.</p>
+        <p class="data-quality-value">99.5%</p>
+        <p class="data-quality-summary">1,986 of 1,995 records include a valid elevation value.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count nonblank finite elevation values between -500 and 9,000 metres.</p>
@@ -209,8 +209,8 @@
           <h3>Rainfall coverage</h3>
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
-        <p class="data-quality-value">99.8%</p>
-        <p class="data-quality-summary">1,986 of 1,990 records include both rainfall fields.</p>
+        <p class="data-quality-value">99.5%</p>
+        <p class="data-quality-summary">1,986 of 1,995 records include both rainfall fields.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count rows with valid annual rainfall and rain-days values within the published schema ranges.</p>
@@ -224,8 +224,8 @@
           <h3>Reviewed Wikipedia links</h3>
           <span class="data-quality-status data-quality-status-informational">Information</span>
         </div>
-        <p class="data-quality-value">56.6%</p>
-        <p class="data-quality-summary">1,126 of 1,990 records include a reviewed Wikipedia link.</p>
+        <p class="data-quality-value">56.4%</p>
+        <p class="data-quality-summary">1,126 of 1,995 records include a reviewed Wikipedia link.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.</p>
@@ -502,7 +502,7 @@
           <tr>
             <th scope="row">canonical_dataset</th>
             <td data-label="Type">canonical_csv</td>
-            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/94ad200ea2b73dca70ca2ed25bce5806f99edd16/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
+            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
             <td data-label="Data as of">2026-11-05</td>
             <td data-label="Available">Yes</td>
           </tr>

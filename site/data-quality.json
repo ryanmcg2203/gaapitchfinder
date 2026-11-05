@@ -2,23 +2,23 @@
   "contract_version": "1.0.0",
   "build": {
     "method_version": "1.0.0",
-    "source_revision": "94ad200ea2b73dca70ca2ed25bce5806f99edd16",
+    "source_revision": "4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256",
     "generator": "scripts/generate_data_quality.py"
   },
   "dataset": {
-    "record_count": 1990,
+    "record_count": 1995,
     "data_as_of": "2026-11-05",
     "version": "2026.11.05",
-    "revision": "94ad200ea2b73dca70ca2ed25bce5806f99edd16"
+    "revision": "4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256"
   },
   "sources": {
     "canonical_dataset": {
       "source_id": "canonical_dataset",
       "type": "canonical_csv",
       "path": "gaapitchfinder_data.csv",
-      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/94ad200ea2b73dca70ca2ed25bce5806f99edd16/gaapitchfinder_data.csv",
+      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256/gaapitchfinder_data.csv",
       "data_as_of": "2026-11-05",
-      "revision": "94ad200ea2b73dca70ca2ed25bce5806f99edd16",
+      "revision": "4c8a1ca6f4a4e2cd22ddfc591f90443de17f0256",
       "available": true,
       "limitation": null
     },
@@ -37,7 +37,7 @@
     {
       "metric_id": "record_count",
       "label": "Pitch records",
-      "value": 1990,
+      "value": 1995,
       "unit": "records",
       "numerator": null,
       "denominator": null,
@@ -47,17 +47,17 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-05",
       "method": "Count data rows in the canonical CSV, excluding the header.",
-      "summary": "1,990 pitch records are published in the current dataset.",
+      "summary": "1,995 pitch records are published in the current dataset.",
       "limitation": null,
       "details": {}
     },
     {
       "metric_id": "valid_coordinates",
       "label": "Valid coordinates",
-      "value": 1990,
+      "value": 1995,
       "unit": "records",
-      "numerator": 1990,
-      "denominator": 1990,
+      "numerator": 1995,
+      "denominator": 1995,
       "percentage": 100.0,
       "status": "pass",
       "threshold": {
@@ -68,7 +68,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-05",
       "method": "Parse finite WGS 84 latitude and longitude values and enforce world bounds.",
-      "summary": "1,990 of 1,990 records have valid coordinate pairs.",
+      "summary": "1,995 of 1,995 records have valid coordinate pairs.",
       "limitation": null,
       "details": {
         "missing_records": 0,
@@ -166,10 +166,10 @@
     {
       "metric_id": "valid_directions_links",
       "label": "Valid directions links",
-      "value": 1990,
+      "value": 1995,
       "unit": "records",
-      "numerator": 1990,
-      "denominator": 1990,
+      "numerator": 1995,
+      "denominator": 1995,
       "percentage": 100.0,
       "status": "pass",
       "threshold": {
@@ -180,7 +180,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-05",
       "method": "Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.",
-      "summary": "1,990 of 1,990 directions links are valid and coordinate-aligned.",
+      "summary": "1,995 of 1,995 directions links are valid and coordinate-aligned.",
       "limitation": null,
       "details": {}
     },
@@ -190,8 +190,8 @@
       "value": 1986,
       "unit": "records",
       "numerator": 1986,
-      "denominator": 1990,
-      "percentage": 99.8,
+      "denominator": 1995,
+      "percentage": 99.5,
       "status": "pass",
       "threshold": {
         "operator": "gte",
@@ -201,7 +201,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-05",
       "method": "Count nonblank finite elevation values between -500 and 9,000 metres.",
-      "summary": "1,986 of 1,990 records include a valid elevation value.",
+      "summary": "1,986 of 1,995 records include a valid elevation value.",
       "limitation": "Elevation values are enrichment estimates and are not surveyed ground heights.",
       "details": {}
     },
@@ -211,8 +211,8 @@
       "value": 1986,
       "unit": "records",
       "numerator": 1986,
-      "denominator": 1990,
-      "percentage": 99.8,
+      "denominator": 1995,
+      "percentage": 99.5,
       "status": "pass",
       "threshold": {
         "operator": "gte",
@@ -222,7 +222,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-05",
       "method": "Count rows with valid annual rainfall and rain-days values within the published schema ranges.",
-      "summary": "1,986 of 1,990 records include both rainfall fields.",
+      "summary": "1,986 of 1,995 records include both rainfall fields.",
       "limitation": "Rainfall fields are modelled annual estimates rather than observations at each pitch.",
       "details": {}
     },
@@ -232,14 +232,14 @@
       "value": 1126,
       "unit": "records",
       "numerator": 1126,
-      "denominator": 1990,
-      "percentage": 56.6,
+      "denominator": 1995,
+      "percentage": 56.4,
       "status": "informational",
       "threshold": null,
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-05",
       "method": "Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.",
-      "summary": "1,126 of 1,990 records include a reviewed Wikipedia link.",
+      "summary": "1,126 of 1,995 records include a reviewed Wikipedia link.",
       "limitation": "Not every club has a suitable Wikipedia article, so no completeness target is applied.",
       "details": {}
     },
