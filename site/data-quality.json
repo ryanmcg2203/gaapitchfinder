@@ -2,23 +2,23 @@
   "contract_version": "1.0.0",
   "build": {
     "method_version": "1.0.0",
-    "source_revision": "9171eadfceabc7dffcdbb41db747fac0d1e36339",
+    "source_revision": "d96a79644365904dd5a15a3ac86cd30d2a9ab678",
     "generator": "scripts/generate_data_quality.py"
   },
   "dataset": {
-    "record_count": 1995,
-    "data_as_of": "2026-11-05",
-    "version": "2026.11.05",
-    "revision": "9171eadfceabc7dffcdbb41db747fac0d1e36339"
+    "record_count": 2010,
+    "data_as_of": "2026-11-08",
+    "version": "2026.11.08",
+    "revision": "d96a79644365904dd5a15a3ac86cd30d2a9ab678"
   },
   "sources": {
     "canonical_dataset": {
       "source_id": "canonical_dataset",
       "type": "canonical_csv",
       "path": "gaapitchfinder_data.csv",
-      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/9171eadfceabc7dffcdbb41db747fac0d1e36339/gaapitchfinder_data.csv",
-      "data_as_of": "2026-11-05",
-      "revision": "9171eadfceabc7dffcdbb41db747fac0d1e36339",
+      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/d96a79644365904dd5a15a3ac86cd30d2a9ab678/gaapitchfinder_data.csv",
+      "data_as_of": "2026-11-08",
+      "revision": "d96a79644365904dd5a15a3ac86cd30d2a9ab678",
       "available": true,
       "limitation": null
     },
@@ -37,7 +37,7 @@
     {
       "metric_id": "record_count",
       "label": "Pitch records",
-      "value": 1995,
+      "value": 2010,
       "unit": "records",
       "numerator": null,
       "denominator": null,
@@ -45,19 +45,19 @@
       "status": "informational",
       "threshold": null,
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Count data rows in the canonical CSV, excluding the header.",
-      "summary": "1,995 pitch records are published in the current dataset.",
+      "summary": "2,010 pitch records are published in the current dataset.",
       "limitation": null,
       "details": {}
     },
     {
       "metric_id": "valid_coordinates",
       "label": "Valid coordinates",
-      "value": 1995,
+      "value": 2010,
       "unit": "records",
-      "numerator": 1995,
-      "denominator": 1995,
+      "numerator": 2010,
+      "denominator": 2010,
       "percentage": 100.0,
       "status": "pass",
       "threshold": {
@@ -66,9 +66,9 @@
         "unit": "percent"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Parse finite WGS 84 latitude and longitude values and enforce world bounds.",
-      "summary": "1,995 of 1,995 records have valid coordinate pairs.",
+      "summary": "2,010 of 2,010 records have valid coordinate pairs.",
       "limitation": null,
       "details": {
         "missing_records": 0,
@@ -90,7 +90,7 @@
         "unit": "records"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Count rows where latitude or longitude is blank.",
       "summary": "0 records have a blank latitude or longitude.",
       "limitation": "Malformed nonblank coordinates are reported under valid coordinates rather than this metric.",
@@ -111,7 +111,7 @@
         "unit": "records"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Count rows missing any required identity or location field: File, Club, Province, Country, Division, or County.",
       "summary": "0 records are missing a required identity or location field.",
       "limitation": "Pitch name is intentionally optional and is not included in this metric.",
@@ -120,7 +120,7 @@
     {
       "metric_id": "shared_coordinate_groups",
       "label": "Shared coordinate groups",
-      "value": 21,
+      "value": 22,
       "unit": "groups",
       "numerator": null,
       "denominator": null,
@@ -132,12 +132,12 @@
         "unit": "groups"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Group records that have exactly equal numeric latitude and longitude values.",
-      "summary": "21 coordinate groups are shared by more than one record.",
+      "summary": "22 coordinate groups are shared by more than one record.",
       "limitation": "Shared coordinates are review prompts, not errors; multiple clubs can legitimately use one ground.",
       "details": {
-        "affected_records": 76
+        "affected_records": 78
       }
     },
     {
@@ -155,7 +155,7 @@
         "unit": "groups"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Group normalized club, pitch, county, and country names at coordinates rounded to five decimal places.",
       "summary": "0 groups match the duplicate-candidate rule.",
       "limitation": "Candidates require human review because a club can have multiple records at one complex.",
@@ -166,10 +166,10 @@
     {
       "metric_id": "valid_directions_links",
       "label": "Valid directions links",
-      "value": 1995,
+      "value": 2010,
       "unit": "records",
-      "numerator": 1995,
-      "denominator": 1995,
+      "numerator": 2010,
+      "denominator": 2010,
       "percentage": 100.0,
       "status": "pass",
       "threshold": {
@@ -178,20 +178,20 @@
         "unit": "percent"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.",
-      "summary": "1,995 of 1,995 directions links are valid and coordinate-aligned.",
+      "summary": "2,010 of 2,010 directions links are valid and coordinate-aligned.",
       "limitation": null,
       "details": {}
     },
     {
       "metric_id": "elevation_coverage",
       "label": "Elevation coverage",
-      "value": 1991,
+      "value": 1985,
       "unit": "records",
-      "numerator": 1991,
-      "denominator": 1995,
-      "percentage": 99.8,
+      "numerator": 1985,
+      "denominator": 2010,
+      "percentage": 98.8,
       "status": "pass",
       "threshold": {
         "operator": "gte",
@@ -199,20 +199,20 @@
         "unit": "percent"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Count nonblank finite elevation values between -500 and 9,000 metres.",
-      "summary": "1,991 of 1,995 records include a valid elevation value.",
+      "summary": "1,985 of 2,010 records include a valid elevation value.",
       "limitation": "Elevation values are enrichment estimates and are not surveyed ground heights.",
       "details": {}
     },
     {
       "metric_id": "rainfall_coverage",
       "label": "Rainfall coverage",
-      "value": 1991,
+      "value": 1985,
       "unit": "records",
-      "numerator": 1991,
-      "denominator": 1995,
-      "percentage": 99.8,
+      "numerator": 1985,
+      "denominator": 2010,
+      "percentage": 98.8,
       "status": "pass",
       "threshold": {
         "operator": "gte",
@@ -220,26 +220,26 @@
         "unit": "percent"
       },
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Count rows with valid annual rainfall and rain-days values within the published schema ranges.",
-      "summary": "1,991 of 1,995 records include both rainfall fields.",
+      "summary": "1,985 of 2,010 records include both rainfall fields.",
       "limitation": "Rainfall fields are modelled annual estimates rather than observations at each pitch.",
       "details": {}
     },
     {
       "metric_id": "wikipedia_link_coverage",
       "label": "Reviewed Wikipedia links",
-      "value": 1126,
+      "value": 1137,
       "unit": "records",
-      "numerator": 1126,
-      "denominator": 1995,
-      "percentage": 56.4,
+      "numerator": 1137,
+      "denominator": 2010,
+      "percentage": 56.6,
       "status": "informational",
       "threshold": null,
       "source_id": "canonical_dataset",
-      "data_as_of": "2026-11-05",
+      "data_as_of": "2026-11-08",
       "method": "Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.",
-      "summary": "1,126 of 1,995 records include a reviewed Wikipedia link.",
+      "summary": "1,137 of 2,010 records include a reviewed Wikipedia link.",
       "limitation": "Not every club has a suitable Wikipedia article, so no completeness target is applied.",
       "details": {}
     },
@@ -257,10 +257,10 @@
       "data_as_of": "2026-07-05",
       "method": "Treat matched_gaa and matched_generic as matches, no_match as evaluated nonmatches, and exclude unavailable statuses from the denominator.",
       "summary": "1,621 of 1,683 evaluated snapshot rows have a nearby OSM pitch match.",
-      "limitation": "This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,687 Ireland records.",
+      "limitation": "This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,702 Ireland records.",
       "details": {
         "snapshot_records": 1683,
-        "current_ireland_records": 1687,
+        "current_ireland_records": 1702,
         "unavailable_records": 0,
         "county_breakdown": [
           {
