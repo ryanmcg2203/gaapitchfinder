@@ -2,23 +2,23 @@
   "contract_version": "1.0.0",
   "build": {
     "method_version": "1.0.0",
-    "source_revision": "09c41c2536437b46258b0be057a8218393aee447",
+    "source_revision": "565b4efd5a32d45c4acad58b5efe2035b2f3e5af",
     "generator": "scripts/generate_data_quality.py"
   },
   "dataset": {
-    "record_count": 2012,
+    "record_count": 2013,
     "data_as_of": "2026-11-08",
     "version": "2026.11.08",
-    "revision": "09c41c2536437b46258b0be057a8218393aee447"
+    "revision": "565b4efd5a32d45c4acad58b5efe2035b2f3e5af"
   },
   "sources": {
     "canonical_dataset": {
       "source_id": "canonical_dataset",
       "type": "canonical_csv",
       "path": "gaapitchfinder_data.csv",
-      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/09c41c2536437b46258b0be057a8218393aee447/gaapitchfinder_data.csv",
+      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/565b4efd5a32d45c4acad58b5efe2035b2f3e5af/gaapitchfinder_data.csv",
       "data_as_of": "2026-11-08",
-      "revision": "09c41c2536437b46258b0be057a8218393aee447",
+      "revision": "565b4efd5a32d45c4acad58b5efe2035b2f3e5af",
       "available": true,
       "limitation": null
     },
@@ -37,7 +37,7 @@
     {
       "metric_id": "record_count",
       "label": "Pitch records",
-      "value": 2012,
+      "value": 2013,
       "unit": "records",
       "numerator": null,
       "denominator": null,
@@ -47,17 +47,17 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-08",
       "method": "Count data rows in the canonical CSV, excluding the header.",
-      "summary": "2,012 pitch records are published in the current dataset.",
+      "summary": "2,013 pitch records are published in the current dataset.",
       "limitation": null,
       "details": {}
     },
     {
       "metric_id": "valid_coordinates",
       "label": "Valid coordinates",
-      "value": 2012,
+      "value": 2013,
       "unit": "records",
-      "numerator": 2012,
-      "denominator": 2012,
+      "numerator": 2013,
+      "denominator": 2013,
       "percentage": 100.0,
       "status": "pass",
       "threshold": {
@@ -68,7 +68,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-08",
       "method": "Parse finite WGS 84 latitude and longitude values and enforce world bounds.",
-      "summary": "2,012 of 2,012 records have valid coordinate pairs.",
+      "summary": "2,013 of 2,013 records have valid coordinate pairs.",
       "limitation": null,
       "details": {
         "missing_records": 0,
@@ -166,10 +166,10 @@
     {
       "metric_id": "valid_directions_links",
       "label": "Valid directions links",
-      "value": 2012,
+      "value": 2013,
       "unit": "records",
-      "numerator": 2012,
-      "denominator": 2012,
+      "numerator": 2013,
+      "denominator": 2013,
       "percentage": 100.0,
       "status": "pass",
       "threshold": {
@@ -180,7 +180,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-08",
       "method": "Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.",
-      "summary": "2,012 of 2,012 directions links are valid and coordinate-aligned.",
+      "summary": "2,013 of 2,013 directions links are valid and coordinate-aligned.",
       "limitation": null,
       "details": {}
     },
@@ -190,8 +190,8 @@
       "value": 1985,
       "unit": "records",
       "numerator": 1985,
-      "denominator": 2012,
-      "percentage": 98.7,
+      "denominator": 2013,
+      "percentage": 98.6,
       "status": "pass",
       "threshold": {
         "operator": "gte",
@@ -201,7 +201,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-08",
       "method": "Count nonblank finite elevation values between -500 and 9,000 metres.",
-      "summary": "1,985 of 2,012 records include a valid elevation value.",
+      "summary": "1,985 of 2,013 records include a valid elevation value.",
       "limitation": "Elevation values are enrichment estimates and are not surveyed ground heights.",
       "details": {}
     },
@@ -211,8 +211,8 @@
       "value": 1985,
       "unit": "records",
       "numerator": 1985,
-      "denominator": 2012,
-      "percentage": 98.7,
+      "denominator": 2013,
+      "percentage": 98.6,
       "status": "pass",
       "threshold": {
         "operator": "gte",
@@ -222,7 +222,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-08",
       "method": "Count rows with valid annual rainfall and rain-days values within the published schema ranges.",
-      "summary": "1,985 of 2,012 records include both rainfall fields.",
+      "summary": "1,985 of 2,013 records include both rainfall fields.",
       "limitation": "Rainfall fields are modelled annual estimates rather than observations at each pitch.",
       "details": {}
     },
@@ -232,14 +232,14 @@
       "value": 1138,
       "unit": "records",
       "numerator": 1138,
-      "denominator": 2012,
-      "percentage": 56.6,
+      "denominator": 2013,
+      "percentage": 56.5,
       "status": "informational",
       "threshold": null,
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-08",
       "method": "Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.",
-      "summary": "1,138 of 2,012 records include a reviewed Wikipedia link.",
+      "summary": "1,138 of 2,013 records include a reviewed Wikipedia link.",
       "limitation": "Not every club has a suitable Wikipedia article, so no completeness target is applied.",
       "details": {}
     },
@@ -257,10 +257,10 @@
       "data_as_of": "2026-07-05",
       "method": "Treat matched_gaa and matched_generic as matches, no_match as evaluated nonmatches, and exclude unavailable statuses from the denominator.",
       "summary": "1,621 of 1,683 evaluated snapshot rows have a nearby OSM pitch match.",
-      "limitation": "This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,704 Ireland records.",
+      "limitation": "This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,705 Ireland records.",
       "details": {
         "snapshot_records": 1683,
-        "current_ireland_records": 1704,
+        "current_ireland_records": 1705,
         "unavailable_records": 0,
         "county_breakdown": [
           {
