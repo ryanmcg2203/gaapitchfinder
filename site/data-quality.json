@@ -2,23 +2,23 @@
   "contract_version": "1.0.0",
   "build": {
     "method_version": "1.0.0",
-    "source_revision": "a8b213531258934c874e09f8f488784f6bfed387",
+    "source_revision": "bc4b0cc3e366e5f9271b8dda9d256b61e8a46738",
     "generator": "scripts/generate_data_quality.py"
   },
   "dataset": {
     "record_count": 2015,
     "data_as_of": "2026-11-11",
     "version": "2026.11.11",
-    "revision": "a8b213531258934c874e09f8f488784f6bfed387"
+    "revision": "bc4b0cc3e366e5f9271b8dda9d256b61e8a46738"
   },
   "sources": {
     "canonical_dataset": {
       "source_id": "canonical_dataset",
       "type": "canonical_csv",
       "path": "gaapitchfinder_data.csv",
-      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/a8b213531258934c874e09f8f488784f6bfed387/gaapitchfinder_data.csv",
+      "url": "https://github.com/ryanmcg2203/gaapitchfinder/blob/bc4b0cc3e366e5f9271b8dda9d256b61e8a46738/gaapitchfinder_data.csv",
       "data_as_of": "2026-11-11",
-      "revision": "a8b213531258934c874e09f8f488784f6bfed387",
+      "revision": "bc4b0cc3e366e5f9271b8dda9d256b61e8a46738",
       "available": true,
       "limitation": null
     },
@@ -187,9 +187,9 @@
     {
       "metric_id": "elevation_coverage",
       "label": "Elevation coverage",
-      "value": 1985,
+      "value": 1984,
       "unit": "records",
-      "numerator": 1985,
+      "numerator": 1984,
       "denominator": 2015,
       "percentage": 98.5,
       "status": "pass",
@@ -201,16 +201,16 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-11",
       "method": "Count nonblank finite elevation values between -500 and 9,000 metres.",
-      "summary": "1,985 of 2,015 records include a valid elevation value.",
+      "summary": "1,984 of 2,015 records include a valid elevation value.",
       "limitation": "Elevation values are enrichment estimates and are not surveyed ground heights.",
       "details": {}
     },
     {
       "metric_id": "rainfall_coverage",
       "label": "Rainfall coverage",
-      "value": 1985,
+      "value": 1984,
       "unit": "records",
-      "numerator": 1985,
+      "numerator": 1984,
       "denominator": 2015,
       "percentage": 98.5,
       "status": "pass",
@@ -222,7 +222,7 @@
       "source_id": "canonical_dataset",
       "data_as_of": "2026-11-11",
       "method": "Count rows with valid annual rainfall and rain-days values within the published schema ranges.",
-      "summary": "1,985 of 2,015 records include both rainfall fields.",
+      "summary": "1,984 of 2,015 records include both rainfall fields.",
       "limitation": "Rainfall fields are modelled annual estimates rather than observations at each pitch.",
       "details": {}
     },
