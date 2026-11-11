@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://gaapitchfinder.com/data-quality.html">
 <meta name="description" content="Public quality metrics, provenance, freshness, and known limitations for the open GAA Pitch Finder dataset.">
-<meta name="gaa-data-quality-source-revision" content="bdd5e43f7c8669e6fb5a36d7d29e2f6ffba712af">
+<meta name="gaa-data-quality-source-revision" content="acec270865dab68dba6f06abfc77b51b78097e9e">
 <script src="/js/ga.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -60,10 +60,10 @@
     <h1>Dataset health and provenance</h1>
     <p>This report publishes the checks behind GAA Pitch Finder as individual metrics. It deliberately avoids a single quality score so gaps and limitations remain visible.</p>
     <dl class="data-quality-snapshot">
-      <div><dt>Records</dt><dd>2,016</dd></div>
+      <div><dt>Records</dt><dd>2,015</dd></div>
       <div><dt>Data as of</dt><dd><time datetime="2026-11-11">2026-11-11</time></dd></div>
       <div><dt>Dataset version</dt><dd>2026.11.11</dd></div>
-      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/bdd5e43f7c8669e6fb5a36d7d29e2f6ffba712af"><code>bdd5e43f7c</code></a></dd></div>
+      <div><dt>Source revision</dt><dd><a href="https://github.com/ryanmcg2203/gaapitchfinder/commit/acec270865dab68dba6f06abfc77b51b78097e9e"><code>acec270865</code></a></dd></div>
     </dl>
     <div class="data-quality-actions">
       <a href="/dataset.html">Open dataset downloads</a>
@@ -83,8 +83,8 @@
           <h3>Pitch records</h3>
           <span class="data-quality-status data-quality-status-informational">Information</span>
         </div>
-        <p class="data-quality-value">2,016</p>
-        <p class="data-quality-summary">2,016 pitch records are published in the current dataset.</p>
+        <p class="data-quality-value">2,015</p>
+        <p class="data-quality-summary">2,015 pitch records are published in the current dataset.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count data rows in the canonical CSV, excluding the header.</p>
@@ -98,7 +98,7 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">100.0%</p>
-        <p class="data-quality-summary">2,016 of 2,016 records have valid coordinate pairs.</p>
+        <p class="data-quality-summary">2,015 of 2,015 records have valid coordinate pairs.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Parse finite WGS 84 latitude and longitude values and enforce world bounds.</p>
@@ -172,7 +172,7 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">100.0%</p>
-        <p class="data-quality-summary">2,016 of 2,016 directions links are valid and coordinate-aligned.</p>
+        <p class="data-quality-summary">2,015 of 2,015 directions links are valid and coordinate-aligned.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Require an allowed Google Maps host, one finite daddr pair, and coordinates matching the canonical point within 0.00001 degrees.</p>
@@ -195,7 +195,7 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">98.4%</p>
-        <p class="data-quality-summary">1,984 of 2,016 records include a valid elevation value.</p>
+        <p class="data-quality-summary">1,983 of 2,015 records include a valid elevation value.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count nonblank finite elevation values between -500 and 9,000 metres.</p>
@@ -210,7 +210,7 @@
           <span class="data-quality-status data-quality-status-pass">Pass</span>
         </div>
         <p class="data-quality-value">98.4%</p>
-        <p class="data-quality-summary">1,984 of 2,016 records include both rainfall fields.</p>
+        <p class="data-quality-summary">1,983 of 2,015 records include both rainfall fields.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count rows with valid annual rainfall and rain-days values within the published schema ranges.</p>
@@ -224,8 +224,8 @@
           <h3>Reviewed Wikipedia links</h3>
           <span class="data-quality-status data-quality-status-informational">Information</span>
         </div>
-        <p class="data-quality-value">56.4%</p>
-        <p class="data-quality-summary">1,138 of 2,016 records include a reviewed Wikipedia link.</p>
+        <p class="data-quality-value">56.5%</p>
+        <p class="data-quality-summary">1,138 of 2,015 records include a reviewed Wikipedia link.</p>
         <details>
           <summary>Method and provenance</summary>
           <p><strong>Method:</strong> Count nonblank Wikipedia URLs that use an allowed Wikipedia hostname.</p>
@@ -246,7 +246,7 @@
           <p><strong>Method:</strong> Treat matched_gaa and matched_generic as matches, no_match as evaluated nonmatches, and exclude unavailable statuses from the denominator.</p>
           <p><strong>Source:</strong> <code>osm_coverage_snapshot</code></p>
           <p><strong>Data as of:</strong> 2026-07-05</p>
-          <p><strong>Known limitation:</strong> This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,708 Ireland records.</p>
+          <p><strong>Known limitation:</strong> This is a historical proximity check against OSM pitch geometry, not proof that every match is correctly tagged. The snapshot contains 1,683 rows while the current canonical dataset contains 1,707 Ireland records.</p>
         </details>
       </article>
     </div>
@@ -502,7 +502,7 @@
           <tr>
             <th scope="row">canonical_dataset</th>
             <td data-label="Type">canonical_csv</td>
-            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/bdd5e43f7c8669e6fb5a36d7d29e2f6ffba712af/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
+            <td data-label="Source"><a href="https://github.com/ryanmcg2203/gaapitchfinder/blob/acec270865dab68dba6f06abfc77b51b78097e9e/gaapitchfinder_data.csv" target="_blank" rel="noopener noreferrer"><code>gaapitchfinder_data.csv</code></a></td>
             <td data-label="Data as of">2026-11-11</td>
             <td data-label="Available">Yes</td>
           </tr>
