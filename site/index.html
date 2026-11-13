@@ -16,16 +16,20 @@
 <meta name="twitter:image" content="https://gaapitchfinder.com/img/logo-black.png">
 <link rel="canonical" href="https://gaapitchfinder.com/">
 <meta name="description" content="Find GAA clubs, pitches and Google Maps directions across Ireland and worldwide using the open GAA Pitch Finder dataset. Search by club, county, pitch or place.">
-<link rel="preconnect" href="https://a.basemaps.cartocdn.com">
-<link rel="preconnect" href="https://b.basemaps.cartocdn.com">
-<link rel="preconnect" href="https://a.tile.openstreetmap.org">
+<link rel="preconnect" href="https://c.basemaps.cartocdn.com">
+<link rel="preconnect" href="https://d.basemaps.cartocdn.com">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://gaapitchfinder.com/#website","name":"GAA Pitch Finder","alternateName":["GAA Club Finder","GAA Pitch Directions","GAA Club Map"],"url":"https://gaapitchfinder.com/","description":"Interactive map of nearly 2,000 GAA clubs and pitches in Ireland and worldwide, with Google Maps directions and an open dataset.","inLanguage":"en","publisher":{"@id":"https://gaapitchfinder.com/#organization"}},{"@type":"Organization","@id":"https://gaapitchfinder.com/#organization","name":"GAA Pitch Finder","url":"https://gaapitchfinder.com/","logo":"https://gaapitchfinder.com/img/logo-black.png","email":"gaapitchfinder@gmail.com","sameAs":["https://github.com/ryanmcg2203/gaapitchfinder"]},{"@type":"WebPage","@id":"https://gaapitchfinder.com/#webpage","url":"https://gaapitchfinder.com/","name":"GAA Pitch Finder - GAA Club & Pitch Directions Map","isPartOf":{"@id":"https://gaapitchfinder.com/#website"},"about":{"@id":"https://gaapitchfinder.com/#organization"},"description":"Find GAA clubs, pitches and Google Maps directions across Ireland and worldwide using the open GAA Pitch Finder dataset."}]}</script>
 <script src="/js/ga.js" defer></script>
 <script src="/js/navigation.js" defer></script>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="vendor/leaflet.css">
-<link rel="stylesheet" href="vendor/MarkerCluster.css">
-<link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
+<link rel="preload" href="vendor/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="vendor/MarkerCluster.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="vendor/MarkerCluster.Default.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="vendor/MarkerCluster.css">
+  <link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
+</noscript>
 <style>
 body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
 .site-nav { flex-shrink: 0; }
@@ -663,10 +667,11 @@ body.light .pop-correction:hover { background: #f1f1f1; border-color: #555; colo
   </div>
 </div>
 
-<script src="js/config.js"></script>
-<script src="vendor/leaflet.js"></script>
-<script src="vendor/leaflet.markercluster.js"></script>
+<script src="js/config.js" defer></script>
+<script src="vendor/leaflet.js" defer></script>
+<script src="vendor/leaflet.markercluster.js" defer></script>
 <script>
+const initMap = () => {
 // ── Info panel ────────────────────────────────────────────────────────────────
 const infoPanel = document.getElementById('info-panel');
 const infoButton = document.getElementById('info-btn');
@@ -708,6 +713,7 @@ const lightTiles = cartoBasemapKey
     );
 
 const map = L.map('map', { center: [53.5, -8], zoom: 7, layers: [darkTiles], preferCanvas: true });
+window.map = map;
 const mapElement = document.getElementById('map');
 if ('ResizeObserver' in window) {
   new ResizeObserver(() => map.invalidateSize({ pan: false })).observe(mapElement);
@@ -755,6 +761,7 @@ const resultsRange = document.getElementById('results-range');
 const mobileResultsMedia = window.matchMedia('(max-width: 700px)');
 
 let allClubs = [];
+window.allClubs = allClubs;
 let clustered = true;
 let regionIsExplicit = false;
 let focusedPitchKey = '';
@@ -1366,6 +1373,7 @@ function loadPitchData() {
         pitch._marker = makePitchMarker(pitch);
         return pitch;
       });
+      window.allClubs = allClubs;
       setOptions(selRegion, [...new Set(data.map(c => c.r))].sort(), 'Region (All)');
       applyUrlFilters();
       scheduleInitialRender(() => {
@@ -1387,6 +1395,12 @@ function loadPitchData() {
 }
 
 loadPitchData();
+};
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMap, { once: true });
+} else {
+  initMap();
+}
 </script>
 </body>
 </html>
